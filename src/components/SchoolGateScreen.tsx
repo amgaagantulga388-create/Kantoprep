@@ -15,7 +15,7 @@ import {
   MessageSquarePlus,
 } from 'lucide-react';
 import { StudentProfile, Curriculum } from '@/types';
-import { ALLOWED_SCHOOLS, CURRICULUM_OPTIONS, SUBJECTS_BY_CURRICULUM } from '@/lib/constants';
+import { ALLOWED_SCHOOLS, CURRICULUM_OPTIONS, SUBJECTS_BY_CURRICULUM, PRESET_AVATARS } from '@/lib/constants';
 import { validateSchoolEmail, sendSchoolOtp, verifySchoolOtp } from '@/lib/supabase';
 import { InteractiveBackground } from './InteractiveBackground';
 
@@ -38,6 +38,8 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
 
   // Profile setup for new students
   const [fullName, setFullName] = useState('');
+  const [selectedAvatarUrl, setSelectedAvatarUrl] = useState(PRESET_AVATARS[0].url);
+  const [nameError, setNameError] = useState<string | null>(null);
   const [gradeLevel, setGradeLevel] = useState<number>(11);
   const [curriculum, setCurriculum] = useState<Curriculum>('IB');
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([
@@ -91,11 +93,9 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
           .split(' ')
           .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
           .join(' ');
-        setFullName(formatted || 'Aoba Student');
-        setStep('profile');
-      } else {
-        finishLogin();
+        setFullName(formatted || '');
       }
+      setStep('profile');
     } else {
       setErrorMessage(res.message);
     }
@@ -103,17 +103,23 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
 
   // Complete profile and enter dashboard
   const finishLogin = () => {
+    const cleanName = fullName.trim();
+    if (!cleanName) {
+      setNameError('Nickname or real name is mandatory to join study pods.');
+      return;
+    }
+
     const school = detectedSchool || ALLOWED_SCHOOLS[0];
     const newUser: StudentProfile = {
       id: `usr_${Date.now()}`,
-      fullName: fullName.trim() || 'Aoba Student',
+      fullName: cleanName,
       email: email.trim().toLowerCase(),
       schoolDomain: school.domain,
       schoolName: school.name,
       gradeLevel,
       curriculum,
       subjects: selectedSubjects,
-      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120',
+      avatarUrl: selectedAvatarUrl,
       role: 'student',
     };
 
@@ -438,18 +444,60 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                   </h2>
                 </div>
 
+                {/* Avatar Selection (No real photo needed) */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-xs font-semibold text-zinc-700">
+                      Choose Avatar <span className="text-zinc-400 font-normal">(No real photo needed)</span>
+                    </label>
+                    <div className="w-6 h-6 rounded-full overflow-hidden ring-2 ring-emerald-500 shadow-xs">
+                      <img
+                        src={selectedAvatarUrl}
+                        alt="Selected Avatar"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-5 gap-1.5 p-2 bg-zinc-50 rounded-2xl border border-zinc-200">
+                    {PRESET_AVATARS.map((preset) => {
+                      const isSelected = selectedAvatarUrl === preset.url;
+                      return (
+                        <button
+                          key={preset.id}
+                          type="button"
+                          onClick={() => setSelectedAvatarUrl(preset.url)}
+                          title={preset.name}
+                          className={`p-1 rounded-xl transition-all cursor-pointer aspect-square flex items-center justify-center ${
+                            isSelected
+                              ? 'ring-2 ring-emerald-600 bg-white shadow-xs scale-105'
+                              : 'hover:bg-white/80 hover:scale-105'
+                          }`}
+                        >
+                          <img src={preset.url} alt={preset.name} className="w-7 h-7 rounded-full" />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                    Your Full Name
+                    Nickname or Real Name <span className="text-emerald-600">* (Mandatory)</span>
                   </label>
                   <input
                     type="text"
                     value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="e.g. Maya Tanaka"
+                    onChange={(e) => {
+                      setFullName(e.target.value);
+                      if (nameError) setNameError(null);
+                    }}
+                    placeholder="e.g. Kai, Maya T, or your real name"
                     required
                     className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-base sm:text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
                   />
+                  {nameError && (
+                    <p className="text-[11px] text-red-600 font-medium mt-1">{nameError}</p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
@@ -524,7 +572,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
             )}
           </motion.div>
 
-          {/* Safety & Trust Pillars (CAS removed) */}
+          {/* Safety & Trust Pillars */}
           <div className="mt-4 sm:mt-5 grid grid-cols-2 gap-2 text-center text-[11px] text-zinc-500">
             <div className="p-2 rounded-xl bg-white/70 border border-emerald-100 flex items-center justify-center space-x-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
@@ -540,7 +588,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
 
       {/* Simple Footer */}
       <footer className="relative z-10 w-full py-3 text-center text-[11px] text-zinc-400 px-4">
-        KantoPrep • Tokyo International School Student Initiative • Free ($0) Non-Profit
+        KantoPrep • Verified Tokyo Peer Study Network • Free Non-Profit
       </footer>
     </div>
   );

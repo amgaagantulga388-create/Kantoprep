@@ -220,3 +220,34 @@ export const VENUE_CONFIG: Record<VenueType, { label: string; isPhysical: boolea
     address: 'Private study channel with voice & screen share',
   },
 };
+
+export interface AvatarPreset {
+  id: string;
+  name: string;
+  emoji: string;
+  url: string;
+}
+
+const makeSvgAvatar = (emoji: string, c1: string, c2: string) => {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient></defs><rect width="100" height="100" rx="50" fill="url(#g)"/><text x="50" y="58" font-size="50" text-anchor="middle" dominant-baseline="central">${emoji}</text></svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+};
+
+export const PRESET_AVATARS: AvatarPreset[] = [
+  { id: 'fox', name: 'Study Fox', emoji: '🦊', url: makeSvgAvatar('🦊', '#f59e0b', '#ea580c') },
+  { id: 'owl', name: 'Wise Owl', emoji: '🦉', url: makeSvgAvatar('🦉', '#6366f1', '#4338ca') },
+  { id: 'cat', name: 'Focus Cat', emoji: '🐱', url: makeSvgAvatar('🐱', '#10b981', '#047857') },
+  { id: 'shiba', name: 'Shiba Inu', emoji: '🐕', url: makeSvgAvatar('🐕', '#eab308', '#d97706') },
+  { id: 'panda', name: 'Zen Panda', emoji: '🐼', url: makeSvgAvatar('🐼', '#0284c7', '#0369a1') },
+  { id: 'rabbit', name: 'Speed Rabbit', emoji: '🐰', url: makeSvgAvatar('🐰', '#f43f5e', '#be123c') },
+  { id: 'penguin', name: 'Chill Penguin', emoji: '🐧', url: makeSvgAvatar('🐧', '#06b6d4', '#0891b2') },
+  { id: 'sakura', name: 'Sakura Petal', emoji: '🌸', url: makeSvgAvatar('🌸', '#ec4899', '#db2777') },
+  { id: 'rocket', name: 'Cosmos Orbit', emoji: '🚀', url: makeSvgAvatar('🚀', '#8b5cf6', '#6d28d9') },
+  { id: 'matcha', name: 'Matcha Cup', emoji: '🍵', url: makeSvgAvatar('🍵', '#22c55e', '#15803d') },
+];
+
+export const getGoogleMapsUrl = (venueLabel: string, address?: string) => {
+  const query = encodeURIComponent(`${venueLabel} ${address ? address.split('(')[0].trim() : ''} Tokyo`);
+  return `https://www.google.com/maps/search/?api=1&query=${query}`;
+};
+

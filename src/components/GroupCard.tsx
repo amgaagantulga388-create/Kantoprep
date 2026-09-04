@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ArrowUpRight, MessageCircle } from 'lucide-react';
+import { MapPin, ArrowUpRight, MessageCircle, ExternalLink } from 'lucide-react';
 import { StudyGroup, StudentProfile } from '@/types';
-import { FORMAT_CONFIG } from '@/lib/constants';
+import { FORMAT_CONFIG, getGoogleMapsUrl } from '@/lib/constants';
 
 interface GroupCardProps {
   group: StudyGroup;
@@ -56,11 +56,19 @@ export const GroupCard: React.FC<GroupCardProps> = ({
             </span>
           </div>
 
-          {/* Safe Venue Tag */}
-          <div className="flex items-center space-x-1 text-[11px] text-zinc-600 bg-zinc-50 px-2 py-0.5 rounded-lg border border-emerald-100">
-            <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
-            <span className="truncate max-w-[130px] font-medium">{group.venueLabel}</span>
-          </div>
+          {/* Safe Venue Tag (Links directly to Google Maps) */}
+          <a
+            href={getGoogleMapsUrl(group.venueLabel)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="flex items-center space-x-1 text-[11px] text-zinc-600 hover:text-emerald-700 bg-zinc-50 hover:bg-emerald-50/50 px-2 py-0.5 rounded-lg border border-emerald-100 hover:border-emerald-300 transition-all shadow-2xs group/map cursor-pointer"
+            title="Open library in Google Maps"
+          >
+            <MapPin className="w-3 h-3 text-emerald-600 shrink-0 group-hover/map:scale-110 transition-transform" />
+            <span className="truncate max-w-[120px] font-medium">{group.venueLabel}</span>
+            <ExternalLink className="w-2.5 h-2.5 text-zinc-400 group-hover/map:text-emerald-600 shrink-0" />
+          </a>
         </div>
 
         {/* Subject & Title */}

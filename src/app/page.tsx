@@ -13,6 +13,8 @@ import { SchoolSwitchModal } from '@/components/SchoolSwitchModal';
 import { SchoolGateScreen } from '@/components/SchoolGateScreen';
 import { FeedbackModal } from '@/components/FeedbackModal';
 import { WhyKantoPrepModal } from '@/components/WhyKantoPrepModal';
+import { JoinGroupModal } from '@/components/JoinGroupModal';
+import { EditProfileModal } from '@/components/EditProfileModal';
 import { InteractiveBackground } from '@/components/InteractiveBackground';
 import {
   Curriculum,
@@ -47,6 +49,8 @@ export default function Home() {
   const [isSchoolSwitchOpen, setIsSchoolSwitchOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isWhyModalOpen, setIsWhyModalOpen] = useState(false);
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const [pendingJoinGroup, setPendingJoinGroup] = useState<StudyGroup | null>(null);
   const [reportingGroup, setReportingGroup] = useState<StudyGroup | null>(null);
 
   // Restore session from localStorage on initial load
@@ -122,9 +126,20 @@ export default function Home() {
   // Handle Joining or Opening Group
   const handleJoinOrOpen = (group: StudyGroup) => {
     if (!currentUser) return;
-
     const isMember = group.members.some((m) => m.id === currentUser.id);
 
+    if (!isMember) {
+      setPendingJoinGroup(group);
+    } else {
+      setActiveChatGroup(group);
+    }
+  };
+
+  // Handle Confirmed Join with Etiquette & Responsibility Acknowledgment
+  const handleConfirmJoin = (group: StudyGroup) => {
+    if (!currentUser) return;
+
+    const isMember = group.members.some((m) => m.id === currentUser.id);
     if (!isMember) {
       const updated = groups.map((g) => {
         if (g.id === group.id && g.members.length < g.maxMembers) {
@@ -151,8 +166,27 @@ export default function Home() {
       }));
     }
 
+    setPendingJoinGroup(null);
     const targetGroup = groups.find((g) => g.id === group.id) || group;
     setActiveChatGroup(targetGroup);
+  };
+
+  // Handle User Profile Update (Avatar, Nickname)
+  const handleUpdateUser = (updatedUser: StudentProfile) => {
+    setCurrentUser(updatedUser);
+    try {
+      localStorage.setItem('kantoprep_user', JSON.stringify(updatedUser));
+    } catch {
+      // Ignore
+    }
+    // Update local groups
+    setGroups((prev) =>
+      prev.map((g) => ({
+        ...g,
+        host: g.host.id === updatedUser.id ? updatedUser : g.host,
+        members: g.members.map((m) => (m.id === updatedUser.id ? updatedUser : m)),
+      }))
+    );
   };
 
   // Handle Sending Chat Message
@@ -253,6 +287,7 @@ export default function Home() {
         onGoHome={handleGoHome}
         onOpenFeedback={() => setIsFeedbackModalOpen(true)}
         onOpenWhyKantoPrep={() => setIsWhyModalOpen(true)}
+        onOpenEditProfile={() => setIsEditProfileOpen(true)}
         onOpenAuthModal={() => {}}
         onOpenCreateModal={() => setIsCreateModalOpen(true)}
         onOpenSchoolSwitch={() => setIsSchoolSwitchOpen(true)}
@@ -327,6 +362,23 @@ export default function Home() {
         onOpenReport={(grp) => setReportingGroup(grp)}
       />
 
+      {/* Join Responsibility & Etiquette Reminder Modal */}
+      <JoinGroupModal
+        isOpen={Boolean(pendingJoinGroup)}
+        group={pendingJoinGroup}
+        currentUser={currentUser}
+        onConfirmJoin={handleConfirmJoin}
+        onClose={() => setPendingJoinGroup(null)}
+      />
+
+      {/* Edit Nickname & Avatar Modal */}
+      <EditProfileModal
+        isOpen={isEditProfileOpen}
+        currentUser={currentUser}
+        onUpdateUser={handleUpdateUser}
+        onClose={() => setIsEditProfileOpen(false)}
+      />
+
       {/* Create Study Group Modal */}
       <CreateGroupModal
         isOpen={isCreateModalOpen}
@@ -370,7 +422,7 @@ export default function Home() {
           <div className="flex items-center space-x-2">
             <span className="font-semibold text-zinc-700">KantoPrep</span>
             <span>•</span>
-            <span>Tokyo International School Student Initiative</span>
+            <span>Verified Tokyo Peer Study Network</span>
           </div>
 
           <div className="flex items-center space-x-3 text-[11px] text-zinc-500">

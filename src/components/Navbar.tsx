@@ -10,6 +10,7 @@ interface NavbarProps {
   onGoHome: () => void;
   onOpenFeedback: () => void;
   onOpenWhyKantoPrep?: () => void;
+  onOpenEditProfile?: () => void;
   onOpenAuthModal: () => void;
   onOpenCreateModal: () => void;
   onOpenSchoolSwitch: () => void;
@@ -21,6 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onGoHome,
   onOpenFeedback,
   onOpenWhyKantoPrep,
+  onOpenEditProfile,
   onOpenAuthModal,
   onOpenCreateModal,
   onOpenSchoolSwitch,
@@ -139,6 +141,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                         {currentUser.schoolName}
                       </span>
                     </div>
+
+                    <button
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        onOpenEditProfile?.();
+                      }}
+                      className="w-full px-3.5 py-2 text-left hover:bg-zinc-50 flex items-center space-x-2 text-zinc-700 cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Edit Nickname &amp; Avatar</span>
+                    </button>
 
                     <button
                       onClick={() => {

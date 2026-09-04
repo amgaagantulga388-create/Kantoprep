@@ -24,7 +24,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { StudyGroup, StudentProfile, ChatMessage, ResourceMetadata, ResourceCategory } from '@/types';
-import { VENUE_CONFIG } from '@/lib/constants';
+import { VENUE_CONFIG, getGoogleMapsUrl } from '@/lib/constants';
 import { inspectContentSafety, rateLimiter } from '@/lib/safety';
 import { generateGoogleCalendarUrl, downloadIcsFile } from '@/lib/calendar';
 
@@ -66,6 +66,7 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
   const quickChips = [
     '👋 Arrived at the library!',
     '⏳ Running 5 mins late',
+    '🙏 Cannot make it today (notifying pod)',
     '📄 Check Question 3 markscheme',
     '💡 Reviewing formula sheet',
     '✅ Finished Paper 1 sprint',
@@ -267,8 +268,18 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       <span className="font-semibold truncate">{group.venueLabel}</span>
                     </div>
 
-                    {/* Add to Calendar Button */}
+                    {/* Add to Maps and Calendar Buttons */}
                     <div className="flex items-center space-x-1">
+                      <a
+                        href={getGoogleMapsUrl(group.venueLabel, venueInfo?.address)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-white border border-zinc-200 hover:border-emerald-300 text-[10px] text-zinc-700 hover:text-emerald-700 font-medium transition-colors cursor-pointer shadow-2xs"
+                        title="Open venue in Google Maps"
+                      >
+                        <ExternalLink className="w-3 h-3 text-emerald-600" />
+                        <span>Maps</span>
+                      </a>
                       <a
                         href={generateGoogleCalendarUrl(group)}
                         target="_blank"
