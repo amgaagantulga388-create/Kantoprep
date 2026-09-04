@@ -24,30 +24,21 @@ International school students in Tokyo preparing for high-stakes standardized cu
 
 ## 🌟 Key Features & Innovations
 
-### 1. Zero-Trust School Domain Gatekeeper (`@students.aobajapan.jp`)
+### 1. Zero-Trust School Domain Gatekeeper 
 * **Minor Safeguarding:** Unauthenticated visitors are held in a secure, ambient **School Gate Screen**. All study pods, member profiles, and chat rooms are completely hidden until identity verification is satisfied.
-* **RFC 5322 Anti-Spoofing:** Strict regular expression and domain normalization verify official school inboxes (`@students.aobajapan.jp`, `@bst.ac.jp`, `@asij.ac.jp`, `@k-international.ed.jp`, etc.), rejecting generic public providers (`@gmail.com`, `@yahoo.com`) and subdomain spoofing attempts.
+* **RFC 5322 Anti-Spoofing:** Strict regular expression and domain normalization verify official school inboxes rejecting generic public providers (`@gmail.com`, `@yahoo.com`) and subdomain spoofing attempts.
 * **100% Free 6-Digit OTP:** Powered by passwordless one-time password (OTP) delivery directly to student school inboxes.
 
-### 2. Apple-Inspired Calming Light Interface
-* **Research-Grounded Palette:** Built on a gentle off-white canvas (`#f7faf8`) paired with muted sage and emerald accents (`#10b981`, `#059669`) to minimize eye strain during intense multi-hour study sessions.
-* **Interactive Canvas Spotlight:** A hardware-accelerated HTML5 canvas tracks the user's cursor using linear interpolation (`lerp`), casting a fluid, organic emerald aura across the background.
-* **Spring-Physics Segmented Controls:** Curriculum pills and format tabs utilize Framer Motion spring curves (`stiffness: 450, damping: 35`) for tactile micro-interactions.
-
-### 3. Supercharged Study Pod Chat & In-Room Pomodoro
+### 2. Supercharged Study Pod Chat & In-Room Pomodoro
 * **Synchronized 25/5 Study Sprint:** An expandable focus timer allows pod leaders to initiate a 25-minute Pomodoro past-paper sprint with live visual progress bars and room-wide notification broadcasts.
 * **One-Tap Transit & Library Status Chips:** Pre-built quick action chips (`👋 Arrived at library!`, `⏳ Running 5 mins late`, `📄 Check Q3 markscheme`) enable rapid mobile communication.
 * **Rich Past-Paper Resource Cards:** Students can attach past-paper links (Google Drive, PDFs, IB Docs) that render into interactive, categorized preview cards.
 
-### 4. Meeting Logistics & Calendar RSVP Integration
+### 3. Meeting Logistics & Calendar RSVP Integration
 * **Verified Public Venues Only:** To eliminate child safety concerns associated with residential meetups, sessions are restricted to approved public hubs (Tokyo Metropolitan Central Library in Arisugawa Park, Minato Central Library in Shibakoen, and school library quiet rooms).
 * **One-Click Calendar Sync:** Automatically generates Google Calendar deep links and RFC 5545 `.ics` downloads pre-populated with library GPS coordinates, study agendas, and host details.
 
-### 5. Official Automated CAS / NHS Verification Engine
-* **Service Hours Ledger:** Hosting peer study sessions automatically credits service hours based on session duration.
-* **Printable Service Certificate:** Generates a formal, printable verification document compliant with IB Diploma CAS Service strand outcomes and NHS portfolios, complete with cryptographic verification IDs and advisor signature fields.
-
-### 6. Safety & Content Moderation Shield
+### 5. Safety & Content Moderation Shield
 * **PII Leak Detection:** Scans outgoing chat messages for phone numbers and private addresses, issuing real-time warnings to keep communication on-platform.
 * **Academic Dishonesty Defense:** Built-in heuristics identify and block requests to buy/sell unreleased exam papers, test bank leaks, or commercial tutoring solicitation.
 * **Anti-Flood Rate Limiting:** Enforces client-level token bucket limits (1.2s message cooldown, 20s pod creation cooldown) to prevent spam.
