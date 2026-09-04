@@ -238,7 +238,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                   className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50/90 hover:bg-emerald-100 border border-emerald-200/90 text-xs font-semibold text-emerald-800 transition-all cursor-pointer shadow-2xs group active:scale-95"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform" />
-                  <span>Why KantoPrep? · The Science &amp; Founder Note</span>
+                  <span>Why KantoPrep? (Our Mission)</span>
                 </button>
               </motion.div>
             )}
