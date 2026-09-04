@@ -38,7 +38,7 @@ International school students in Tokyo preparing for high-stakes standardized cu
 * **Verified Public Venues Only:** To eliminate child safety concerns associated with residential meetups, sessions are restricted to approved public hubs (Tokyo Metropolitan Central Library in Arisugawa Park, Minato Central Library in Shibakoen, and school library quiet rooms).
 * **One-Click Calendar Sync:** Automatically generates Google Calendar deep links and RFC 5545 `.ics` downloads pre-populated with library GPS coordinates, study agendas, and host details.
 
-### 5. Safety & Content Moderation Shield
+### 4. Safety & Content Moderation Shield
 * **PII Leak Detection:** Scans outgoing chat messages for phone numbers and private addresses, issuing real-time warnings to keep communication on-platform.
 * **Academic Dishonesty Defense:** Built-in heuristics identify and block requests to buy/sell unreleased exam papers, test bank leaks, or commercial tutoring solicitation.
 * **Anti-Flood Rate Limiting:** Enforces client-level token bucket limits (1.2s message cooldown, 20s pod creation cooldown) to prevent spam.
