@@ -28,13 +28,23 @@ export const SafetyReportModal: React.FC<SafetyReportModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const sanitizedDetails = sanitizeInput(details);
-    console.log('Safety Report Filed:', {
+    const reportData = {
+      id: `report_${Date.now()}`,
       groupId: group.id,
+      groupTitle: group.title,
       reporter: currentUser.email,
+      reporterName: currentUser.fullName,
       reason,
       details: sanitizedDetails,
       timestamp: new Date().toISOString(),
-    });
+    };
+
+    try {
+      const existing = JSON.parse(localStorage.getItem('kantoprep_safety_reports') || '[]');
+      localStorage.setItem('kantoprep_safety_reports', JSON.stringify([reportData, ...existing]));
+    } catch {
+      // Ignore
+    }
 
     setSubmitted(true);
     setTimeout(() => {

@@ -22,6 +22,10 @@ import {
   FileText,
   Bookmark,
   CheckCircle2,
+  Share2,
+  Check,
+  LogOut,
+  Trash2,
 } from 'lucide-react';
 import { StudyGroup, StudentProfile, ChatMessage, ResourceMetadata, ResourceCategory } from '@/types';
 import { VENUE_CONFIG, getGoogleMapsUrl } from '@/lib/constants';
@@ -36,6 +40,8 @@ interface GroupChatDrawerProps {
   messages: ChatMessage[];
   onSendMessage: (groupId: string, content: string, type?: 'text' | 'resource_link' | 'timer_event', resource?: ResourceMetadata) => void;
   onOpenReport: (group: StudyGroup) => void;
+  onLeaveGroup?: (groupId: string) => void;
+  onCancelGroup?: (groupId: string) => void;
 }
 
 export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
@@ -46,10 +52,65 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
   messages,
   onSendMessage,
   onOpenReport,
+  onLeaveGroup,
+  onCancelGroup,
 }) => {
   const [inputText, setInputText] = useState('');
   const [safetyAlert, setSafetyAlert] = useState<string | null>(null);
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const isHost = group ? group.host.id === currentUser.id : false;
+  const isMember = group ? group.members.some((m) => m.id === currentUser.id) : false;
+
+  // Handle Share pod link
+  const handleShare = async () => {
+    if (!group) return;
+    const shareUrl = typeof window !== 'undefined'
+      ? `${window.location.origin}/?pod=${group.id}`
+      : `https://kantoprep.vercel.app/?pod=${group.id}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `KantoPrep: ${group.title}`,
+          text: `Join our Tokyo peer study pod for ${group.subject} at ${group.venueLabel}!`,
+          url: shareUrl,
+        });
+        return;
+      } catch {
+        // Ignore
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2000);
+    } catch {
+      // Ignore
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    if (!group) return;
+    setIsLeaveModalOpen(false);
+    if (onLeaveGroup) {
+      onLeaveGroup(group.id);
+    }
+    onClose();
+  };
+
+  const handleConfirmCancel = () => {
+    if (!group) return;
+    setIsCancelModalOpen(false);
+    if (onCancelGroup) {
+      onCancelGroup(group.id);
+    }
+    onClose();
+  };
 
   // Pomodoro Focus Sprint State (25 mins = 1500 secs)
   const [timerSeconds, setTimerSeconds] = useState(25 * 60);
@@ -268,8 +329,21 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       <span className="font-semibold truncate">{group.venueLabel}</span>
                     </div>
 
-                    {/* Add to Maps and Calendar Buttons */}
+                    {/* Add to Maps, Calendar, and Share Buttons */}
                     <div className="flex items-center space-x-1">
+                      <button
+                        type="button"
+                        onClick={handleShare}
+                        className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-white border border-zinc-200 hover:border-emerald-300 text-[10px] text-zinc-700 hover:text-emerald-700 font-medium transition-colors cursor-pointer shadow-2xs"
+                        title="Share pod link"
+                      >
+                        {shareCopied ? (
+                          <Check className="w-3 h-3 text-emerald-600" />
+                        ) : (
+                          <Share2 className="w-3 h-3 text-emerald-600" />
+                        )}
+                        <span>{shareCopied ? 'Copied' : 'Share'}</span>
+                      </button>
                       <a
                         href={getGoogleMapsUrl(group.venueLabel, venueInfo?.address)}
                         target="_blank"
@@ -312,10 +386,31 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       <Clock className="w-3 h-3 text-amber-500 mr-1" />
                       {group.meetingTime} ({group.durationMinutes} mins)
                     </span>
-                    <span className="flex items-center">
-                      <Users className="w-3 h-3 text-emerald-600 mr-1" />
-                      {group.members.length}/{group.maxMembers} Students
-                    </span>
+                    <div className="flex items-center space-x-2">
+                      <span className="flex items-center">
+                        <Users className="w-3 h-3 text-emerald-600 mr-1" />
+                        {group.members.length}/{group.maxMembers} Students
+                      </span>
+                      {isHost ? (
+                        <button
+                          type="button"
+                          onClick={() => setIsCancelModalOpen(true)}
+                          className="text-[10px] text-red-500 hover:text-red-700 font-medium hover:underline cursor-pointer pl-1.5 border-l border-zinc-200"
+                          title="Cancel and remove this study session"
+                        >
+                          Cancel Pod
+                        </button>
+                      ) : isMember ? (
+                        <button
+                          type="button"
+                          onClick={() => setIsLeaveModalOpen(true)}
+                          className="text-[10px] text-zinc-500 hover:text-red-600 font-medium hover:underline cursor-pointer pl-1.5 border-l border-zinc-200"
+                          title="Leave this study pod"
+                        >
+                          Leave Pod
+                        </button>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
 
@@ -655,6 +750,99 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                   </button>
                 </div>
               </form>
+              {/* Leave Pod Confirmation Modal */}
+              <AnimatePresence>
+                {isLeaveModalOpen && (
+                  <div className="fixed inset-0 z-70 flex items-center justify-center p-4">
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      onClick={() => setIsLeaveModalOpen(false)}
+                      className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+                    />
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                      className="relative w-full max-w-sm bg-white rounded-3xl p-5 shadow-2xl border border-zinc-200 z-10 space-y-3"
+                    >
+                      <div className="flex items-center space-x-2 text-zinc-900 font-bold text-sm">
+                        <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                          <LogOut className="w-4 h-4" />
+                        </div>
+                        <span>Leave Study Pod?</span>
+                      </div>
+                      <p className="text-xs text-zinc-600 leading-relaxed">
+                        Your seat will open for another student. To be respectful, a brief notice will be posted in the chat so your study partners aren't left waiting.
+                      </p>
+                      <div className="flex items-center justify-end space-x-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => setIsLeaveModalOpen(false)}
+                          className="px-3.5 py-1.5 rounded-xl border border-zinc-200 hover:bg-zinc-50 text-xs text-zinc-700 font-medium cursor-pointer transition-colors"
+                        >
+                          Stay in Pod
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleConfirmLeave}
+                          className="px-3.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold shadow-xs cursor-pointer transition-colors"
+                        >
+                          Confirm Leave
+                        </button>
+                      </div>
+                    </motion.div>
+                  </div>
+                )}
+              </AnimatePresence>
+
+              {/* Cancel Pod Confirmation Modal */}
+              <AnimatePresence>
+                {isCancelModalOpen && (
+                  <div className="fixed inset-0 z-70 flex items-center justify-center p-4">
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      onClick={() => setIsCancelModalOpen(false)}
+                      className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+                    />
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                      className="relative w-full max-w-sm bg-white rounded-3xl p-5 shadow-2xl border border-zinc-200 z-10 space-y-3"
+                    >
+                      <div className="flex items-center space-x-2 text-zinc-900 font-bold text-sm">
+                        <div className="w-8 h-8 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+                          <Trash2 className="w-4 h-4" />
+                        </div>
+                        <span>Cancel Study Session?</span>
+                      </div>
+                      <p className="text-xs text-zinc-600 leading-relaxed">
+                        As host, cancelling will remove <strong>{group.title}</strong> from KantoPrep listings and notify all joined members.
+                      </p>
+                      <div className="flex items-center justify-end space-x-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => setIsCancelModalOpen(false)}
+                          className="px-3.5 py-1.5 rounded-xl border border-zinc-200 hover:bg-zinc-50 text-xs text-zinc-700 font-medium cursor-pointer transition-colors"
+                        >
+                          Keep Session
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleConfirmCancel}
+                          className="px-3.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold shadow-xs cursor-pointer transition-colors"
+                        >
+                          Cancel Session
+                        </button>
+                      </div>
+                    </motion.div>
+                  </div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </div>
         </div>

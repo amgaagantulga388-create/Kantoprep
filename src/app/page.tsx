@@ -37,11 +37,13 @@ export default function Home() {
   // App Data State
   const [groups, setGroups] = useState<StudyGroup[]>(INITIAL_GROUPS);
   const [chatMessages, setChatMessages] = useState<Record<string, ChatMessage[]>>(INITIAL_CHAT_MESSAGES);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   // Filter States
   const [selectedCurriculum, setSelectedCurriculum] = useState<Curriculum | 'ALL'>('ALL');
   const [selectedFormat, setSelectedFormat] = useState<SessionFormat | 'ALL'>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMyPodsOnly, setIsMyPodsOnly] = useState(false);
 
   // Active Modals & Drawers
   const [activeChatGroup, setActiveChatGroup] = useState<StudyGroup | null>(null);
@@ -53,7 +55,7 @@ export default function Home() {
   const [pendingJoinGroup, setPendingJoinGroup] = useState<StudyGroup | null>(null);
   const [reportingGroup, setReportingGroup] = useState<StudyGroup | null>(null);
 
-  // Restore session from localStorage on initial load
+  // Restore session, groups, and chat history from localStorage on initial load
   useEffect(() => {
     try {
       const saved = localStorage.getItem('kantoprep_user');
@@ -63,18 +65,77 @@ export default function Home() {
           setCurrentUser(parsed);
         }
       }
+
+      const savedGroups = localStorage.getItem('kantoprep_groups');
+      if (savedGroups) {
+        const parsedGroups = JSON.parse(savedGroups);
+        if (Array.isArray(parsedGroups) && parsedGroups.length > 0) {
+          setGroups(parsedGroups);
+        }
+      }
+
+      const savedChats = localStorage.getItem('kantoprep_chats');
+      if (savedChats) {
+        const parsedChats = JSON.parse(savedChats);
+        if (parsedChats && typeof parsedChats === 'object') {
+          setChatMessages((prev) => ({ ...prev, ...parsedChats }));
+        }
+      }
     } catch {
       // Ignore
     } finally {
       setIsAuthLoading(false);
+      setIsDataLoaded(true);
     }
   }, []);
+
+  // Persist study groups across reloads
+  useEffect(() => {
+    if (isDataLoaded) {
+      try {
+        localStorage.setItem('kantoprep_groups', JSON.stringify(groups));
+      } catch {
+        // Ignore
+      }
+    }
+  }, [groups, isDataLoaded]);
+
+  // Persist chat messages across reloads
+  useEffect(() => {
+    if (isDataLoaded) {
+      try {
+        localStorage.setItem('kantoprep_chats', JSON.stringify(chatMessages));
+      } catch {
+        // Ignore
+      }
+    }
+  }, [chatMessages, isDataLoaded]);
+
+  // Deep link support (?pod=...)
+  useEffect(() => {
+    if (typeof window === 'undefined' || isAuthLoading || !currentUser) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const podId = params.get('pod');
+    if (!podId) return;
+
+    const matched = groups.find((g) => g.id === podId);
+    if (matched) {
+      const isMember = matched.members.some((m) => m.id === currentUser.id);
+      if (isMember) {
+        setActiveChatGroup(matched);
+      } else {
+        setPendingJoinGroup(matched);
+      }
+    }
+  }, [isAuthLoading, currentUser, groups]);
 
   // Handle Logo Click -> Go Home & Reset Filters
   const handleGoHome = () => {
     setSelectedCurriculum('ALL');
     setSelectedFormat('ALL');
     setSearchQuery('');
+    setIsMyPodsOnly(false);
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -100,9 +161,23 @@ export default function Home() {
     }
   };
 
+  // Compute number of joined or hosted pods
+  const myPodsCount = useMemo(() => {
+    if (!currentUser) return 0;
+    return groups.filter(
+      (g) => g.members.some((m) => m.id === currentUser.id) || g.host.id === currentUser.id
+    ).length;
+  }, [groups, currentUser]);
+
   // Filter Logic
   const filteredGroups = useMemo(() => {
     return groups.filter((group) => {
+      if (isMyPodsOnly) {
+        const isMyPod =
+          currentUser &&
+          (group.members.some((m) => m.id === currentUser.id) || group.host.id === currentUser.id);
+        if (!isMyPod) return false;
+      }
       if (selectedCurriculum !== 'ALL' && group.curriculum !== selectedCurriculum) {
         return false;
       }
@@ -121,7 +196,7 @@ export default function Home() {
       }
       return true;
     });
-  }, [groups, selectedCurriculum, selectedFormat, searchQuery]);
+  }, [groups, selectedCurriculum, selectedFormat, searchQuery, isMyPodsOnly, currentUser]);
 
   // Handle Joining or Opening Group
   const handleJoinOrOpen = (group: StudyGroup) => {
@@ -133,6 +208,45 @@ export default function Home() {
     } else {
       setActiveChatGroup(group);
     }
+  };
+
+  // Handle Leaving a Study Pod
+  const handleLeaveGroup = (groupId: string) => {
+    if (!currentUser) return;
+
+    setGroups((prev) =>
+      prev.map((g) => {
+        if (g.id === groupId) {
+          return {
+            ...g,
+            members: g.members.filter((m) => m.id !== currentUser.id),
+          };
+        }
+        return g;
+      })
+    );
+
+    const sysMsg: ChatMessage = {
+      id: `sys_leave_${Date.now()}`,
+      groupId,
+      sender: currentUser,
+      content: `🙏 ${currentUser.fullName} had to step out of this study pod.`,
+      createdAt: new Date().toISOString(),
+      isSystem: true,
+    };
+    setChatMessages((prev) => ({
+      ...prev,
+      [groupId]: [...(prev[groupId] || []), sysMsg],
+    }));
+
+    setActiveChatGroup(null);
+  };
+
+  // Handle Cancelling a Study Pod (Host Only)
+  const handleCancelGroup = (groupId: string) => {
+    if (!currentUser) return;
+    setGroups((prev) => prev.filter((g) => g.id !== groupId));
+    setActiveChatGroup(null);
   };
 
   // Handle Confirmed Join with Etiquette & Responsibility Acknowledgment
@@ -309,6 +423,9 @@ export default function Home() {
           selectedFormat={selectedFormat}
           onFormatChange={setSelectedFormat}
           totalResults={filteredGroups.length}
+          isMyPodsOnly={isMyPodsOnly}
+          onToggleMyPods={setIsMyPodsOnly}
+          myPodsCount={myPodsCount}
         />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -360,6 +477,8 @@ export default function Home() {
         messages={activeChatGroup ? chatMessages[activeChatGroup.id] || [] : []}
         onSendMessage={handleSendMessage}
         onOpenReport={(grp) => setReportingGroup(grp)}
+        onLeaveGroup={handleLeaveGroup}
+        onCancelGroup={handleCancelGroup}
       />
 
       {/* Join Responsibility & Etiquette Reminder Modal */}

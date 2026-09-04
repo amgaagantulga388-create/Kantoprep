@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Search, FileSpreadsheet, PenTool, Clock, Brain, Layers } from 'lucide-react';
+import { Search, FileSpreadsheet, PenTool, Clock, Brain, Layers, UserCheck } from 'lucide-react';
 import { SessionFormat } from '@/types';
 
 interface FilterBarProps {
@@ -11,6 +11,9 @@ interface FilterBarProps {
   selectedFormat: SessionFormat | 'ALL';
   onFormatChange: (f: SessionFormat | 'ALL') => void;
   totalResults: number;
+  isMyPodsOnly: boolean;
+  onToggleMyPods: (val: boolean) => void;
+  myPodsCount: number;
 }
 
 export const FilterBar: React.FC<FilterBarProps> = ({
@@ -19,6 +22,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   selectedFormat,
   onFormatChange,
   totalResults,
+  isMyPodsOnly,
+  onToggleMyPods,
+  myPodsCount,
 }) => {
   const formats: { id: SessionFormat | 'ALL'; label: string; icon: React.ElementType }[] = [
     { id: 'ALL', label: 'All Formats', icon: Layers },
@@ -60,6 +66,26 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               </button>
             );
           })}
+
+          {myPodsCount > 0 && (
+            <button
+              type="button"
+              onClick={() => onToggleMyPods(!isMyPodsOnly)}
+              className={`relative px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 flex items-center space-x-1.5 cursor-pointer ml-1 ${
+                isMyPodsOnly
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-emerald-800 bg-emerald-50/80 border border-emerald-200 hover:bg-emerald-100/80'
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>My Pods</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                isMyPodsOnly ? 'bg-emerald-700 text-white' : 'bg-emerald-200/80 text-emerald-900'
+              }`}>
+                {myPodsCount}
+              </span>
+            </button>
+          )}
         </div>
 
         {/* Search & Counter */}

@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     "IGCSE revision",
     "peer study groups",
   ],
-  authors: [{ name: "Amgaa Gantulga" }],
+  authors: [{ name: "Amgaa" }],
   icons: {
     icon: "/icon.png",
     shortcut: "/icon.png",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "KantoPrep | Tokyo International School Study Network",
-    description: "Syllabus-aligned study pods, live Pomodoro sprints, and safe public study hubs for Tokyo international students.",
+    description: "Never cram alone. Connect with verified Tokyo international high school peers (IB, AP, IGCSE, SAT) for past paper sprints at quiet libraries.",
     type: "website",
     locale: "en_US",
     siteName: "KantoPrep",
@@ -54,6 +54,12 @@ export const metadata: Metadata = {
         alt: "KantoPrep - Connect, Study, Succeed",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "KantoPrep | Tokyo International School Study Network",
+    description: "Never cram alone. Connect with verified Tokyo international high school peers for syllabus-aligned study pods.",
+    images: ["/logo.png"],
   },
 };
 

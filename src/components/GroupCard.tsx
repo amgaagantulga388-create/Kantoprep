@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ArrowUpRight, MessageCircle, ExternalLink } from 'lucide-react';
+import { MapPin, ArrowUpRight, MessageCircle, ExternalLink, Share2, Check } from 'lucide-react';
 import { StudyGroup, StudentProfile } from '@/types';
 import { FORMAT_CONFIG, getGoogleMapsUrl } from '@/lib/constants';
 
@@ -17,10 +17,39 @@ export const GroupCard: React.FC<GroupCardProps> = ({
   currentUser,
   onJoinOrOpen,
 }) => {
+  const [copied, setCopied] = useState(false);
   const isMember = group.members.some((m) => m.id === currentUser.id);
   const isHost = group.host.id === currentUser.id;
   const isFull = group.members.length >= group.maxMembers;
   const formatInfo = FORMAT_CONFIG[group.format] || FORMAT_CONFIG.past_paper_sprint;
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const shareUrl = typeof window !== 'undefined'
+      ? `${window.location.origin}/?pod=${group.id}`
+      : `https://kantoprep.vercel.app/?pod=${group.id}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `KantoPrep: ${group.title}`,
+          text: `Join our Tokyo peer study pod for ${group.subject} at ${group.venueLabel}!`,
+          url: shareUrl,
+        });
+        return;
+      } catch {
+        // Fallback to clipboard if cancelled or failed
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Ignore
+    }
+  };
 
   const curriculumStyles: Record<string, string> = {
     IB: 'border-blue-200 text-blue-700 bg-blue-50',
@@ -119,31 +148,51 @@ export const GroupCard: React.FC<GroupCardProps> = ({
           </div>
         </div>
 
-        <button
-          onClick={() => onJoinOrOpen(group)}
-          className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 active:scale-[0.98] cursor-pointer ${
-            isMember
-              ? 'bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100'
-              : isFull
-              ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed border border-zinc-200'
-              : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm shadow-emerald-600/20'
-          }`}
-          disabled={isFull && !isMember}
-        >
-          {isMember ? (
-            <>
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span>{isHost ? 'Host Chat' : 'Open Chat'}</span>
-            </>
-          ) : isFull ? (
-            <span>Pod Full</span>
-          ) : (
-            <>
-              <span>Join Pod</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </>
-          )}
-        </button>
+        <div className="flex items-center space-x-1.5">
+          <button
+            type="button"
+            onClick={handleShare}
+            className="relative p-2 rounded-xl border border-zinc-200 hover:border-emerald-300 hover:bg-emerald-50/60 text-zinc-400 hover:text-emerald-700 transition-all cursor-pointer shadow-2xs"
+            title="Share pod link with peers"
+          >
+            {copied ? (
+              <Check className="w-3.5 h-3.5 text-emerald-600" />
+            ) : (
+              <Share2 className="w-3.5 h-3.5" />
+            )}
+            {copied && (
+              <span className="absolute -top-7 right-0 px-2 py-0.5 rounded-md bg-zinc-900 text-white text-[10px] font-medium whitespace-nowrap shadow-lg animate-in fade-in slide-in-from-bottom-1">
+                Link copied!
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => onJoinOrOpen(group)}
+            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 active:scale-[0.98] cursor-pointer ${
+              isMember
+                ? 'bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100'
+                : isFull
+                ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed border border-zinc-200'
+                : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm shadow-emerald-600/20'
+            }`}
+            disabled={isFull && !isMember}
+          >
+            {isMember ? (
+              <>
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>{isHost ? 'Host Chat' : 'Open Chat'}</span>
+              </>
+            ) : isFull ? (
+              <span>Pod Full</span>
+            ) : (
+              <>
+                <span>Join Pod</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </motion.div>
   );
