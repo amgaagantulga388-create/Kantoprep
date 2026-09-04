@@ -25,6 +25,7 @@ export const JoinGroupModal: React.FC<JoinGroupModalProps> = ({
 
   const venueInfo = VENUE_CONFIG[group.venueType];
   const mapsUrl = getGoogleMapsUrl(group.venueLabel, venueInfo?.address);
+  const isFull = group.members.length >= group.maxMembers;
 
   return (
     <AnimatePresence>
@@ -91,15 +92,24 @@ export const JoinGroupModal: React.FC<JoinGroupModalProps> = ({
             </div>
           </div>
 
-          {/* Smooth Responsibility & Attendance Reminder */}
-          <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-zinc-700 space-y-2 mb-5">
-            <div className="flex items-center space-x-1.5 text-emerald-900 font-bold">
-              <span>🤝 A quick reminder before you join:</span>
+          {/* Capacity notice or Smooth Responsibility & Attendance Reminder */}
+          {isFull ? (
+            <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start space-x-2 mb-5">
+              <Users className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <p className="leading-relaxed">
+                This study pod is currently full (<strong>{group.members.length}/{group.maxMembers}</strong> seats taken). Check back soon or browse other available sessions!
+              </p>
             </div>
-            <p className="text-zinc-600 leading-relaxed">
-              Your peers are reserving a seat for you. If your schedule changes or something comes up, <strong>please notify your pod in the chat beforehand</strong> so the group can plan accordingly.
-            </p>
-          </div>
+          ) : (
+            <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-zinc-700 space-y-2 mb-5">
+              <div className="flex items-center space-x-1.5 text-emerald-900 font-bold">
+                <span>🤝 A quick reminder before you join:</span>
+              </div>
+              <p className="text-zinc-600 leading-relaxed">
+                Your peers are reserving a seat for you. If your schedule changes or something comes up, <strong>please notify your pod in the chat beforehand</strong> so the group can plan accordingly.
+              </p>
+            </div>
+          )}
 
           {/* Action Buttons */}
           <div className="flex gap-2.5">
@@ -112,11 +122,16 @@ export const JoinGroupModal: React.FC<JoinGroupModalProps> = ({
             </button>
             <button
               type="button"
+              disabled={isFull}
               onClick={() => onConfirmJoin(group)}
-              className="w-2/3 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 active:scale-95 transition-all flex items-center justify-center space-x-1.5 cursor-pointer"
+              className={`w-2/3 py-2.5 rounded-xl text-xs font-semibold transition-all flex items-center justify-center space-x-1.5 ${
+                isFull
+                  ? 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
+                  : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-600/20 active:scale-95 cursor-pointer'
+              }`}
             >
-              <span>I Commit &amp; Join Pod</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>{isFull ? 'Pod Full' : 'I Commit & Join Pod'}</span>
+              {!isFull && <ArrowRight className="w-3.5 h-3.5" />}
             </button>
           </div>
         </motion.div>

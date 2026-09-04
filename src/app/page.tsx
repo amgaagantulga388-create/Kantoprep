@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navbar } from '@/components/Navbar';
 import { HeroSection } from '@/components/HeroSection';
@@ -111,9 +111,11 @@ export default function Home() {
     }
   }, [chatMessages, isDataLoaded]);
 
-  // Deep link support (?pod=...)
+  const deepLinkProcessedRef = useRef(false);
+
+  // Deep link support (?pod=...) runs once after auth and data load
   useEffect(() => {
-    if (typeof window === 'undefined' || isAuthLoading || !currentUser) return;
+    if (typeof window === 'undefined' || isAuthLoading || !currentUser || deepLinkProcessedRef.current) return;
 
     const params = new URLSearchParams(window.location.search);
     const podId = params.get('pod');
@@ -121,6 +123,7 @@ export default function Home() {
 
     const matched = groups.find((g) => g.id === podId);
     if (matched) {
+      deepLinkProcessedRef.current = true;
       const isMember = matched.members.some((m) => m.id === currentUser.id);
       if (isMember) {
         setActiveChatGroup(matched);
@@ -129,6 +132,16 @@ export default function Home() {
       }
     }
   }, [isAuthLoading, currentUser, groups]);
+
+  // Keep active chat group in sync with any group updates (leave, join, profile update)
+  useEffect(() => {
+    if (activeChatGroup) {
+      const fresh = groups.find((g) => g.id === activeChatGroup.id);
+      if (fresh && fresh !== activeChatGroup) {
+        setActiveChatGroup(fresh);
+      }
+    }
+  }, [groups, activeChatGroup]);
 
   // Handle Logo Click -> Go Home & Reset Filters
   const handleGoHome = () => {
@@ -281,8 +294,13 @@ export default function Home() {
     }
 
     setPendingJoinGroup(null);
-    const targetGroup = groups.find((g) => g.id === group.id) || group;
-    setActiveChatGroup(targetGroup);
+    const updatedTargetGroup: StudyGroup = {
+      ...group,
+      members: group.members.some((m) => m.id === currentUser.id)
+        ? group.members
+        : [...group.members, currentUser],
+    };
+    setActiveChatGroup(updatedTargetGroup);
   };
 
   // Handle User Profile Update (Avatar, Nickname)
