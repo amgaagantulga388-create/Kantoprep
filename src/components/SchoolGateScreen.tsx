@@ -151,8 +151,12 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
       {/* Top Header */}
       <header className="relative z-10 w-full px-4 sm:px-6 py-4 sm:py-5 max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-2.5">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 shadow-md shadow-emerald-600/20 text-white font-bold text-base sm:text-lg flex items-center justify-center tracking-wider">
-            KP
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl overflow-hidden shadow-md shadow-emerald-600/15 border border-emerald-200/80 shrink-0 bg-white">
+            <img
+              src="/logo.jpg"
+              alt="KantoPrep Logo"
+              className="w-full h-full object-cover"
+            />
           </div>
           <div>
             <span className="text-base sm:text-lg font-bold tracking-tight text-zinc-900">KantoPrep</span>
@@ -176,8 +180,20 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
       {/* Center Gated Access Screen */}
       <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 py-6 sm:py-10">
         <div className="w-full max-w-md mx-auto">
-          {/* Tagline */}
+          {/* Tagline & Logo Emblem */}
           <div className="text-center mb-5 sm:mb-6">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3.5 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg shadow-emerald-600/15 border-2 border-emerald-500/20 bg-white p-0.5"
+            >
+              <img
+                src="/logo.jpg"
+                alt="KantoPrep Emblem"
+                className="w-full h-full object-cover rounded-[14px] sm:rounded-[22px]"
+              />
+            </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}

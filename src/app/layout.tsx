@@ -20,6 +20,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://kantoprep.vercel.app'),
   title: "KantoPrep | Tokyo International School Study Network",
   description: "Student-governed platform connecting Tokyo international school students (A-JIS, BST, ASIJ, KIST) into syllabus-aligned study pods (IB, AP, IGCSE, SAT).",
   keywords: [
@@ -28,17 +29,30 @@ export const metadata: Metadata = {
     "A-JIS",
     "Tokyo international school",
     "study pods",
-    "CAS hours",
     "past paper sprints",
     "AP exams",
+    "IGCSE revision",
+    "peer study groups",
   ],
   authors: [{ name: "Amgaa Gantulga" }],
+  icons: {
+    icon: "/logo.jpg",
+    apple: "/logo.jpg",
+  },
   openGraph: {
     title: "KantoPrep | Tokyo International School Study Network",
-    description: "Syllabus-aligned study pods, live Pomodoro sprints, and verified CAS hours for Tokyo students.",
+    description: "Syllabus-aligned study pods, live Pomodoro sprints, and safe public study hubs for Tokyo international students.",
     type: "website",
     locale: "en_US",
     siteName: "KantoPrep",
+    images: [
+      {
+        url: "/logo.jpg",
+        width: 800,
+        height: 800,
+        alt: "KantoPrep - Connect, Study, Succeed",
+      },
+    ],
   },
 };
 
