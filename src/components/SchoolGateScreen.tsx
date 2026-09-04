@@ -22,11 +22,13 @@ import { InteractiveBackground } from './InteractiveBackground';
 interface SchoolGateScreenProps {
   onAuthenticated: (user: StudentProfile) => void;
   onOpenFeedback?: () => void;
+  onOpenWhyKantoPrep?: () => void;
 }
 
 export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
   onAuthenticated,
   onOpenFeedback,
+  onOpenWhyKantoPrep,
 }) => {
   const [step, setStep] = useState<'email' | 'code' | 'profile'>('email');
   const [email, setEmail] = useState('');
@@ -166,15 +168,26 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
           </div>
         </div>
 
-        {onOpenFeedback && (
-          <button
-            onClick={onOpenFeedback}
-            className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-white/80 border border-zinc-200 hover:border-emerald-300 text-xs text-zinc-600 hover:text-emerald-700 font-medium transition-all shadow-2xs cursor-pointer"
-          >
-            <MessageSquarePlus className="w-3.5 h-3.5 text-emerald-600" />
-            <span className="hidden sm:inline">Suggest a Venue</span>
-          </button>
-        )}
+        <div className="flex items-center space-x-2">
+          {onOpenWhyKantoPrep && (
+            <button
+              onClick={onOpenWhyKantoPrep}
+              className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-emerald-50/80 border border-emerald-200 hover:border-emerald-300 text-xs text-emerald-800 font-semibold transition-all shadow-2xs cursor-pointer"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Why KantoPrep?</span>
+            </button>
+          )}
+          {onOpenFeedback && (
+            <button
+              onClick={onOpenFeedback}
+              className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-white/80 border border-zinc-200 hover:border-emerald-300 text-xs text-zinc-600 hover:text-emerald-700 font-medium transition-all shadow-2xs cursor-pointer"
+            >
+              <MessageSquarePlus className="w-3.5 h-3.5 text-emerald-600" />
+              <span className="hidden sm:inline">Suggest a Venue</span>
+            </button>
+          )}
+        </div>
       </header>
 
       {/* Center Gated Access Screen */}
@@ -199,9 +212,9 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
               animate={{ opacity: 1, y: 0 }}
               className="text-2xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 leading-tight"
             >
-              Find your study orbit.{' '}
+              You don&apos;t have to study alone.{' '}
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500">
-                Together.
+                Ever.
               </span>
             </motion.h1>
             <motion.p
@@ -212,6 +225,23 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
             >
               Tokyo&apos;s verified student study network for IB & AP. Sign in with your school email to unlock study pods.
             </motion.p>
+            {onOpenWhyKantoPrep && (
+              <motion.div
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="mt-2.5"
+              >
+                <button
+                  type="button"
+                  onClick={onOpenWhyKantoPrep}
+                  className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50/90 hover:bg-emerald-100 border border-emerald-200/90 text-xs font-semibold text-emerald-800 transition-all cursor-pointer shadow-2xs group active:scale-95"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform" />
+                  <span>Why KantoPrep? · The Science &amp; Founder Note</span>
+                </button>
+              </motion.div>
+            )}
           </div>
 
           {/* Gated Access Card */}

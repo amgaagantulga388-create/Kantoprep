@@ -12,6 +12,7 @@ import { SafetyReportModal } from '@/components/SafetyReportModal';
 import { SchoolSwitchModal } from '@/components/SchoolSwitchModal';
 import { SchoolGateScreen } from '@/components/SchoolGateScreen';
 import { FeedbackModal } from '@/components/FeedbackModal';
+import { WhyKantoPrepModal } from '@/components/WhyKantoPrepModal';
 import { InteractiveBackground } from '@/components/InteractiveBackground';
 import {
   Curriculum,
@@ -45,6 +46,7 @@ export default function Home() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isSchoolSwitchOpen, setIsSchoolSwitchOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [isWhyModalOpen, setIsWhyModalOpen] = useState(false);
   const [reportingGroup, setReportingGroup] = useState<StudyGroup | null>(null);
 
   // Restore session from localStorage on initial load
@@ -222,11 +224,16 @@ export default function Home() {
         <SchoolGateScreen
           onAuthenticated={handleAuthenticated}
           onOpenFeedback={() => setIsFeedbackModalOpen(true)}
+          onOpenWhyKantoPrep={() => setIsWhyModalOpen(true)}
         />
         <FeedbackModal
           isOpen={isFeedbackModalOpen}
           onClose={() => setIsFeedbackModalOpen(false)}
           currentUser={null}
+        />
+        <WhyKantoPrepModal
+          isOpen={isWhyModalOpen}
+          onClose={() => setIsWhyModalOpen(false)}
         />
       </>
     );
@@ -245,6 +252,7 @@ export default function Home() {
         currentUser={currentUser}
         onGoHome={handleGoHome}
         onOpenFeedback={() => setIsFeedbackModalOpen(true)}
+        onOpenWhyKantoPrep={() => setIsWhyModalOpen(true)}
         onOpenAuthModal={() => {}}
         onOpenCreateModal={() => setIsCreateModalOpen(true)}
         onOpenSchoolSwitch={() => setIsSchoolSwitchOpen(true)}
@@ -257,6 +265,7 @@ export default function Home() {
           selectedCurriculum={selectedCurriculum}
           onSelectCurriculum={setSelectedCurriculum}
           groupCount={groups.length}
+          onOpenWhyKantoPrep={() => setIsWhyModalOpen(true)}
         />
 
         <FilterBar
@@ -347,6 +356,12 @@ export default function Home() {
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
         currentUser={currentUser}
+      />
+
+      {/* Why KantoPrep Manifesto & Science Modal */}
+      <WhyKantoPrepModal
+        isOpen={isWhyModalOpen}
+        onClose={() => setIsWhyModalOpen(false)}
       />
 
       {/* Footer */}

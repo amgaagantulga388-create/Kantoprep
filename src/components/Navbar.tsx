@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus } from 'lucide-react';
+import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles } from 'lucide-react';
 import { StudentProfile } from '@/types';
 import { ALLOWED_SCHOOLS } from '@/lib/constants';
 
@@ -9,6 +9,7 @@ interface NavbarProps {
   currentUser: StudentProfile | null;
   onGoHome: () => void;
   onOpenFeedback: () => void;
+  onOpenWhyKantoPrep?: () => void;
   onOpenAuthModal: () => void;
   onOpenCreateModal: () => void;
   onOpenSchoolSwitch: () => void;
@@ -19,6 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentUser,
   onGoHome,
   onOpenFeedback,
+  onOpenWhyKantoPrep,
   onOpenAuthModal,
   onOpenCreateModal,
   onOpenSchoolSwitch,
@@ -78,6 +80,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right: Actions */}
         <div className="flex items-center space-x-1.5 sm:space-x-2.5">
+          {/* Why KantoPrep Button */}
+          {onOpenWhyKantoPrep && (
+            <button
+              onClick={onOpenWhyKantoPrep}
+              className="hidden sm:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-emerald-50/80 border border-emerald-200 hover:border-emerald-300 text-emerald-800 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
+              title="Why KantoPrep? Our mission and research"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Why KantoPrep?</span>
+            </button>
+          )}
+
           {/* Feedback Button */}
           <button
             onClick={onOpenFeedback}
