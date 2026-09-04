@@ -201,7 +201,7 @@ export const INITIAL_CHAT_MESSAGES: Record<string, ChatMessage[]> = {
       id: 'msg_2',
       groupId: 'grp_1',
       sender: INITIAL_STUDENTS.usr_2,
-      content: 'Awesome Kenji. Did you check question 9 on the vectors with the scalar product? That one was brutal in the mock.',
+      content: 'Awesome Amgaa! Did you check question 9 on the vectors with the scalar product? That one was brutal in the mock.',
       createdAt: new Date(Date.now() - 1800000 * 2).toISOString(),
     },
     {
@@ -210,6 +210,22 @@ export const INITIAL_CHAT_MESSAGES: Record<string, ChatMessage[]> = {
       sender: CURRENT_USER,
       content: 'Yeah exactly, we will spend 20 minutes specifically dissecting the markscheme for that question.',
       createdAt: new Date(Date.now() - 1800000 * 1).toISOString(),
+    },
+    {
+      id: 'msg_res_1',
+      groupId: 'grp_1',
+      sender: CURRENT_USER,
+      content: 'Shared a resource: May 2024 Math AA HL TZ2 Paper 1 Markscheme',
+      createdAt: new Date(Date.now() - 1800000 * 0.5).toISOString(),
+      type: 'resource_link',
+      resource: {
+        id: 'res_sample_1',
+        title: 'May 2024 Math AA HL TZ2 Paper 1 Markscheme (Official)',
+        url: 'https://ibdocs.re',
+        category: 'markscheme',
+        sharedBy: 'Amgaa (A-JIS)',
+        createdAt: new Date(Date.now() - 1800000 * 0.5).toISOString(),
+      },
     },
   ],
   grp_2: [

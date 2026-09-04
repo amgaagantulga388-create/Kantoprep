@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,9 +12,34 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#f7faf8",
+};
+
 export const metadata: Metadata = {
   title: "KantoPrep | Tokyo International School Study Network",
-  description: "Student-only platform connecting Tokyo international school students into syllabus-aligned study groups (IB, AP, IGCSE, SAT).",
+  description: "Student-governed platform connecting Tokyo international school students (A-JIS, BST, ASIJ, KIST) into syllabus-aligned study pods (IB, AP, IGCSE, SAT).",
+  keywords: [
+    "IB Diploma",
+    "Aoba-Japan International School",
+    "A-JIS",
+    "Tokyo international school",
+    "study pods",
+    "CAS hours",
+    "past paper sprints",
+    "AP exams",
+  ],
+  authors: [{ name: "Amgaa Gantulga" }],
+  openGraph: {
+    title: "KantoPrep | Tokyo International School Study Network",
+    description: "Syllabus-aligned study pods, live Pomodoro sprints, and verified CAS hours for Tokyo students.",
+    type: "website",
+    locale: "en_US",
+    siteName: "KantoPrep",
+  },
 };
 
 export default function RootLayout({
