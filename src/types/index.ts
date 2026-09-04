@@ -7,9 +7,14 @@ export type SessionFormat =
   | 'exam_cram';
 
 export type VenueType = 
-  | 'school_library' 
+  | 'hikarigaoka_library'
   | 'hiroo_metropolitan_library' 
   | 'minato_library' 
+  | 'shibuya_central_library'
+  | 'setagaya_central_library'
+  | 'chiyoda_central_library'
+  | 'yokohama_central_library'
+  | 'school_library' 
   | 'virtual_zoom' 
   | 'virtual_discord';
 
@@ -30,7 +35,7 @@ export interface StudentProfile {
   gradeLevel: number; // 9, 10, 11, 12
   curriculum: Curriculum;
   subjects: string[];
-  casHours: number;
+  casHours?: number;
   avatarUrl?: string;
   role?: 'student' | 'admin';
 }
@@ -95,5 +100,13 @@ export interface SafetyReport {
   reason: string;
   details: string;
   status: 'pending' | 'reviewed' | 'action_taken';
+  createdAt: string;
+}
+
+export interface FeedbackReport {
+  id: string;
+  category: 'venue_suggestion' | 'feature_request' | 'bug_report' | 'general';
+  message: string;
+  studentEmail?: string;
   createdAt: string;
 }

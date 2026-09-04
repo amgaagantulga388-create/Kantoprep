@@ -169,10 +169,10 @@ export const FORMAT_CONFIG: Record<SessionFormat, { label: string; badge: string
 };
 
 export const VENUE_CONFIG: Record<VenueType, { label: string; isPhysical: boolean; address: string }> = {
-  school_library: {
-    label: 'School Campus Library',
+  hikarigaoka_library: {
+    label: 'Nerima City Hikarigaoka Library',
     isPhysical: true,
-    address: 'On-campus designated quiet study rooms during after-school hours',
+    address: '4-1-5 Hikarigaoka, Nerima-ku (Near A-JIS Hikarigaoka Campus)',
   },
   hiroo_metropolitan_library: {
     label: 'Tokyo Metropolitan Central Library',
@@ -183,6 +183,31 @@ export const VENUE_CONFIG: Record<VenueType, { label: string; isPhysical: boolea
     label: 'Minato City Central Library',
     isPhysical: true,
     address: '3-2-25 Shibakoen, Minato-ku (near Tokyo Tower)',
+  },
+  shibuya_central_library: {
+    label: 'Shibuya City Central Library',
+    isPhysical: true,
+    address: '1-12-8 Jingumae, Shibuya-ku (Near Harajuku / Meiji-Jingumae)',
+  },
+  setagaya_central_library: {
+    label: 'Setagaya City Central Library',
+    isPhysical: true,
+    address: '2-16-1 Tsurumaki, Setagaya-ku (Peace Forest Park)',
+  },
+  chiyoda_central_library: {
+    label: 'Chiyoda City Central Library',
+    isPhysical: true,
+    address: '1-2-1 Kudanminami, Chiyoda-ku (Chiyoda Ward Office 9F)',
+  },
+  yokohama_central_library: {
+    label: 'Yokohama Central Library',
+    isPhysical: true,
+    address: '1 Oimatsucho, Nishi-ku, Yokohama (Nogeyama Park)',
+  },
+  school_library: {
+    label: 'School Campus Library',
+    isPhysical: true,
+    address: 'On-campus designated quiet study rooms during after-school hours',
   },
   virtual_zoom: {
     label: 'Secure Video Room (Zoom / Daily)',

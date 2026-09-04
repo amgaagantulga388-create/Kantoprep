@@ -80,7 +80,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       gradeLevel: 11,
       curriculum: 'IB',
       subjects: ['Math Analysis & Approaches HL', 'Physics HL', 'Economics HL'],
-      casHours: 14.5,
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120',
       role: 'student',
     };
@@ -119,7 +118,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       gradeLevel,
       curriculum,
       subjects: selectedSubjects,
-      casHours: 0,
       avatarUrl: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120`,
       role: 'student',
     };
