@@ -36,8 +36,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Amgaa Gantulga" }],
   icons: {
-    icon: "/logo.jpg",
-    apple: "/logo.jpg",
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/apple-icon.png",
   },
   openGraph: {
     title: "KantoPrep | Tokyo International School Study Network",
@@ -47,9 +48,9 @@ export const metadata: Metadata = {
     siteName: "KantoPrep",
     images: [
       {
-        url: "/logo.jpg",
-        width: 800,
-        height: 800,
+        url: "/logo.png",
+        width: 512,
+        height: 512,
         alt: "KantoPrep - Connect, Study, Succeed",
       },
     ],

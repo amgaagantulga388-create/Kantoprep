@@ -39,13 +39,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="flex items-center space-x-2.5 text-left cursor-pointer group focus:outline-none"
           title="KantoPrep Home"
         >
-          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl overflow-hidden shadow-md shadow-emerald-600/15 border border-emerald-200/80 group-hover:scale-105 transition-transform shrink-0 bg-white">
+          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-md shadow-emerald-600/15 border border-emerald-200/80 group-hover:scale-105 transition-transform shrink-0 bg-white">
             <img
-              src="/logo.jpg"
+              src="/logo.png"
               alt="KantoPrep Logo"
               className="w-full h-full object-cover"
             />
-            <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full" />
           </div>
           <div>
             <div className="flex items-center space-x-1.5">

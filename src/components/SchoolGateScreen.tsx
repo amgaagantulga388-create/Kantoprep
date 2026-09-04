@@ -151,9 +151,9 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
       {/* Top Header */}
       <header className="relative z-10 w-full px-4 sm:px-6 py-4 sm:py-5 max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-2.5">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl overflow-hidden shadow-md shadow-emerald-600/15 border border-emerald-200/80 shrink-0 bg-white">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-md shadow-emerald-600/15 border border-emerald-200/80 shrink-0 bg-white">
             <img
-              src="/logo.jpg"
+              src="/logo.png"
               alt="KantoPrep Logo"
               className="w-full h-full object-cover"
             />
@@ -186,12 +186,12 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
-              className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3.5 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg shadow-emerald-600/15 border-2 border-emerald-500/20 bg-white p-0.5"
+              className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3.5 rounded-full overflow-hidden shadow-lg shadow-emerald-600/15 border-2 border-emerald-500/20 bg-white p-0.5"
             >
               <img
-                src="/logo.jpg"
+                src="/logo.png"
                 alt="KantoPrep Emblem"
-                className="w-full h-full object-cover rounded-[14px] sm:rounded-[22px]"
+                className="w-full h-full object-cover rounded-full"
               />
             </motion.div>
             <motion.h1
