@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Search, FileSpreadsheet, PenTool, Clock, Brain, Layers, UserCheck } from 'lucide-react';
 import { SessionFormat } from '@/types';
 
@@ -97,12 +97,21 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search subject, past paper, or topic..."
-              className="w-full pl-9 pr-4 py-2 bg-white border border-emerald-100 rounded-xl text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all shadow-xs"
+              className="w-full pl-9 pr-4 py-2 bg-white border border-emerald-100 rounded-xl text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all shadow-xs"
             />
           </div>
-          <span className="text-xs text-zinc-500 whitespace-nowrap hidden sm:inline">
-            {totalResults} {totalResults === 1 ? 'pod' : 'pods'} found
-          </span>
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={totalResults}
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 4 }}
+              transition={{ duration: 0.2 }}
+              className="text-xs text-zinc-500 whitespace-nowrap hidden sm:inline tabular-nums"
+            >
+              {totalResults} {totalResults === 1 ? 'pod' : 'pods'} found
+            </motion.span>
+          </AnimatePresence>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, ArrowUpRight, MessageCircle, ExternalLink, Share2, Check } from 'lucide-react';
+import { MapPin, ArrowUpRight, MessageCircle, ExternalLink, Share2, Check, Crown } from 'lucide-react';
 import { StudyGroup, StudentProfile } from '@/types';
 import { FORMAT_CONFIG, getGoogleMapsUrl } from '@/lib/constants';
 
@@ -22,6 +22,7 @@ export const GroupCard: React.FC<GroupCardProps> = ({
   const isHost = group.host.id === currentUser.id;
   const isFull = group.members.length >= group.maxMembers;
   const formatInfo = FORMAT_CONFIG[group.format] || FORMAT_CONFIG.past_paper_sprint;
+  const capacityPercent = Math.round((group.members.length / group.maxMembers) * 100);
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -64,8 +65,8 @@ export const GroupCard: React.FC<GroupCardProps> = ({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      whileHover={{ y: -3, transition: { duration: 0.2 } }}
-      className="relative flex flex-col justify-between p-5 rounded-2xl glass-card transition-all duration-300 group"
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      className="relative flex flex-col justify-between p-5 rounded-2xl glass-card glow-card transition-all duration-300 group"
     >
       <div>
         {/* Top Header: Curriculum + Format Badges */}
@@ -125,30 +126,48 @@ export const GroupCard: React.FC<GroupCardProps> = ({
       </div>
 
       {/* Card Footer */}
-      <div className="mt-5 pt-4 border-t border-zinc-100 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <div className="flex -space-x-1.5 overflow-hidden">
-            {group.members.slice(0, 3).map((member, idx) => (
-              <img
-                key={member.id || idx}
-                src={member.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80'}
-                alt={member.fullName}
-                title={`${member.fullName} (${member.schoolName})`}
-                className="inline-block h-6 w-6 rounded-full ring-2 ring-white object-cover"
-              />
-            ))}
-          </div>
-          <div className="text-[11px] text-zinc-600">
-            <span className="font-semibold text-zinc-900">
-              {group.members.length}/{group.maxMembers}
-            </span>{' '}
-            <span className="text-zinc-400">
-              ({group.maxMembers - group.members.length} open)
-            </span>
+      <div className="mt-5 pt-4 border-t border-zinc-100">
+        {/* Member Avatars Row with Host Badge */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center space-x-2">
+            <div className="flex -space-x-1.5 overflow-hidden">
+              {group.members.slice(0, 4).map((member, idx) => (
+                <div key={member.id || idx} className="relative">
+                  <img
+                    src={member.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80'}
+                    alt={member.fullName}
+                    title={`${member.fullName}${member.id === group.host.id ? ' (Host)' : ''} • ${member.schoolName}`}
+                    className={`inline-block h-6 w-6 rounded-full ring-2 ring-white object-cover ${
+                      member.id === group.host.id ? 'ring-emerald-300' : ''
+                    }`}
+                  />
+                  {member.id === group.host.id && (
+                    <Crown className="absolute -top-1.5 -right-0.5 w-3 h-3 text-amber-500 drop-shadow-sm" />
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="text-[11px] text-zinc-600">
+              <span className="font-semibold text-zinc-900">
+                {group.members.length}/{group.maxMembers}
+              </span>{' '}
+              <span className="text-zinc-400">
+                ({group.maxMembers - group.members.length} open)
+              </span>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center space-x-1.5">
+        {/* Capacity Progress Bar */}
+        <div className="capacity-bar h-1 mb-3">
+          <div
+            className={`capacity-bar-fill h-full ${capacityPercent >= 100 ? '!bg-amber-400' : ''}`}
+            style={{ width: `${capacityPercent}%` }}
+          />
+        </div>
+
+        {/* Actions Row */}
+        <div className="flex items-center justify-between">
           <button
             type="button"
             onClick={handleShare}
@@ -174,7 +193,7 @@ export const GroupCard: React.FC<GroupCardProps> = ({
                 ? 'bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100'
                 : isFull
                 ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed border border-zinc-200'
-                : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm shadow-emerald-600/20'
+                : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm shadow-emerald-600/20 cta-glow'
             }`}
             disabled={isFull && !isMember}
           >

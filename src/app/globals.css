@@ -82,3 +82,96 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ── Animated Gradient Border Glow (Linear/Raycast-style) ── */
+.glow-card {
+  position: relative;
+  overflow: hidden;
+}
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--glow-angle, 0deg),
+    transparent 40%,
+    rgba(16, 185, 129, 0.35) 50%,
+    rgba(20, 184, 166, 0.25) 55%,
+    transparent 65%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  animation: glow-spin 3s linear infinite;
+}
+.glow-card:hover::before {
+  opacity: 1;
+}
+
+@property --glow-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes glow-spin {
+  to { --glow-angle: 360deg; }
+}
+
+/* ── Pulsing Live Indicator ── */
+.pulse-dot {
+  position: relative;
+}
+.pulse-dot::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.4);
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.8); opacity: 0; }
+}
+
+/* ── Gradient Text Shimmer ── */
+.shimmer-text {
+  background-size: 200% auto;
+  animation: shimmer-slide 3s ease-in-out infinite;
+}
+@keyframes shimmer-slide {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+
+/* ── Capacity Progress Bar ── */
+.capacity-bar {
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.capacity-bar-fill {
+  background: linear-gradient(90deg, #10b981, #14b8a6);
+  border-radius: 9999px;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Subtle CTA pulse ── */
+@keyframes cta-pulse {
+  0%, 100% { box-shadow: 0 4px 14px -2px rgba(16, 185, 129, 0.25); }
+  50% { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.45); }
+}
+.cta-glow {
+  animation: cta-pulse 2.5s ease-in-out infinite;
+}
+
+/* ── Dotted background pattern ── */
+.dotted-bg {
+  background-image: radial-gradient(circle, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}

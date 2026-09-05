@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles } from 'lucide-react';
 import { StudentProfile } from '@/types';
 import { ALLOWED_SCHOOLS } from '@/lib/constants';
@@ -29,6 +29,20 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSignOut,
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isDropdownOpen]);
+
   const currentSchool = currentUser
     ? ALLOWED_SCHOOLS.find((s) => s.domain === currentUser.schoolDomain) || ALLOWED_SCHOOLS[0]
     : null;
@@ -109,14 +123,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* Primary CTA: Host Session */}
               <button
                 onClick={onOpenCreateModal}
-                className="flex items-center space-x-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 hover:shadow-emerald-500/30 transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                className="flex items-center space-x-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 hover:shadow-emerald-500/30 transition-all duration-200 active:scale-[0.98] cursor-pointer cta-glow"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Host Pod</span>
               </button>
 
               {/* Student Profile Dropdown */}
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="flex items-center space-x-1 p-0.5 rounded-full hover:ring-2 hover:ring-emerald-400/40 transition-all cursor-pointer"
@@ -132,7 +146,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {isDropdownOpen && (
                   <div
                     className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-zinc-200 py-1.5 z-50 text-xs text-zinc-700"
-                    onMouseLeave={() => setIsDropdownOpen(false)}
                   >
                     <div className="px-3.5 py-2.5 border-b border-zinc-100">
                       <p className="font-bold text-zinc-900 truncate">{currentUser.fullName}</p>

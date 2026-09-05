@@ -449,18 +449,25 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredGroups.length === 0 ? (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-16 sm:py-20 p-6 sm:p-8 rounded-3xl bg-white border border-zinc-200 max-w-lg mx-auto shadow-sm"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center py-16 sm:py-20 p-6 sm:p-8 rounded-3xl bg-white border border-zinc-200 max-w-lg mx-auto shadow-sm relative overflow-hidden dotted-bg"
             >
-              <BookOpen className="w-10 h-10 text-zinc-400 mx-auto mb-3" />
-              <h3 className="text-base font-bold text-zinc-900">No Study Pods Found</h3>
-              <p className="text-xs text-zinc-500 mt-1 max-w-xs mx-auto">
-                No active groups match your current filter. Be the leader who starts the first sprint!
+              {/* Animated floating book illustration */}
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                className="mx-auto mb-4 w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center shadow-sm"
+              >
+                <BookOpen className="w-8 h-8 text-emerald-500" />
+              </motion.div>
+              <h3 className="text-base font-bold text-zinc-900">No pods yet</h3>
+              <p className="text-xs text-zinc-500 mt-1.5 max-w-xs mx-auto leading-relaxed">
+                Start the first pod. Someone&apos;s probably waiting.
               </p>
               <button
                 onClick={() => setIsCreateModalOpen(true)}
-                className="mt-5 inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/15 active:scale-95 cursor-pointer"
+                className="mt-5 inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/15 active:scale-95 cursor-pointer cta-glow"
               >
                 <Plus className="w-4 h-4" />
                 <span>Host This Session</span>
@@ -554,26 +561,50 @@ export default function Home() {
       />
 
       {/* Footer */}
-      <footer className="w-full border-t border-zinc-200 bg-white/80 py-6 sm:py-8 px-4 sm:px-6 lg:px-8 text-center text-xs text-zinc-500 relative z-10">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center space-x-2">
-            <span className="font-semibold text-zinc-700">KantoPrep</span>
-            <span>•</span>
-            <span>Verified Tokyo Peer Study Network</span>
+      <footer className="w-full border-t border-zinc-200 bg-white/80 backdrop-blur-sm py-8 sm:py-10 px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <div className="max-w-7xl mx-auto flex flex-col items-center gap-5">
+          {/* Brand + Mini Stats */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-bold text-zinc-800">KantoPrep</span>
+              <span className="px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
+                Pilot
+              </span>
+            </div>
+            <div className="flex items-center space-x-3 text-[11px] text-zinc-500">
+              <span>{groups.length} pods hosted</span>
+              <span className="text-zinc-300">•</span>
+              <span>8+ schools connected</span>
+              <span className="text-zinc-300">•</span>
+              <span>100% free</span>
+            </div>
           </div>
 
-          <div className="flex items-center space-x-3 text-[11px] text-zinc-500">
+          {/* Action Row */}
+          <div className="flex items-center space-x-4 text-[11px] text-zinc-500">
             <button
               onClick={() => setIsFeedbackModalOpen(true)}
               className="inline-flex items-center space-x-1 hover:text-emerald-700 transition-colors cursor-pointer"
             >
               <MessageSquarePlus className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Suggest Library / Feedback</span>
+              <span>Feedback</span>
             </button>
-            <span>•</span>
+            <span className="text-zinc-300">•</span>
+            <a
+              href="https://instagram.com/kantoprep"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-1 hover:text-emerald-700 transition-colors"
+            >
+              <svg className="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+              </svg>
+              <span>@kantoprep</span>
+            </a>
+            <span className="text-zinc-300">•</span>
             <span>School Email Whitelisted</span>
-            <span>•</span>
-            <span>Zero Commercial Ads</span>
+            <span className="text-zinc-300">•</span>
+            <span>Zero Ads</span>
           </div>
         </div>
       </footer>
