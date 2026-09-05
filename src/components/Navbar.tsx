@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles } from 'lucide-react';
+import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles, Share2 } from 'lucide-react';
 import { StudentProfile } from '@/types';
 import { ALLOWED_SCHOOLS } from '@/lib/constants';
 
@@ -11,6 +11,7 @@ interface NavbarProps {
   onOpenFeedback: () => void;
   onOpenWhyKantoPrep?: () => void;
   onOpenEditProfile?: () => void;
+  onOpenInvite?: () => void;
   onOpenAuthModal: () => void;
   onOpenCreateModal: () => void;
   onOpenSchoolSwitch: () => void;
@@ -23,6 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenFeedback,
   onOpenWhyKantoPrep,
   onOpenEditProfile,
+  onOpenInvite,
   onOpenAuthModal,
   onOpenCreateModal,
   onOpenSchoolSwitch,
@@ -108,6 +110,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
+          {/* Invite Peers / Print Flyer Button */}
+          {onOpenInvite && (
+            <button
+              onClick={onOpenInvite}
+              className="hidden sm:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-white border border-zinc-200 hover:border-emerald-300 text-zinc-700 hover:text-emerald-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
+              title="Invite peers or print school flyer"
+            >
+              <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Invite</span>
+            </button>
+          )}
+
           {/* Feedback Button */}
           <button
             onClick={onOpenFeedback}
@@ -165,6 +179,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
                       <span>Edit Nickname &amp; Avatar</span>
                     </button>
+
+                    {onOpenInvite && (
+                      <button
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          onOpenInvite();
+                        }}
+                        className="w-full px-3.5 py-2 text-left hover:bg-zinc-50 flex items-center space-x-2 text-zinc-700 cursor-pointer"
+                      >
+                        <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Invite Classmates / Print Flyer</span>
+                      </button>
+                    )}
 
                     <button
                       onClick={() => {

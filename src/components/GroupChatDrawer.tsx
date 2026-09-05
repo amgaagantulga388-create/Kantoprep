@@ -26,11 +26,13 @@ import {
   Check,
   LogOut,
   Trash2,
+  Headphones,
 } from 'lucide-react';
 import { StudyGroup, StudentProfile, ChatMessage, ResourceMetadata, ResourceCategory } from '@/types';
 import { VENUE_CONFIG, getGoogleMapsUrl } from '@/lib/constants';
 import { inspectContentSafety, rateLimiter } from '@/lib/safety';
 import { generateGoogleCalendarUrl, downloadIcsFile } from '@/lib/calendar';
+import { ambientAudio, SoundType } from '@/lib/audioEngine';
 
 interface GroupChatDrawerProps {
   group: StudyGroup | null;
@@ -116,6 +118,21 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
   const [timerSeconds, setTimerSeconds] = useState(25 * 60);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [isTimerExpanded, setIsTimerExpanded] = useState(false);
+  const [ambientSound, setAmbientSound] = useState<SoundType>('off');
+
+  // Stop ambient audio on unmount or drawer close
+  useEffect(() => {
+    return () => {
+      ambientAudio.stop();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) {
+      ambientAudio.stop();
+      setAmbientSound('off');
+    }
+  }, [isOpen]);
 
   // Resource attachment popover state
   const [isAttachOpen, setIsAttachOpen] = useState(false);
@@ -471,6 +488,39 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                             </>
                           )}
                         </button>
+                      </div>
+
+                      {/* Ambient Focus Audio Soundboard */}
+                      <div className="mt-2.5 pt-2 border-t border-emerald-200/60 flex items-center justify-between">
+                        <span className="text-[10px] font-semibold text-emerald-900 flex items-center gap-1">
+                          <Headphones className="w-3 h-3 text-emerald-600" />
+                          <span>Focus Audio</span>
+                        </span>
+                        <div className="flex items-center space-x-1">
+                          {[
+                            { id: 'off', label: 'Off' },
+                            { id: 'rain', label: '🌧️ Rain' },
+                            { id: 'library', label: '📚 Library' },
+                            { id: 'cafe', label: '☕ Cafe' },
+                          ].map((snd) => (
+                            <button
+                              key={snd.id}
+                              type="button"
+                              onClick={() => {
+                                const next = snd.id as SoundType;
+                                setAmbientSound(next);
+                                ambientAudio.play(next);
+                              }}
+                              className={`px-2 py-0.5 rounded-md text-[10px] font-medium transition-all cursor-pointer ${
+                                ambientSound === snd.id
+                                  ? 'bg-emerald-600 text-white shadow-2xs font-semibold'
+                                  : 'bg-white/80 text-zinc-600 hover:bg-white border border-emerald-200/60'
+                              }`}
+                            >
+                              {snd.label}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     </motion.div>
                   )}

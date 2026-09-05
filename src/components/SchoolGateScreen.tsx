@@ -13,6 +13,7 @@ import {
   BookOpen,
   MapPin,
   MessageSquarePlus,
+  Share2,
 } from 'lucide-react';
 import { StudentProfile, Curriculum } from '@/types';
 import { ALLOWED_SCHOOLS, CURRICULUM_OPTIONS, SUBJECTS_BY_CURRICULUM, PRESET_AVATARS } from '@/lib/constants';
@@ -23,12 +24,14 @@ interface SchoolGateScreenProps {
   onAuthenticated: (user: StudentProfile) => void;
   onOpenFeedback?: () => void;
   onOpenWhyKantoPrep?: () => void;
+  onOpenInvite?: () => void;
 }
 
 export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
   onAuthenticated,
   onOpenFeedback,
   onOpenWhyKantoPrep,
+  onOpenInvite,
 }) => {
   const [step, setStep] = useState<'email' | 'code' | 'profile'>('email');
   const [email, setEmail] = useState('');
@@ -182,6 +185,16 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
             >
               <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
               <span>Why KantoPrep?</span>
+            </button>
+          )}
+          {onOpenInvite && (
+            <button
+              onClick={onOpenInvite}
+              className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-white/80 border border-zinc-200 hover:border-emerald-300 text-xs text-zinc-700 hover:text-emerald-700 font-medium transition-all shadow-2xs cursor-pointer"
+              title="Print school noticeboard flyer or copy invite"
+            >
+              <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Flyer / Invite</span>
             </button>
           )}
           {onOpenFeedback && (

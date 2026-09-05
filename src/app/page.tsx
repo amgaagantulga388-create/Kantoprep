@@ -15,6 +15,7 @@ import { FeedbackModal } from '@/components/FeedbackModal';
 import { WhyKantoPrepModal } from '@/components/WhyKantoPrepModal';
 import { JoinGroupModal } from '@/components/JoinGroupModal';
 import { EditProfileModal } from '@/components/EditProfileModal';
+import { InviteModal } from '@/components/InviteModal';
 import { InteractiveBackground } from '@/components/InteractiveBackground';
 import {
   Curriculum,
@@ -26,7 +27,7 @@ import {
   MessageType,
 } from '@/types';
 import { INITIAL_GROUPS, INITIAL_CHAT_MESSAGES } from '@/lib/mockData';
-import { Plus, BookOpen, MessageSquarePlus } from 'lucide-react';
+import { Plus, BookOpen, MessageSquarePlus, Share2 } from 'lucide-react';
 import { sanitizeInput } from '@/lib/safety';
 
 export default function Home() {
@@ -54,6 +55,7 @@ export default function Home() {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [pendingJoinGroup, setPendingJoinGroup] = useState<StudyGroup | null>(null);
   const [reportingGroup, setReportingGroup] = useState<StudyGroup | null>(null);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   // Restore session, groups, and chat history from localStorage on initial load
   useEffect(() => {
@@ -391,6 +393,7 @@ export default function Home() {
           onAuthenticated={handleAuthenticated}
           onOpenFeedback={() => setIsFeedbackModalOpen(true)}
           onOpenWhyKantoPrep={() => setIsWhyModalOpen(true)}
+          onOpenInvite={() => setIsInviteModalOpen(true)}
         />
         <FeedbackModal
           isOpen={isFeedbackModalOpen}
@@ -400,6 +403,11 @@ export default function Home() {
         <WhyKantoPrepModal
           isOpen={isWhyModalOpen}
           onClose={() => setIsWhyModalOpen(false)}
+        />
+        <InviteModal
+          isOpen={isInviteModalOpen}
+          onClose={() => setIsInviteModalOpen(false)}
+          currentUser={null}
         />
       </>
     );
@@ -420,6 +428,7 @@ export default function Home() {
         onOpenFeedback={() => setIsFeedbackModalOpen(true)}
         onOpenWhyKantoPrep={() => setIsWhyModalOpen(true)}
         onOpenEditProfile={() => setIsEditProfileOpen(true)}
+        onOpenInvite={() => setIsInviteModalOpen(true)}
         onOpenAuthModal={() => {}}
         onOpenCreateModal={() => setIsCreateModalOpen(true)}
         onOpenSchoolSwitch={() => setIsSchoolSwitchOpen(true)}
@@ -560,6 +569,13 @@ export default function Home() {
         onClose={() => setIsWhyModalOpen(false)}
       />
 
+      {/* Invite Classmates & School Noticeboard Flyer Modal */}
+      <InviteModal
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
+        currentUser={currentUser}
+      />
+
       {/* Footer */}
       <footer className="w-full border-t border-zinc-200 bg-white/80 backdrop-blur-sm py-8 sm:py-10 px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col items-center gap-5">
@@ -582,6 +598,15 @@ export default function Home() {
 
           {/* Action Row */}
           <div className="flex items-center space-x-4 text-[11px] text-zinc-500">
+            <button
+              onClick={() => setIsInviteModalOpen(true)}
+              className="inline-flex items-center space-x-1 hover:text-emerald-700 transition-colors cursor-pointer"
+              title="Print A4 flyer for school library or share invite"
+            >
+              <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Invite / Flyer</span>
+            </button>
+            <span className="text-zinc-300">•</span>
             <button
               onClick={() => setIsFeedbackModalOpen(true)}
               className="inline-flex items-center space-x-1 hover:text-emerald-700 transition-colors cursor-pointer"
