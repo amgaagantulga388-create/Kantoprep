@@ -1,4 +1,5 @@
 import { StudentProfile, StudyGroup, ChatMessage } from '@/types';
+import { PRESET_AVATARS } from '@/lib/constants';
 
 export const CURRENT_USER: StudentProfile = {
   id: 'usr_me_pilot',
@@ -10,7 +11,7 @@ export const CURRENT_USER: StudentProfile = {
   curriculum: 'IB',
   subjects: ['Math Analysis & Approaches HL', 'Physics HL', 'Economics HL'],
   casHours: 14.5,
-  avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
+  avatarUrl: PRESET_AVATARS[0].url,
   role: 'student',
 };
 
@@ -25,7 +26,7 @@ export const INITIAL_STUDENTS: Record<string, StudentProfile> = {
     curriculum: 'AP',
     subjects: ['AP Calculus BC', 'AP Physics C: Mechanics', 'AP Chemistry'],
     casHours: 28,
-    avatarUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80',
+    avatarUrl: PRESET_AVATARS[1].url,
   },
   usr_2: {
     id: 'usr_2',
@@ -37,7 +38,7 @@ export const INITIAL_STUDENTS: Record<string, StudentProfile> = {
     curriculum: 'IB',
     subjects: ['Physics HL', 'Chemistry HL', 'Math Analysis & Approaches HL'],
     casHours: 19,
-    avatarUrl: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=120&auto=format&fit=crop&q=80',
+    avatarUrl: PRESET_AVATARS[2].url,
   },
   usr_3: {
     id: 'usr_3',
@@ -49,7 +50,7 @@ export const INITIAL_STUDENTS: Record<string, StudentProfile> = {
     curriculum: 'IB',
     subjects: ['Economics HL', 'History HL', 'English A: Literature HL'],
     casHours: 35,
-    avatarUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&auto=format&fit=crop&q=80',
+    avatarUrl: PRESET_AVATARS[7].url,
   },
   usr_4: {
     id: 'usr_4',
@@ -61,7 +62,7 @@ export const INITIAL_STUDENTS: Record<string, StudentProfile> = {
     curriculum: 'SAT_ACT',
     subjects: ['Digital SAT Math (Advanced & Desmos)', 'Digital SAT Reading & Writing'],
     casHours: 12,
-    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80',
+    avatarUrl: PRESET_AVATARS[3].url,
   },
   usr_5: {
     id: 'usr_5',
@@ -73,7 +74,7 @@ export const INITIAL_STUDENTS: Record<string, StudentProfile> = {
     curriculum: 'IGCSE',
     subjects: ['IGCSE Extended Mathematics', 'IGCSE Physics (0625)'],
     casHours: 8,
-    avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80',
+    avatarUrl: PRESET_AVATARS[4].url,
   },
 };
 
@@ -186,6 +187,42 @@ export const INITIAL_GROUPS: StudyGroup[] = [
     tags: ['Deep Focus', 'Silent', 'Evening Study'],
     createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
   },
+  {
+    id: 'grp_7',
+    title: 'IGCSE Extended Math (0580) Paper 4 Past Paper Sprint',
+    description: 'Working through May/June 2023 Paper 42: quadratic sequences, probability tree diagrams, and 3D trigonometry bearings.',
+    curriculum: 'IGCSE',
+    subject: 'IGCSE Extended Mathematics',
+    format: 'past_paper_sprint',
+    venueType: 'hiroo_metropolitan_library',
+    venueLabel: 'Tokyo Metropolitan Central Library (Hiroo)',
+    meetingTime: 'Saturday, 1:30 PM',
+    durationMinutes: 120,
+    maxMembers: 5,
+    host: INITIAL_STUDENTS.usr_5,
+    members: [INITIAL_STUDENTS.usr_5],
+    status: 'open',
+    tags: ['Paper 4', 'Extended Math', 'Calculator Allowed'],
+    createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
+  },
+  {
+    id: 'grp_8',
+    title: 'Chemistry HL: Organic Mechanisms & NMR / IR Spectra',
+    description: 'Drilling SN1 vs SN2 reaction pathways, stereochemistry, and deduction of unknown organic structures from 1H NMR splitting patterns.',
+    curriculum: 'IB',
+    subject: 'Chemistry HL',
+    format: 'exam_cram',
+    venueType: 'minato_library',
+    venueLabel: 'Minato City Central Library (Mita)',
+    meetingTime: 'Sunday, 4:15 PM',
+    durationMinutes: 90,
+    maxMembers: 5,
+    host: INITIAL_STUDENTS.usr_2,
+    members: [INITIAL_STUDENTS.usr_2, CURRENT_USER],
+    status: 'open',
+    tags: ['Organic Chem', 'NMR Spectra', 'Paper 2 Prep'],
+    createdAt: new Date(Date.now() - 3600000 * 6).toISOString(),
+  },
 ];
 
 export const INITIAL_CHAT_MESSAGES: Record<string, ChatMessage[]> = {
@@ -201,7 +238,7 @@ export const INITIAL_CHAT_MESSAGES: Record<string, ChatMessage[]> = {
       id: 'msg_2',
       groupId: 'grp_1',
       sender: INITIAL_STUDENTS.usr_2,
-      content: 'Awesome Amgaa! Did you check question 9 on the vectors with the scalar product? That one was brutal in the mock.',
+      content: 'Awesome! Did you check question 9 on the vectors with the scalar product? That one was brutal in the mock.',
       createdAt: new Date(Date.now() - 1800000 * 2).toISOString(),
     },
     {
@@ -223,7 +260,7 @@ export const INITIAL_CHAT_MESSAGES: Record<string, ChatMessage[]> = {
         title: 'May 2024 Math AA HL TZ2 Paper 1 Markscheme (Official)',
         url: 'https://ibdocs.re',
         category: 'markscheme',
-        sharedBy: 'Amgaa (A-JIS)',
+        sharedBy: 'Aoba Student (A-JIS)',
         createdAt: new Date(Date.now() - 1800000 * 0.5).toISOString(),
       },
     },
@@ -242,6 +279,24 @@ export const INITIAL_CHAT_MESSAGES: Record<string, ChatMessage[]> = {
       sender: INITIAL_STUDENTS.usr_4,
       content: 'Got it Maya! Excited to finally get the Lagrange error bound down.',
       createdAt: new Date(Date.now() - 3600000 * 3).toISOString(),
+    },
+  ],
+  grp_7: [
+    {
+      id: 'msg_7_1',
+      groupId: 'grp_7',
+      sender: INITIAL_STUDENTS.usr_5,
+      content: 'Welcome IGCSE students! Let’s meet at the Hiroo Library ground floor cafe area first, then head to the quiet desks upstairs.',
+      createdAt: new Date(Date.now() - 3600000 * 4).toISOString(),
+    },
+  ],
+  grp_8: [
+    {
+      id: 'msg_8_1',
+      groupId: 'grp_8',
+      sender: INITIAL_STUDENTS.usr_2,
+      content: 'Bring your IB Chemistry data booklets! We will focus on Section B spectroscopic identification of unknowns.',
+      createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
     },
   ],
 };
