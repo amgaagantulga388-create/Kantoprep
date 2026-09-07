@@ -19,9 +19,17 @@ import {
   RotateCcw,
   Clock,
   Target,
+  ExternalLink,
+  ShieldCheck,
+  AlertCircle,
 } from 'lucide-react';
 import { Curriculum, StudyGroup } from '@/types';
 import { useTheme } from '@/context/ThemeProvider';
+import {
+  OFFICIAL_EXAM_SCHEDULES,
+  getNextOfficialSession,
+  ExamSessionSchedule,
+} from '@/lib/examSchedule';
 
 interface ExamMilestone {
   id: string;
@@ -31,6 +39,9 @@ interface ExamMilestone {
   sessionName: string;
   targetDate: Date;
   targetDateFormatted: string;
+  registrationDeadline?: string;
+  authorityName: string;
+  authorityUrl: string;
   schools: string[];
   defaultSubject: string;
   defaultTitle: string;
@@ -50,42 +61,6 @@ interface ExamRadarProps {
   onSelectCurriculum: (c: Curriculum | 'ALL') => void;
   groups: StudyGroup[];
   onOpenCreatePod?: (curriculum: Curriculum, subject?: string, title?: string) => void;
-}
-
-// Compute the next valid target date ensuring it never displays negative D-Days
-function getNextTargetDate(month: number, day: number, hour = 9): Date {
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  let candidate = new Date(currentYear, month - 1, day, hour, 0, 0);
-  if (candidate.getTime() <= now.getTime()) {
-    candidate = new Date(currentYear + 1, month - 1, day, hour, 0, 0);
-  }
-  return candidate;
-}
-
-// SAT International scheduled dates
-const SAT_SCHEDULE = [
-  { month: 3, day: 8 },
-  { month: 5, day: 3 },
-  { month: 6, day: 7 },
-  { month: 8, day: 23 },
-  { month: 10, day: 3 },
-  { month: 11, day: 7 },
-  { month: 12, day: 5 },
-];
-
-function getNextSatDate(): Date {
-  const now = new Date();
-  const currentYear = now.getFullYear();
-
-  for (const date of SAT_SCHEDULE) {
-    const candidate = new Date(currentYear, date.month - 1, date.day, 8, 30, 0);
-    if (candidate.getTime() > now.getTime()) {
-      return candidate;
-    }
-  }
-  // If all in this year have passed, return first one next year
-  return new Date(currentYear + 1, SAT_SCHEDULE[0].month - 1, SAT_SCHEDULE[0].day, 8, 30, 0);
 }
 
 function formatDate(date: Date): string {
@@ -149,6 +124,7 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
   const [now, setNow] = useState<Date>(new Date());
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const [selectedSatSessionId, setSelectedSatSessionId] = useState<string>('');
 
   // Update tick every 60 seconds
   useEffect(() => {
@@ -158,21 +134,48 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
     return () => clearInterval(timer);
   }, []);
 
+  // Restore preferred SAT session if user chose a specific target sitting
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('kantoprep_target_sat_session');
+      if (saved) setSelectedSatSessionId(saved);
+    } catch {
+      // Ignore
+    }
+  }, []);
+
+  const handleSelectSatSession = (sessionId: string) => {
+    setSelectedSatSessionId(sessionId);
+    try {
+      localStorage.setItem('kantoprep_target_sat_session', sessionId);
+    } catch {
+      // Ignore
+    }
+  };
+
   const milestones: ExamMilestone[] = useMemo(() => {
-    const ibDate = getNextTargetDate(5, 1);
-    const apDate = getNextTargetDate(5, 5);
-    const satDate = getNextSatDate();
-    const igcseDate = getNextTargetDate(5, 6);
+    // Official sessions queried from authoritative schedules
+    const ibSession = getNextOfficialSession('IB', now);
+    const apSession = getNextOfficialSession('AP', now);
+    const satSession = getNextOfficialSession('SAT_ACT', now, selectedSatSessionId || undefined);
+    const igcseSession = getNextOfficialSession('IGCSE', now);
+
+    const ibDate = new Date(ibSession.testDate);
+    const apDate = new Date(apSession.testDate);
+    const satDate = new Date(satSession.testDate);
+    const igcseDate = new Date(igcseSession.testDate);
 
     return [
       {
-        id: 'ib-may',
+        id: 'ib-official',
         curriculum: 'IB',
         badgeLabel: 'IB DP',
-        title: 'IB Diploma May Session',
-        sessionName: 'Paper 1, 2 & 3 Written Exams',
+        title: 'IB Diploma Programme',
+        sessionName: ibSession.name,
         targetDate: ibDate,
         targetDateFormatted: formatDate(ibDate),
+        authorityName: OFFICIAL_EXAM_SCHEDULES.IB.authorityName,
+        authorityUrl: OFFICIAL_EXAM_SCHEDULES.IB.authorityUrl,
         schools: ['BST', 'YIS', 'St. Maur', 'Seisen', 'KIST', 'TIS'],
         defaultSubject: 'Mathematics: Analysis & Approaches',
         defaultTitle: 'Paper 2 Timed Sprint & Markscheme Grading',
@@ -191,13 +194,15 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
         },
       },
       {
-        id: 'ap-may',
+        id: 'ap-official',
         curriculum: 'AP',
         badgeLabel: 'AP Exams',
         title: 'College Board AP Window',
-        sessionName: 'National Administration Weeks 1 & 2',
+        sessionName: apSession.name,
         targetDate: apDate,
         targetDateFormatted: formatDate(apDate),
+        authorityName: OFFICIAL_EXAM_SCHEDULES.AP.authorityName,
+        authorityUrl: OFFICIAL_EXAM_SCHEDULES.AP.authorityUrl,
         schools: ['ASIJ', 'CAJ', 'Saint Mary’s'],
         defaultSubject: 'AP Calculus BC',
         defaultTitle: '2023–2024 Released FRQ Timed Drills',
@@ -216,13 +221,16 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
         },
       },
       {
-        id: 'sat-digital',
+        id: 'sat-official',
         curriculum: 'SAT_ACT',
         badgeLabel: 'Digital SAT',
-        title: 'Digital SAT Window',
-        sessionName: 'Bluebook Adaptive International Test',
+        title: 'Digital SAT International',
+        sessionName: satSession.name,
         targetDate: satDate,
         targetDateFormatted: formatDate(satDate),
+        registrationDeadline: satSession.registrationDeadline,
+        authorityName: OFFICIAL_EXAM_SCHEDULES.SAT_ACT.authorityName,
+        authorityUrl: OFFICIAL_EXAM_SCHEDULES.SAT_ACT.authorityUrl,
         schools: ['All Tokyo Schools', 'Grades 11–12'],
         defaultSubject: 'Digital SAT Math (Advanced & Desmos)',
         defaultTitle: 'Module 2 Hard Adaptive Bank & Desmos Hacks',
@@ -241,13 +249,15 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
         },
       },
       {
-        id: 'igcse-may',
+        id: 'igcse-official',
         curriculum: 'IGCSE',
         badgeLabel: 'Cambridge / Edexcel',
-        title: 'IGCSE May/June Series',
-        sessionName: 'Core & Extended Written Papers',
+        title: 'Cambridge IGCSE Series',
+        sessionName: igcseSession.name,
         targetDate: igcseDate,
         targetDateFormatted: formatDate(igcseDate),
+        authorityName: OFFICIAL_EXAM_SCHEDULES.IGCSE.authorityName,
+        authorityUrl: OFFICIAL_EXAM_SCHEDULES.IGCSE.authorityUrl,
         schools: ['BST', 'YIS Foundation', 'KIST'],
         defaultSubject: 'IGCSE Extended Mathematics',
         defaultTitle: 'Paper 4 Extended Math Problem Set Drill',
@@ -266,11 +276,10 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
         },
       },
     ];
-  }, []);
+  }, [now, selectedSatSessionId]);
 
   const handleCardClick = (curriculum: Curriculum) => {
     if (selectedCurriculum === curriculum) {
-      // Toggle back to all if already active
       onSelectCurriculum('ALL');
     } else {
       onSelectCurriculum(curriculum);
@@ -282,7 +291,6 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
     setExpandedCardId((prev) => (prev === id ? null : id));
   };
 
-  // Check if a single curriculum is currently filtered
   const singleCurriculumMilestone = useMemo(() => {
     if (selectedCurriculum === 'ALL') return null;
     return milestones.find((m) => m.curriculum === selectedCurriculum) || null;
@@ -293,7 +301,6 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
       {/* Radar Console Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F5B942]/15">
         <div className="flex items-center space-x-3">
-          {/* Pulsing Radar Sonar Icon */}
           <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-[#161513] border border-[#F5B942]/30 shadow-sm">
             <span className="animate-ping absolute inline-flex h-6 w-6 rounded-full bg-[#F5B942]/20 opacity-75" />
             <Radar className="w-5 h-5 text-[#F5B942] relative z-10" />
@@ -306,15 +313,14 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                     ? `${singleCurriculumMilestone.title} Countdown`
                     : 'Exam D-Day Radar'}
                 </span>
-                <span className="px-2 py-0.5 rounded-md bg-[#F5B942]/15 border border-[#F5B942]/30 text-[10px] font-bold text-[#F5B942] uppercase tracking-wider">
-                  {singleCurriculumMilestone ? 'Focused' : 'Live'}
+                <span className="px-2 py-0.5 rounded-md bg-[#F5B942]/15 border border-[#F5B942]/30 text-[10px] font-bold text-[#F5B942] uppercase tracking-wider flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3" />
+                  <span>Official Dates</span>
                 </span>
               </h2>
             </div>
             <p className="text-xs text-[#A8A39D] mt-0.5">
-              {singleCurriculumMilestone
-                ? `Showing target countdown and active study pods specifically for ${singleCurriculumMilestone.badgeLabel}.`
-                : 'Target countdowns, revision phase telemetry, and active study pods across Tokyo international schools.'}
+              Verified against College Board, IBO, and Cambridge official 2026–2027 calendars.
             </p>
           </div>
         </div>
@@ -352,7 +358,7 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
             transition={{ duration: 0.3 }}
             className="pt-4"
           >
-            {/* 1. SINGLE-CURRICULUM FOCUSED HERO RADAR (When user filters by IB, AP, SAT, or IGCSE) */}
+            {/* 1. SINGLE-CURRICULUM FOCUSED HERO RADAR */}
             {singleCurriculumMilestone ? (
               (() => {
                 const m = singleCurriculumMilestone;
@@ -378,7 +384,7 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                       {/* Left: Big D-Day Ticker & Target Session */}
                       <div className="lg:col-span-6 space-y-4">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 flex-wrap gap-y-1">
                           <span
                             className={`px-3 py-1 rounded-xl text-xs font-bold uppercase tracking-wider border ${
                               isLight
@@ -395,13 +401,36 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                         </div>
 
                         <div>
-                          <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
-                            {m.title}
-                          </h3>
+                          <div className="flex items-center justify-between gap-2">
+                            <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
+                              {m.title}
+                            </h3>
+                          </div>
                           <p className="text-xs sm:text-sm text-[#A8A39D] font-medium mt-1">
-                            {m.sessionName} • Tokyo Regional Window
+                            {m.sessionName}
                           </p>
                         </div>
+
+                        {/* SAT Session Picker (If curriculum is SAT) */}
+                        {m.curriculum === 'SAT_ACT' && (
+                          <div className="p-3 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 space-y-1.5">
+                            <label className="text-[11px] font-bold text-[#EDEDEB] flex items-center justify-between">
+                              <span>Target Test Date Sitting:</span>
+                              <span className="text-[#F5B942] text-[10px]">Switch Administration</span>
+                            </label>
+                            <select
+                              value={selectedSatSessionId || OFFICIAL_EXAM_SCHEDULES.SAT_ACT.sessions[0].id}
+                              onChange={(e) => handleSelectSatSession(e.target.value)}
+                              className="w-full py-1.5 px-2.5 rounded-lg bg-[#141310] border border-[#F5B942]/30 text-xs text-white focus:outline-none focus:border-[#F5B942] cursor-pointer"
+                            >
+                              {OFFICIAL_EXAM_SCHEDULES.SAT_ACT.sessions.map((s) => (
+                                <option key={s.id} value={s.id}>
+                                  {s.name} ({new Date(s.testDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
 
                         {/* Prominent Hero Countdown Box */}
                         <div className="p-4 sm:p-5 rounded-2xl bg-[#1C1A17] border border-[#F5B942]/20 flex items-center justify-between shadow-inner">
@@ -415,7 +444,7 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                               </span>
                             </div>
                             <span className="text-xs text-[#7A756D] font-mono block mt-1">
-                              {hoursLeft} hours {minutesLeft} minutes until exam commencement
+                              {hoursLeft} hours {minutesLeft} minutes until exam morning
                             </span>
                           </div>
 
@@ -425,23 +454,31 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                               <span>{m.targetDateFormatted}</span>
                             </div>
                             <span className="text-[11px] text-[#7A756D] mt-1 block font-medium">
-                              09:00 AM JST
+                              08:30 AM JST
                             </span>
                           </div>
                         </div>
 
-                        <div className="text-xs text-[#7A756D]">
-                          Schools preparing:{' '}
-                          <span className="text-[#EDEDEB] font-medium">
-                            {m.schools.join(' • ')}
+                        {/* Verification & Authority Source */}
+                        <div className="flex items-center justify-between text-xs text-[#7A756D] pt-1">
+                          <span className="truncate">
+                            Schools: <span className="text-[#EDEDEB]">{m.schools.join(' • ')}</span>
                           </span>
+                          <a
+                            href={m.authorityUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center space-x-1 text-[#F5B942] hover:underline font-semibold text-[11px] shrink-0 ml-2"
+                          >
+                            <span>Verify Schedule</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
                         </div>
                       </div>
 
                       {/* Right: Revision Telemetry & High-Yield Action */}
                       <div className="lg:col-span-6 space-y-4 lg:border-l lg:border-[#F5B942]/15 lg:pl-6">
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                          {/* Revision Phase Badge */}
                           <div
                             className={`inline-flex items-center space-x-2 px-3 py-1.5 rounded-xl text-xs font-bold border ${phase.badge}`}
                           >
@@ -452,7 +489,6 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                             </span>
                           </div>
 
-                          {/* Pod Telemetry Indicator */}
                           <div className="flex items-center space-x-2 text-xs font-bold text-[#A8A39D] px-3 py-1.5 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20">
                             <span className="relative flex h-2.5 w-2.5">
                               {podCount > 0 && (
@@ -515,13 +551,12 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                 );
               })()
             ) : (
-              /* 2. OVERVIEW 4-CARD RADAR GRID (When viewing 'ALL') */
+              /* 2. OVERVIEW 4-CARD RADAR GRID */
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                 {milestones.map((m) => {
                   const isSelected = selectedCurriculum === m.curriculum;
                   const isExpanded = expandedCardId === m.id;
 
-                  // Time diff calculation
                   const diffMs = Math.max(0, m.targetDate.getTime() - now.getTime());
                   const daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
                   const hoursLeft = Math.floor(
@@ -532,7 +567,6 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                   const phase = getPhaseInfo(daysLeft, isLight);
                   const PhaseIcon = phase.icon;
 
-                  // Active pods count for this curriculum
                   const activePods = groups.filter(
                     (g) => g.curriculum === m.curriculum && g.status !== 'cancelled'
                   );
@@ -651,7 +685,7 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                             onClick={(e) => toggleExpand(m.id, e)}
                             className="flex items-center justify-between w-full text-[11px] font-semibold text-[#A8A39D] hover:text-[#F5B942] transition-colors py-1 cursor-pointer"
                           >
-                            <span>Syllabus Strategy &amp; Tips</span>
+                            <span>Syllabus Strategy &amp; Source</span>
                             {isExpanded ? (
                               <ChevronUp className="w-3.5 h-3.5" />
                             ) : (
@@ -666,7 +700,7 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.2 }}
-                                className="pt-2 pb-1 space-y-1.5 border-t border-[#F5B942]/15 text-[11px] text-[#EDEDEB]"
+                                className="pt-2 pb-1 space-y-2 border-t border-[#F5B942]/15 text-[11px] text-[#EDEDEB]"
                               >
                                 <div className="text-[10px] font-semibold text-[#F5B942] uppercase tracking-wider flex items-center gap-1">
                                   <Sparkles className="w-3 h-3" /> High-Yield Revision Focus
@@ -679,8 +713,19 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
                                     </li>
                                   ))}
                                 </ul>
-                                <div className="pt-1 text-[10px] text-[#7A756D]">
-                                  Schools: {m.schools.join(' • ')}
+
+                                <div className="pt-1.5 border-t border-[#F5B942]/10 flex items-center justify-between text-[10px]">
+                                  <span className="text-[#7A756D] truncate">Schools: {m.schools.slice(0, 3).join(', ')}...</span>
+                                  <a
+                                    href={m.authorityUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-[#F5B942] hover:underline flex items-center gap-0.5 shrink-0"
+                                  >
+                                    <span>Official Source</span>
+                                    <ExternalLink className="w-2.5 h-2.5" />
+                                  </a>
                                 </div>
                               </motion.div>
                             )}
