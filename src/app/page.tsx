@@ -19,6 +19,9 @@ import { EditProfileModal } from '@/components/EditProfileModal';
 import { SubjectSurveyModal } from '@/components/SubjectSurveyModal';
 import { InviteModal } from '@/components/InviteModal';
 import { InteractiveBackground } from '@/components/InteractiveBackground';
+import { CalendarPromptModal } from '@/components/CalendarPromptModal';
+import { AddToHomeScreenBanner } from '@/components/AddToHomeScreenBanner';
+import { notifyPodMembersOfChat } from '@/lib/notifications';
 import {
   Curriculum,
   SessionFormat,
@@ -58,6 +61,7 @@ export default function Home() {
   const [pendingJoinGroup, setPendingJoinGroup] = useState<StudyGroup | null>(null);
   const [reportingGroup, setReportingGroup] = useState<StudyGroup | null>(null);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [calendarPromptState, setCalendarPromptState] = useState<{ group: StudyGroup; isHost: boolean } | null>(null);
   const [prefillData, setPrefillData] = useState<{
     curriculum?: Curriculum;
     subject?: string;
@@ -328,7 +332,8 @@ export default function Home() {
         ? group.members
         : [...group.members, currentUser],
     };
-    setActiveChatGroup(updatedTargetGroup);
+    // Prompt student to add the session to their personal calendar
+    setCalendarPromptState({ group: updatedTargetGroup, isHost: false });
   };
 
   // Handle Sending Chat Message
@@ -355,6 +360,12 @@ export default function Home() {
       ...prev,
       [groupId]: [...(prev[groupId] || []), newMsg],
     }));
+
+    // Dispatch Reddit-style offline email notification to pod peers in background
+    const targetGroup = groups.find((g) => g.id === groupId);
+    if (targetGroup) {
+      notifyPodMembersOfChat(targetGroup, currentUser, cleanContent);
+    }
   };
 
   // Handle Creating a New Study Group
@@ -373,7 +384,8 @@ export default function Home() {
       [newGroup.id]: [welcomeMsg],
     }));
 
-    setActiveChatGroup(newGroup);
+    // Prompt host to add the created session to their personal calendar
+    setCalendarPromptState({ group: newGroup, isHost: true });
   };
 
   // =========================================================================
@@ -619,6 +631,21 @@ export default function Home() {
         onClose={() => setIsInviteModalOpen(false)}
         currentUser={currentUser}
       />
+
+      {/* 1-Click Calendar Sync Prompt Modal */}
+      <CalendarPromptModal
+        isOpen={!!calendarPromptState}
+        group={calendarPromptState?.group || null}
+        isHost={calendarPromptState?.isHost}
+        onClose={() => setCalendarPromptState(null)}
+        onOpenChat={(g) => {
+          setCalendarPromptState(null);
+          setActiveChatGroup(g);
+        }}
+      />
+
+      {/* Add to Home Screen (PWA) Guidance Banner (Told Strictly Once) */}
+      <AddToHomeScreenBanner />
 
       {/* Footer */}
       <footer className="w-full border-t border-[#F5B942]/15 bg-[#0E0D0B]/90 backdrop-blur-sm py-8 sm:py-10 px-4 sm:px-6 lg:px-8 text-center relative z-10">
