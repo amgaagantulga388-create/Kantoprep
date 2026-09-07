@@ -54,7 +54,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/50 backdrop-blur-xs"
+          className="fixed inset-0 bg-black/70 backdrop-blur-xs"
         />
 
         {/* Modal Window */}
@@ -63,19 +63,19 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-          className="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-zinc-200 z-10 overflow-hidden"
+          className="relative w-full max-w-md bg-[#161513] rounded-3xl p-6 shadow-2xl border border-[#F5B942]/20 z-10 overflow-hidden text-white"
         >
           {/* Header */}
-          <div className="flex items-center justify-between pb-3 mb-4 border-b border-zinc-100">
+          <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#F5B942]/15">
             <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-emerald-600" />
-              <h3 className="text-base font-bold text-zinc-900">
+              <Sparkles className="w-4 h-4 text-[#F5B942]" />
+              <h3 className="text-base font-bold text-white">
                 Edit Profile &amp; Avatar
               </h3>
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors cursor-pointer"
+              className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -84,24 +84,24 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Current Avatar Preview */}
             <div className="flex flex-col items-center justify-center pt-1 pb-2">
-              <div className="w-16 h-16 rounded-full overflow-hidden ring-4 ring-emerald-500/20 shadow-md bg-white p-0.5 mb-2">
+              <div className="w-16 h-16 rounded-full overflow-hidden ring-4 ring-[#F5B942]/30 shadow-md bg-[#1C1A17] p-0.5 mb-2">
                 <img
                   src={selectedAvatarUrl}
                   alt="Selected Avatar"
                   className="w-full h-full object-cover rounded-full"
                 />
               </div>
-              <p className="text-[11px] text-zinc-500 font-medium">
+              <p className="text-[11px] text-[#A8A39D] font-medium">
                 Select your avatar (no real photo needed)
               </p>
             </div>
 
             {/* Avatar Preset Grid */}
             <div>
-              <label className="block text-xs font-semibold text-zinc-700 mb-1.5">
+              <label className="block text-xs font-semibold text-[#EDEDEB] mb-1.5">
                 Choose an Avatar
               </label>
-              <div className="grid grid-cols-5 gap-2 p-2.5 rounded-2xl bg-zinc-50 border border-zinc-200/80">
+              <div className="grid grid-cols-5 gap-2 p-2.5 rounded-2xl bg-[#1C1A17] border border-[#F5B942]/20">
                 {PRESET_AVATARS.map((preset) => {
                   const isSelected = selectedAvatarUrl === preset.url;
                   return (
@@ -112,8 +112,8 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
                       title={preset.name}
                       className={`relative rounded-xl p-1 transition-all cursor-pointer aspect-square flex items-center justify-center ${
                         isSelected
-                          ? 'ring-2 ring-emerald-600 scale-105 bg-white shadow-sm'
-                          : 'hover:scale-105 hover:bg-white/80'
+                          ? 'ring-2 ring-[#F5B942] scale-105 bg-[#F5B942]/15 shadow-sm'
+                          : 'hover:scale-105 hover:bg-white/5'
                       }`}
                     >
                       <img
@@ -122,7 +122,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
                         className="w-8 h-8 rounded-full object-cover"
                       />
                       {isSelected && (
-                        <div className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xs">
+                        <div className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-[#F5B942] text-[#0E0D0B] flex items-center justify-center shadow-xs">
                           <Check className="w-2.5 h-2.5 stroke-[3]" />
                         </div>
                       )}
@@ -134,8 +134,8 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
             {/* Nickname / Real Name Input */}
             <div>
-              <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                Nickname or Real Name <span className="text-emerald-600">*</span>
+              <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
+                Nickname or Real Name <span className="text-[#F5B942]">*</span>
               </label>
               <input
                 type="text"
@@ -146,15 +146,15 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
                 }}
                 placeholder="e.g. Kai, Maya T, or your real name"
                 required
-                className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                className="w-full px-3 py-2 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942]"
               />
-              <p className="text-[10px] text-zinc-400 mt-1">
+              <p className="text-[10px] text-[#7A756D] mt-1">
                 This is how other students will see you in study pods.
               </p>
             </div>
 
             {error && (
-              <p className="text-xs text-red-600 font-medium">{error}</p>
+              <p className="text-xs text-red-400 font-medium">{error}</p>
             )}
 
             {/* Action Buttons */}
@@ -162,14 +162,14 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="w-1/3 py-2.5 rounded-xl border border-zinc-200 hover:bg-zinc-50 text-xs font-semibold text-zinc-600 transition-colors cursor-pointer"
+                className="w-1/3 py-2.5 rounded-xl border border-[#F5B942]/20 hover:bg-[#1C1A17] text-xs font-semibold text-[#EDEDEB] transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={!nickname.trim()}
-                className="w-2/3 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer"
+                className="w-2/3 py-2.5 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] disabled:opacity-40 text-[#0E0D0B] text-xs font-bold shadow-md shadow-[#F5B942]/20 active:scale-95 transition-all cursor-pointer"
               >
                 Save Profile
               </button>

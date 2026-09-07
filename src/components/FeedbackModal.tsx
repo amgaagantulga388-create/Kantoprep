@@ -64,7 +64,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-black/40 backdrop-blur-md"
+        className="absolute inset-0 bg-black/70 backdrop-blur-md"
       />
 
       {/* Modal Card */}
@@ -73,21 +73,21 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-        className="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-zinc-200 z-10 overflow-hidden"
+        className="relative w-full max-w-md bg-[#161513] rounded-3xl p-6 shadow-2xl border border-[#F5B942]/20 z-10 overflow-hidden text-white"
       >
-        <div className="flex items-center justify-between pb-3 border-b border-zinc-100">
+        <div className="flex items-center justify-between pb-3 border-b border-[#F5B942]/15">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-[#F5B942]/10 border border-[#F5B942]/30 text-[#F5B942] flex items-center justify-center">
               <MessageSquarePlus className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-zinc-900">Share Feedback or Suggestion</h2>
-              <p className="text-[11px] text-zinc-500">Help shape KantoPrep for Tokyo students</p>
+              <h2 className="text-sm font-bold text-white">Share Feedback or Suggestion</h2>
+              <p className="text-[11px] text-[#A8A39D]">Help shape KantoPrep for Tokyo students</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -95,16 +95,16 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
         {submitted ? (
           <div className="py-10 text-center space-y-3">
-            <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto animate-bounce" />
-            <h3 className="text-base font-bold text-zinc-900">Thank You!</h3>
-            <p className="text-xs text-zinc-500 max-w-xs mx-auto">
+            <CheckCircle2 className="w-12 h-12 text-[#F5B942] mx-auto animate-bounce" />
+            <h3 className="text-base font-bold text-white">Thank You!</h3>
+            <p className="text-xs text-[#A8A39D] max-w-xs mx-auto">
               Your feedback helps make KantoPrep safer, smoother, and more useful for international students across Tokyo.
             </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="mt-4 space-y-3.5 text-xs">
             <div>
-              <label className="block font-semibold text-zinc-700 mb-1.5">
+              <label className="block font-semibold text-[#EDEDEB] mb-1.5">
                 Category
               </label>
               <div className="grid grid-cols-2 gap-1.5">
@@ -118,11 +118,11 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       onClick={() => setCategory(cat.id)}
                       className={`p-2.5 rounded-xl border text-left flex items-center space-x-2 transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-emerald-50 border-emerald-500 text-emerald-950 font-bold shadow-2xs'
-                          : 'bg-zinc-50 border-zinc-200 text-zinc-600 hover:bg-zinc-100'
+                          ? 'bg-[#F5B942]/15 border-[#F5B942] text-white font-bold shadow-2xs'
+                          : 'bg-[#1C1A17] border-[#F5B942]/15 text-[#A8A39D] hover:bg-[#25221E]'
                       }`}
                     >
-                      <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-emerald-600' : 'text-zinc-400'}`} />
+                      <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-[#F5B942]' : 'text-[#7A756D]'}`} />
                       <span className="text-[11px] truncate">{cat.label}</span>
                     </button>
                   );
@@ -131,7 +131,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
             </div>
 
             <div>
-              <label className="block font-semibold text-zinc-700 mb-1.5">
+              <label className="block font-semibold text-[#EDEDEB] mb-1.5">
                 {category === 'venue_suggestion'
                   ? 'Which library or public study hub should we add?'
                   : 'Your Notes & Ideas'}
@@ -146,7 +146,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                     : 'Tell us what you would like to see or what we can improve...'
                 }
                 required
-                className="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                className="w-full p-2.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942]"
               />
             </div>
 
@@ -154,14 +154,14 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl bg-zinc-100 text-zinc-700 hover:bg-zinc-200 font-semibold cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-[#EDEDEB] hover:bg-[#25221E] font-semibold cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={!message.trim()}
-                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold transition-all shadow-md shadow-emerald-600/15 active:scale-95 cursor-pointer flex items-center space-x-1.5"
+                className="px-4 py-2 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] disabled:opacity-50 text-[#0E0D0B] font-bold transition-all shadow-md shadow-[#F5B942]/20 active:scale-95 cursor-pointer flex items-center space-x-1.5"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Submit Feedback</span>

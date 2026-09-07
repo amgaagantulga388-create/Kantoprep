@@ -68,7 +68,7 @@ export const SafetyReportModal: React.FC<SafetyReportModalProps> = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-black/40 backdrop-blur-md"
+        className="absolute inset-0 bg-black/70 backdrop-blur-md"
       />
 
       <motion.div
@@ -76,16 +76,16 @@ export const SafetyReportModal: React.FC<SafetyReportModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-        className="relative w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl border border-red-200 z-10"
+        className="relative w-full max-w-md bg-[#161513] rounded-3xl p-6 shadow-2xl border border-red-500/30 z-10 text-white"
       >
-        <div className="flex items-center justify-between pb-4 border-b border-zinc-200">
-          <div className="flex items-center space-x-2 text-red-600">
+        <div className="flex items-center justify-between pb-4 border-b border-[#F5B942]/15">
+          <div className="flex items-center space-x-2 text-red-400">
             <ShieldAlert className="w-5 h-5" />
-            <h2 className="text-base font-bold text-zinc-900">Student Safety Report</h2>
+            <h2 className="text-base font-bold text-white">Student Safety Report</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -93,21 +93,21 @@ export const SafetyReportModal: React.FC<SafetyReportModalProps> = ({
 
         {submitted ? (
           <div className="py-10 text-center space-y-3">
-            <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto animate-bounce" />
-            <h3 className="text-base font-semibold text-zinc-900">Report Submitted</h3>
-            <p className="text-xs text-zinc-500 max-w-xs mx-auto">
+            <CheckCircle2 className="w-12 h-12 text-[#F5B942] mx-auto animate-bounce" />
+            <h3 className="text-base font-semibold text-white">Report Submitted</h3>
+            <p className="text-xs text-[#A8A39D] max-w-xs mx-auto">
               Thank you for protecting our Tokyo student network. The room log has been flagged for immediate student lead review.
             </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="mt-4 space-y-4 text-xs">
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-800">
+            <div className="p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-red-200">
               <p className="font-semibold">Reporting session: {group.title}</p>
-              <p className="text-[11px] text-zinc-600 mt-0.5">Host: {group.host.fullName} ({group.host.schoolName})</p>
+              <p className="text-[11px] text-[#A8A39D] mt-0.5">Host: {group.host.fullName} ({group.host.schoolName})</p>
             </div>
 
             <div>
-              <label className="block font-semibold text-zinc-700 mb-1.5">
+              <label className="block font-semibold text-[#EDEDEB] mb-1.5">
                 Reason for Incident Report
               </label>
               <div className="space-y-1.5">
@@ -116,8 +116,8 @@ export const SafetyReportModal: React.FC<SafetyReportModalProps> = ({
                     key={r}
                     className={`flex items-center space-x-2.5 p-2 rounded-xl border cursor-pointer transition-all ${
                       reason === r
-                        ? 'bg-red-50 border-red-300 text-red-900 font-medium'
-                        : 'bg-zinc-50 border-zinc-200 text-zinc-600 hover:border-zinc-300'
+                        ? 'bg-red-950/50 border-red-500/60 text-red-200 font-medium'
+                        : 'bg-[#1C1A17] border-[#F5B942]/15 text-[#A8A39D] hover:border-[#F5B942]/30'
                     }`}
                   >
                     <input
@@ -126,7 +126,7 @@ export const SafetyReportModal: React.FC<SafetyReportModalProps> = ({
                       value={r}
                       checked={reason === r}
                       onChange={(e) => setReason(e.target.value)}
-                      className="text-red-600 focus:ring-0"
+                      className="text-red-500 focus:ring-0 accent-red-500"
                     />
                     <span>{r}</span>
                   </label>
@@ -135,7 +135,7 @@ export const SafetyReportModal: React.FC<SafetyReportModalProps> = ({
             </div>
 
             <div>
-              <label className="block font-semibold text-zinc-700 mb-1.5">
+              <label className="block font-semibold text-[#EDEDEB] mb-1.5">
                 Additional Details (Optional)
               </label>
               <textarea
@@ -143,7 +143,7 @@ export const SafetyReportModal: React.FC<SafetyReportModalProps> = ({
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
                 placeholder="Provide any specific context or message excerpt..."
-                className="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-red-500"
+                className="w-full p-2.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-red-500"
               />
             </div>
 
@@ -151,13 +151,13 @@ export const SafetyReportModal: React.FC<SafetyReportModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl bg-zinc-100 text-zinc-700 hover:bg-zinc-200 font-semibold cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-[#EDEDEB] hover:bg-[#25221E] font-semibold cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold transition-all shadow-md shadow-red-600/15 active:scale-95 cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold transition-all shadow-md shadow-red-600/20 active:scale-95 cursor-pointer"
               >
                 Submit Incident Report
               </button>

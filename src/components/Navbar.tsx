@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles, Share2, BookOpen, Users } from 'lucide-react';
 import { StudentProfile } from '@/types';
 import { ALLOWED_SCHOOLS } from '@/lib/constants';
+import { ThemeToggle } from './ThemeToggle';
 
 interface NavbarProps {
   currentUser: StudentProfile | null;
@@ -70,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="flex items-center space-x-2.5 text-left cursor-pointer group focus:outline-none"
           title="KantoPrep Home"
         >
-          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-md shadow-emerald-600/15 border border-emerald-200/80 group-hover:scale-105 transition-transform shrink-0 bg-white">
+          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-md shadow-[#F5B942]/15 border border-[#F5B942]/30 group-hover:scale-105 transition-transform shrink-0 bg-[#161513]">
             <img
               src="/logo.png"
               alt="KantoPrep Logo"
@@ -79,14 +80,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <div>
             <div className="flex items-center space-x-1.5">
-              <span className="text-base sm:text-lg font-bold tracking-tight text-zinc-900 group-hover:text-emerald-700 transition-colors">
+              <span className="text-base sm:text-lg font-bold tracking-tight text-white group-hover:text-[#F5B942] transition-colors">
                 KantoPrep
               </span>
-              <span className="px-1.5 py-0.5 text-[9px] sm:text-[10px] font-semibold uppercase tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
+              <span className="px-1.5 py-0.5 text-[9px] sm:text-[10px] font-semibold uppercase tracking-wide bg-[#F5B942]/10 text-[#F5B942] border border-[#F5B942]/30 rounded-full">
                 Pilot
               </span>
             </div>
-            <p className="text-[10px] sm:text-[11px] text-zinc-500 font-normal hidden md:block">
+            <p className="text-[10px] sm:text-[11px] text-[#9E988F] font-normal hidden md:block">
               Tokyo International School Study Network
             </p>
           </div>
@@ -100,7 +101,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
                 activeTab === 'pods'
                   ? 'tab-active'
-                  : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/80'
+                  : 'text-[#9E988F] hover:text-white hover:bg-white/5'
               }`}
             >
               <Users className="w-3.5 h-3.5" />
@@ -112,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
                 activeTab === 'resources'
                   ? 'tab-active'
-                  : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/80'
+                  : 'text-[#9E988F] hover:text-white hover:bg-white/5'
               }`}
             >
               <BookOpen className="w-3.5 h-3.5" />
@@ -124,14 +125,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right: Actions */}
         <div className="flex items-center space-x-1.5 sm:space-x-2.5">
+          {/* Light / Dark Mode Switcher */}
+          <ThemeToggle />
+
           {/* Why KantoPrep Button */}
           {onOpenWhyKantoPrep && (
             <button
               onClick={onOpenWhyKantoPrep}
-              className="hidden lg:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-emerald-50/80 border border-emerald-200 hover:border-emerald-300 text-emerald-800 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
+              className="hidden lg:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-[#F5B942]/10 border border-[#F5B942]/25 hover:border-[#F5B942]/40 text-[#F5B942] text-xs font-semibold transition-all cursor-pointer shadow-2xs"
               title="Why KantoPrep? Our mission and research"
             >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <Sparkles className="w-3.5 h-3.5 text-[#F5B942]" />
               <span>Why KantoPrep?</span>
             </button>
           )}
@@ -139,10 +143,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Feedback Button */}
           <button
             onClick={onOpenFeedback}
-            className="hidden sm:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-white border border-zinc-200 hover:border-emerald-300 text-zinc-600 hover:text-emerald-700 text-xs font-medium transition-all cursor-pointer shadow-2xs"
+            className="hidden sm:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-[#161513] border border-[#F5B942]/20 hover:border-[#F5B942]/40 text-[#D1CEC7] hover:text-[#F5B942] text-xs font-medium transition-all cursor-pointer shadow-2xs"
             title="Suggest a safe library venue or share feedback"
           >
-            <MessageSquarePlus className="w-3.5 h-3.5 text-emerald-600" />
+            <MessageSquarePlus className="w-3.5 h-3.5 text-[#F5B942]" />
             <span className="hidden sm:inline">Feedback</span>
           </button>
 
@@ -152,9 +156,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               {activeTab === 'pods' && onOpenCreateModal && (
                 <button
                   onClick={onOpenCreateModal}
-                  className="flex items-center space-x-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 hover:shadow-emerald-500/30 transition-all duration-200 active:scale-[0.98] cursor-pointer cta-glow"
+                  className="flex items-center space-x-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold shadow-md shadow-[#F5B942]/20 hover:shadow-[#F5B942]/30 transition-all duration-200 active:scale-[0.98] cursor-pointer cta-glow"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span>Host Pod</span>
                 </button>
               )}
@@ -163,25 +167,25 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center space-x-1 p-0.5 rounded-full hover:ring-2 hover:ring-emerald-400/40 transition-all cursor-pointer"
+                  className="flex items-center space-x-1 p-0.5 rounded-full hover:ring-2 hover:ring-[#F5B942]/40 transition-all cursor-pointer"
                 >
                   <img
                     src={currentUser.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120'}
                     alt={currentUser.fullName}
-                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover ring-2 ring-emerald-500/30 shadow-xs"
+                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover ring-2 ring-[#F5B942]/30 shadow-xs"
                   />
-                  <ChevronDown className="w-3 h-3 text-zinc-400 hidden sm:block" />
+                  <ChevronDown className="w-3 h-3 text-[#7A756D] hidden sm:block" />
                 </button>
 
                 {isDropdownOpen && (
                   <div
-                    className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-zinc-200 py-1.5 z-50 text-xs text-zinc-700"
+                    className="absolute right-0 mt-2 w-56 bg-[#161513] rounded-2xl shadow-2xl border border-[#F5B942]/20 py-1.5 z-50 text-xs text-[#E4E2DD]"
                   >
-                    <div className="px-3.5 py-2.5 border-b border-zinc-100">
-                      <p className="font-bold text-zinc-900 truncate">{currentUser.fullName}</p>
-                      <p className="text-[11px] text-zinc-500 truncate">{currentUser.email}</p>
+                    <div className="px-3.5 py-2.5 border-b border-[#F5B942]/15">
+                      <p className="font-bold text-white truncate">{currentUser.fullName}</p>
+                      <p className="text-[11px] text-[#9E988F] truncate">{currentUser.email}</p>
                       {currentSchool && (
-                        <span className="mt-1 inline-block text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">
+                        <span className="mt-1 inline-block text-[10px] px-2 py-0.5 rounded bg-[#F5B942]/10 text-[#F5B942] border border-[#F5B942]/30 font-medium">
                           {currentSchool.shortName} • {currentUser.gradeLevel ? `Gr. ${currentUser.gradeLevel}` : 'Student'}
                         </span>
                       )}
@@ -192,9 +196,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         setIsDropdownOpen(false);
                         onOpenEditProfile?.();
                       }}
-                      className="w-full px-3.5 py-2 text-left hover:bg-zinc-50 flex items-center space-x-2 text-zinc-700 cursor-pointer"
+                      className="w-full px-3.5 py-2 text-left hover:bg-white/5 flex items-center space-x-2 text-[#E4E2DD] hover:text-[#F5B942] cursor-pointer transition-colors"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#F5B942]" />
                       <span>Edit Nickname &amp; Avatar</span>
                     </button>
 
@@ -204,9 +208,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           setIsDropdownOpen(false);
                           onOpenInvite();
                         }}
-                        className="w-full px-3.5 py-2 text-left hover:bg-zinc-50 flex items-center space-x-2 text-zinc-700 cursor-pointer"
+                        className="w-full px-3.5 py-2 text-left hover:bg-white/5 flex items-center space-x-2 text-[#E4E2DD] hover:text-[#F5B942] cursor-pointer transition-colors"
                       >
-                        <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <Share2 className="w-3.5 h-3.5 text-[#F5B942]" />
                         <span>Invite Classmates / Print Flyer</span>
                       </button>
                     )}
@@ -217,9 +221,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           setIsDropdownOpen(false);
                           onOpenSchoolSwitch();
                         }}
-                        className="w-full px-3.5 py-2 text-left hover:bg-zinc-50 flex items-center space-x-2 text-zinc-700 cursor-pointer"
+                        className="w-full px-3.5 py-2 text-left hover:bg-white/5 flex items-center space-x-2 text-[#E4E2DD] hover:text-[#F5B942] cursor-pointer transition-colors"
                       >
-                        <User className="w-3.5 h-3.5 text-emerald-600" />
+                        <User className="w-3.5 h-3.5 text-[#F5B942]" />
                         <span>Switch Student Account</span>
                       </button>
                     )}
@@ -229,20 +233,26 @@ export const Navbar: React.FC<NavbarProps> = ({
                         setIsDropdownOpen(false);
                         onOpenFeedback();
                       }}
-                      className="w-full px-3.5 py-2 text-left hover:bg-zinc-50 flex items-center space-x-2 text-zinc-700 cursor-pointer"
+                      className="w-full px-3.5 py-2 text-left hover:bg-white/5 flex items-center space-x-2 text-[#E4E2DD] hover:text-[#F5B942] cursor-pointer transition-colors"
                     >
-                      <MessageSquarePlus className="w-3.5 h-3.5 text-emerald-600" />
+                      <MessageSquarePlus className="w-3.5 h-3.5 text-[#F5B942]" />
                       <span>Suggest a Study Venue</span>
                     </button>
 
-                    <div className="my-1 border-t border-zinc-100" />
+                    {/* Mode Toggle in Dropdown */}
+                    <div className="px-3.5 py-2 flex items-center justify-between border-t border-[#F5B942]/15">
+                      <span className="text-[11px] text-[#A8A39D] font-medium">Appearance</span>
+                      <ThemeToggle showLabel={true} className="py-1 px-2.5 text-[11px]" />
+                    </div>
+
+                    <div className="my-1 border-t border-[#F5B942]/15" />
 
                     <button
                       onClick={() => {
                         setIsDropdownOpen(false);
                         onSignOut();
                       }}
-                      className="w-full px-3.5 py-2 text-left hover:bg-red-50 flex items-center space-x-2 text-red-600 cursor-pointer"
+                      className="w-full px-3.5 py-2 text-left hover:bg-red-500/10 flex items-center space-x-2 text-red-400 cursor-pointer transition-colors"
                     >
                       <LogOut className="w-3.5 h-3.5" />
                       <span>Sign Out</span>
@@ -255,9 +265,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             /* Logged Out View */
             <button
               onClick={() => onOpenAuthModal?.()}
-              className="flex items-center space-x-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 transition-all duration-200 active:scale-[0.98] cursor-pointer"
+              className="flex items-center space-x-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold shadow-md shadow-[#F5B942]/20 transition-all duration-200 active:scale-[0.98] cursor-pointer"
             >
-              <LogIn className="w-3.5 h-3.5" />
+              <LogIn className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Sign In</span>
             </button>
           )}

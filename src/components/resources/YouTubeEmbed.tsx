@@ -25,7 +25,7 @@ export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ resource }) => {
 
   return (
     <div className="group">
-      <div className="relative aspect-video rounded-xl overflow-hidden border border-zinc-200 shadow-sm transition-colors group-hover:border-emerald-300">
+      <div className="relative aspect-video rounded-xl overflow-hidden border border-[#F5B942]/15 shadow-sm transition-colors group-hover:border-[#F5B942]/40 bg-black">
         <iframe
           src={`https://www.youtube.com/embed/${cleanVideoId}`}
           title={resource.title}
@@ -35,10 +35,10 @@ export const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({ resource }) => {
         />
       </div>
       <div className="mt-2 px-0.5">
-        <p className="text-sm font-semibold text-zinc-900 line-clamp-2 group-hover:text-emerald-800 transition-colors">
+        <p className="text-sm font-semibold text-white line-clamp-2 group-hover:text-[#F5B942] transition-colors">
           {resource.title}
         </p>
-        <p className="text-xs text-zinc-500 mt-0.5">
+        <p className="text-xs text-[#A8A39D] mt-0.5">
           {resource.channelName}
           {resource.durationMinutes ? ` • ${resource.durationMinutes} min` : ''}
         </p>

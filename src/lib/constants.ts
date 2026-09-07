@@ -83,7 +83,7 @@ export const ALLOWED_SCHOOLS: SchoolInfo[] = [
     name: 'KantoPrep Pilot Campus',
     shortName: 'KantoPrep',
     campus: 'Tokyo Central',
-    badgeColor: 'from-emerald-500 to-teal-600',
+    badgeColor: 'from-amber-400 to-amber-600',
   },
 ];
 
@@ -144,25 +144,25 @@ export const SUBJECTS_BY_CURRICULUM: Record<Curriculum, string[]> = {
 export const FORMAT_CONFIG: Record<SessionFormat, { label: string; badge: string; description: string; icon: string }> = {
   past_paper_sprint: {
     label: 'Past Paper Sprint',
-    badge: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    badge: 'bg-[#F5B942]/10 text-[#F5B942] border-[#F5B942]/30',
     description: 'Timed paper test followed by step-by-step markscheme review.',
     icon: 'FileSpreadsheet',
   },
   ia_workshop: {
     label: 'IA / Essay Workshop',
-    badge: 'bg-teal-50 text-teal-700 border-teal-200',
+    badge: 'bg-amber-400/10 text-[#FFD479] border-amber-400/25',
     description: 'Constructive peer review on structure, calculations, and rubric.',
     icon: 'PenTool',
   },
   silent_pomodoro: {
     label: 'Silent Pomodoro',
-    badge: 'bg-amber-50 text-amber-700 border-amber-200',
+    badge: 'bg-orange-500/10 text-orange-300 border-orange-500/25',
     description: 'High-focus 25/5 study session with ambient timer accountability.',
     icon: 'Clock',
   },
   exam_cram: {
     label: 'Concept Cram & Q&A',
-    badge: 'bg-emerald-50 text-emerald-800 border-emerald-300',
+    badge: 'bg-amber-500/15 text-amber-200 border-amber-500/35',
     description: 'Targeted drill on difficult syllabus chapters and formulas.',
     icon: 'Brain',
   },

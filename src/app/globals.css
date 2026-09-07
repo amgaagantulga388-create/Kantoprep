@@ -1,76 +1,77 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #f7faf8;
-  --color-foreground: #1a2e23;
+  --color-background: #0E0D0B;
+  --color-foreground: #F5F5F3;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background-color: #f7faf8;
-  color: #1a2e23;
+  background-color: #0E0D0B;
+  color: #EDEDEB;
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Frosted Glass Navigation */
+/* Frosted Luxury Dark Glass Navigation */
 .glass-nav {
-  background: rgba(247, 250, 248, 0.88);
-  backdrop-filter: blur(24px) saturate(1.6);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6);
-  border-bottom: 1px solid rgba(16, 185, 129, 0.12);
+  background: rgba(14, 13, 11, 0.86);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid rgba(245, 185, 66, 0.12);
 }
 
-/* Glass Panels */
+/* Luxury Dark Glass Panels */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border: 1px solid rgba(16, 185, 129, 0.12);
-  box-shadow: 0 2px 16px -2px rgba(16, 185, 129, 0.04);
+  background: rgba(22, 21, 19, 0.85);
+  backdrop-filter: blur(20px) saturate(1.3);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  border: 1px solid rgba(245, 185, 66, 0.14);
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5);
 }
 
 /* Study Pod Cards */
 .glass-card {
-  background: #ffffff;
-  border: 1px solid rgba(16, 185, 129, 0.08);
+  background: #161513;
+  border: 1px solid rgba(245, 185, 66, 0.12);
   border-radius: 1.25rem;
   box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.02),
-    0 4px 16px -2px rgba(16, 185, 129, 0.05);
+    0 1px 3px rgba(0, 0, 0, 0.4),
+    0 4px 20px -2px rgba(0, 0, 0, 0.6);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  border-color: rgba(16, 185, 129, 0.28);
+  border-color: rgba(245, 185, 66, 0.38);
   box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.02),
-    0 8px 28px -4px rgba(16, 185, 129, 0.12);
+    0 1px 3px rgba(0, 0, 0, 0.5),
+    0 8px 32px -4px rgba(245, 185, 66, 0.12),
+    0 4px 16px -2px rgba(0, 0, 0, 0.8);
   transform: translateY(-2px);
 }
 
-/* Smooth Scrollbars */
+/* Smooth Scrollbars in Warm Amber */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #0E0D0B;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.2);
+  background: rgba(245, 185, 66, 0.25);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.35);
+  background: rgba(245, 185, 66, 0.45);
 }
 
-/* Smooth focus rings */
+/* Smooth warm focus rings */
 *:focus-visible {
-  outline: 2px solid rgba(16, 185, 129, 0.5);
+  outline: 2px solid rgba(245, 185, 66, 0.6);
   outline-offset: 2px;
 }
 
@@ -83,7 +84,7 @@ body {
   scrollbar-width: none;
 }
 
-/* ── Animated Gradient Border Glow (Linear/Raycast-style) ── */
+/* ── Animated Warm Amber Border Glow (Linear/Raycast luxury style) ── */
 .glow-card {
   position: relative;
   overflow: hidden;
@@ -97,8 +98,8 @@ body {
   background: conic-gradient(
     from var(--glow-angle, 0deg),
     transparent 40%,
-    rgba(16, 185, 129, 0.35) 50%,
-    rgba(20, 184, 166, 0.25) 55%,
+    rgba(245, 185, 66, 0.45) 50%,
+    rgba(217, 155, 38, 0.3) 55%,
     transparent 65%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -122,7 +123,7 @@ body {
   to { --glow-angle: 360deg; }
 }
 
-/* ── Pulsing Live Indicator ── */
+/* ── Pulsing Live Indicator (Warm Amber) ── */
 .pulse-dot {
   position: relative;
 }
@@ -131,7 +132,7 @@ body {
   position: absolute;
   inset: -2px;
   border-radius: 9999px;
-  background: rgba(16, 185, 129, 0.4);
+  background: rgba(245, 185, 66, 0.45);
   animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 @keyframes pulse-ring {
@@ -142,7 +143,7 @@ body {
 /* ── Gradient Text Shimmer ── */
 .shimmer-text {
   background-size: 200% auto;
-  animation: shimmer-slide 3s ease-in-out infinite;
+  animation: shimmer-slide 3.5s ease-in-out infinite;
 }
 @keyframes shimmer-slide {
   0%, 100% { background-position: 0% center; }
@@ -151,49 +152,220 @@ body {
 
 /* ── Capacity Progress Bar ── */
 .capacity-bar {
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(245, 185, 66, 0.12);
   border-radius: 9999px;
   overflow: hidden;
 }
 .capacity-bar-fill {
-  background: linear-gradient(90deg, #10b981, #14b8a6);
+  background: linear-gradient(90deg, #F5B942, #E5A832);
   border-radius: 9999px;
   transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── Subtle CTA pulse ── */
+/* ── Subtle CTA pulse (Warm Amber) ── */
 @keyframes cta-pulse {
-  0%, 100% { box-shadow: 0 4px 14px -2px rgba(16, 185, 129, 0.25); }
-  50% { box-shadow: 0 4px 20px -2px rgba(16, 185, 129, 0.45); }
+  0%, 100% { box-shadow: 0 4px 16px -2px rgba(245, 185, 66, 0.28); }
+  50% { box-shadow: 0 4px 24px -2px rgba(245, 185, 66, 0.48); }
 }
 .cta-glow {
   animation: cta-pulse 2.5s ease-in-out infinite;
 }
 
-/* ── Dotted background pattern ── */
+/* ── Dotted background pattern (Warm Amber on Dark) ── */
 .dotted-bg {
-  background-image: radial-gradient(circle, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(245, 185, 66, 0.08) 1px, transparent 1px);
   background-size: 20px 20px;
 }
 
-/* ── Resource Card (lighter variant of glass-card) ── */
+/* ── Resource Card (dark elevated variant) ── */
 .resource-card {
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #161513;
+  border: 1px solid rgba(245, 185, 66, 0.12);
   border-radius: 1rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .resource-card:hover {
-  border-color: rgba(16, 185, 129, 0.25);
-  box-shadow: 0 2px 12px -2px rgba(16, 185, 129, 0.1);
+  border-color: rgba(245, 185, 66, 0.35);
+  box-shadow: 0 4px 20px -2px rgba(245, 185, 66, 0.12), 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
-/* ── Active Nav Tab Indicator ── */
+/* ── Active Nav Tab Indicator (Warm Amber with Deep Black text) ── */
 .tab-active {
-  background: linear-gradient(135deg, #059669, #0d9488);
-  color: white;
-  box-shadow: 0 2px 8px -2px rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #F5B942, #E5A832);
+  color: #0E0D0B;
+  font-weight: 700;
+  box-shadow: 0 2px 12px -2px rgba(245, 185, 66, 0.45);
+}
+
+/* ── Academic Light Mode Overrides (Activated via ThemeToggle) ── */
+html.light,
+html.light body {
+  background-color: #f7faf8 !important;
+  color: #18181b !important;
+}
+
+html.light ::selection {
+  background-color: rgba(5, 150, 105, 0.2) !important;
+  color: #065f46 !important;
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #f7faf8 !important;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: rgba(5, 150, 105, 0.25) !important;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(5, 150, 105, 0.45) !important;
+}
+
+/* Background surfaces */
+html.light .bg-\[\#0E0D0B\] {
+  background-color: #f7faf8 !important;
+}
+
+html.light .bg-\[\#161513\],
+html.light .bg-\[\#141310\] {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-\[\#1C1A17\],
+html.light .bg-\[\#1A1815\],
+html.light .bg-\[\#201D1A\],
+html.light .bg-\[\#221F1B\] {
+  background-color: #f4f5f6 !important;
+}
+
+html.light .bg-\[\#25221E\] {
+  background-color: #e4e4e7 !important;
+}
+
+/* Typography */
+html.light .text-white {
+  color: #09090b !important;
+}
+
+html.light .hover\:text-white:hover {
+  color: #09090b !important;
+}
+
+html.light .text-\[\#EDEDEB\],
+html.light .text-\[\#E4E2DD\],
+html.light .text-\[\#D1CEC7\] {
+  color: #27272a !important;
+}
+
+html.light .text-\[\#A8A39D\],
+html.light .text-\[\#9E988F\] {
+  color: #52525b !important;
+}
+
+html.light .text-\[\#7A756D\] {
+  color: #71717a !important;
+}
+
+html.light .text-\[\#F5B942\] {
+  color: #059669 !important;
+}
+
+html.light .text-\[\#0E0D0B\] {
+  color: #ffffff !important;
+}
+
+/* Accents & Buttons */
+html.light .bg-\[\#F5B942\] {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+html.light .hover\:bg-\[\#E5A832\]:hover {
+  background-color: #047857 !important;
+  color: #ffffff !important;
+}
+
+html.light .bg-\[\#F5B942\]\/10,
+html.light .bg-\[\#F5B942\]\/15,
+html.light .bg-\[\#F5B942\]\/20,
+html.light .bg-\[\#F5B942\]\/25 {
+  background-color: rgba(5, 150, 105, 0.08) !important;
+}
+
+html.light .bg-\[\#F5B942\]\/30 {
+  background-color: rgba(5, 150, 105, 0.15) !important;
+}
+
+/* Borders */
+html.light .border-\[\#F5B942\]\/10,
+html.light .border-\[\#F5B942\]\/15,
+html.light .border-\[\#F5B942\]\/20,
+html.light .border-\[\#F5B942\]\/25 {
+  border-color: #e4e4e7 !important;
+}
+
+html.light .border-\[\#F5B942\]\/30,
+html.light .border-\[\#F5B942\]\/40,
+html.light .border-\[\#F5B942\]\/50,
+html.light .border-\[\#F5B942\]\/60 {
+  border-color: rgba(5, 150, 105, 0.35) !important;
+}
+
+/* Shadows & Rings */
+html.light .shadow-\[\#F5B942\]\/15,
+html.light .shadow-\[\#F5B942\]\/20,
+html.light .shadow-\[\#F5B942\]\/30 {
+  box-shadow: 0 4px 14px 0 rgba(5, 150, 105, 0.2) !important;
+}
+
+html.light .ring-\[\#F5B942\]\/20,
+html.light .ring-\[\#F5B942\]\/30,
+html.light .ring-\[\#F5B942\]\/40 {
+  --tw-ring-color: rgba(5, 150, 105, 0.35) !important;
+}
+
+/* Glass navigation & panels in light mode */
+html.light .glass-nav {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light .glass-panel {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light .glass-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px -2px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light .glass-card:hover {
+  border-color: rgba(5, 150, 105, 0.4) !important;
+  box-shadow: 0 8px 30px -4px rgba(5, 150, 105, 0.15) !important;
+}
+
+html.light .tab-active {
+  background: #059669 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px -2px rgba(5, 150, 105, 0.4) !important;
+}
+
+html.light .dotted-bg {
+  background-image: radial-gradient(circle, rgba(5, 150, 105, 0.08) 1px, transparent 1px) !important;
+}
+
+html.light .pulse-dot::after {
+  background: rgba(5, 150, 105, 0.45) !important;
+}
+
+html.light .capacity-bar {
+  background: rgba(5, 150, 105, 0.12) !important;
+}
+
+html.light .capacity-bar-fill {
+  background: linear-gradient(90deg, #10b981, #059669) !important;
 }
 

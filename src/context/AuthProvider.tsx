@@ -81,9 +81,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Loading state
   if (isAuthLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f7faf8] text-emerald-700">
+      <div className="min-h-screen flex items-center justify-center bg-[#0E0D0B] text-[#F5B942]">
         <div className="flex items-center space-x-2 text-sm font-semibold animate-pulse">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+          <div className="w-2.5 h-2.5 rounded-full bg-[#F5B942]" />
           <span>Entering KantoPrep...</span>
         </div>
       </div>

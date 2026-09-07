@@ -53,10 +53,10 @@ export const GroupCard: React.FC<GroupCardProps> = ({
   };
 
   const curriculumStyles: Record<string, string> = {
-    IB: 'border-blue-200 text-blue-700 bg-blue-50',
-    AP: 'border-amber-200 text-amber-700 bg-amber-50',
-    IGCSE: 'border-emerald-200 text-emerald-700 bg-emerald-50',
-    SAT_ACT: 'border-teal-200 text-teal-700 bg-teal-50',
+    IB: 'border-blue-400/30 text-blue-300 bg-blue-500/10',
+    AP: 'border-amber-400/30 text-amber-300 bg-amber-500/10',
+    IGCSE: 'border-[#F5B942]/30 text-[#F5B942] bg-[#F5B942]/10',
+    SAT_ACT: 'border-teal-400/30 text-teal-300 bg-teal-500/10',
   };
 
   return (
@@ -92,23 +92,23 @@ export const GroupCard: React.FC<GroupCardProps> = ({
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="flex items-center space-x-1 text-[11px] text-zinc-600 hover:text-emerald-700 bg-zinc-50 hover:bg-emerald-50/50 px-2 py-0.5 rounded-lg border border-emerald-100 hover:border-emerald-300 transition-all shadow-2xs group/map cursor-pointer"
+            className="flex items-center space-x-1 text-[11px] text-[#D1CEC7] hover:text-[#F5B942] bg-[#1C1A17] hover:bg-[#23201C] px-2 py-0.5 rounded-lg border border-[#F5B942]/20 hover:border-[#F5B942]/40 transition-all shadow-2xs group/map cursor-pointer"
             title="Open library in Google Maps"
           >
-            <MapPin className="w-3 h-3 text-emerald-600 shrink-0 group-hover/map:scale-110 transition-transform" />
+            <MapPin className="w-3 h-3 text-[#F5B942] shrink-0 group-hover/map:scale-110 transition-transform" />
             <span className="truncate max-w-[120px] font-medium">{group.venueLabel}</span>
-            <ExternalLink className="w-2.5 h-2.5 text-zinc-400 group-hover/map:text-emerald-600 shrink-0" />
+            <ExternalLink className="w-2.5 h-2.5 text-[#7A756D] group-hover/map:text-[#F5B942] shrink-0" />
           </a>
         </div>
 
         {/* Subject & Title */}
-        <p className="text-xs font-semibold text-emerald-700 mb-1">{group.subject}</p>
-        <h3 className="text-base font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-snug">
+        <p className="text-xs font-bold text-[#F5B942] mb-1">{group.subject}</p>
+        <h3 className="text-base font-bold text-white group-hover:text-[#F5B942] transition-colors line-clamp-2 leading-snug">
           {group.title}
         </h3>
 
         {/* Description */}
-        <p className="mt-2 text-xs text-zinc-600 line-clamp-2 leading-relaxed">
+        <p className="mt-2 text-xs text-[#A8A39D] line-clamp-2 leading-relaxed">
           {group.description}
         </p>
 
@@ -117,7 +117,7 @@ export const GroupCard: React.FC<GroupCardProps> = ({
           {group.tags.map((tag) => (
             <span
               key={tag}
-              className="text-[10px] px-2 py-0.5 rounded-md bg-zinc-100/80 text-zinc-700 border border-zinc-200"
+              className="text-[10px] px-2 py-0.5 rounded-md bg-[#1C1A17] text-[#C2BEB6] border border-[#F5B942]/15"
             >
               #{tag}
             </span>
@@ -126,7 +126,7 @@ export const GroupCard: React.FC<GroupCardProps> = ({
       </div>
 
       {/* Card Footer */}
-      <div className="mt-5 pt-4 border-t border-zinc-100">
+      <div className="mt-5 pt-4 border-t border-[#F5B942]/15">
         {/* Member Avatars Row with Host Badge */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
@@ -137,21 +137,21 @@ export const GroupCard: React.FC<GroupCardProps> = ({
                     src={member.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80'}
                     alt={member.fullName}
                     title={`${member.fullName}${member.id === group.host.id ? ' (Host)' : ''} • ${member.schoolName}`}
-                    className={`inline-block h-6 w-6 rounded-full ring-2 ring-white object-cover ${
-                      member.id === group.host.id ? 'ring-emerald-300' : ''
+                    className={`inline-block h-6 w-6 rounded-full ring-2 ring-[#161513] object-cover ${
+                      member.id === group.host.id ? 'ring-[#F5B942]/50' : ''
                     }`}
                   />
                   {member.id === group.host.id && (
-                    <Crown className="absolute -top-1.5 -right-0.5 w-3 h-3 text-amber-500 drop-shadow-sm" />
+                    <Crown className="absolute -top-1.5 -right-0.5 w-3 h-3 text-[#F5B942] drop-shadow-sm" />
                   )}
                 </div>
               ))}
             </div>
-            <div className="text-[11px] text-zinc-600">
-              <span className="font-semibold text-zinc-900">
+            <div className="text-[11px] text-[#A8A39D]">
+              <span className="font-semibold text-white">
                 {group.members.length}/{group.maxMembers}
               </span>{' '}
-              <span className="text-zinc-400">
+              <span className="text-[#7A756D]">
                 ({group.maxMembers - group.members.length} open)
               </span>
             </div>
@@ -161,7 +161,7 @@ export const GroupCard: React.FC<GroupCardProps> = ({
         {/* Capacity Progress Bar */}
         <div className="capacity-bar h-1 mb-3">
           <div
-            className={`capacity-bar-fill h-full ${capacityPercent >= 100 ? '!bg-amber-400' : ''}`}
+            className={`capacity-bar-fill h-full ${capacityPercent >= 100 ? '!bg-[#F5B942]' : ''}`}
             style={{ width: `${capacityPercent}%` }}
           />
         </div>
@@ -171,16 +171,16 @@ export const GroupCard: React.FC<GroupCardProps> = ({
           <button
             type="button"
             onClick={handleShare}
-            className="relative p-2 rounded-xl border border-zinc-200 hover:border-emerald-300 hover:bg-emerald-50/60 text-zinc-400 hover:text-emerald-700 transition-all cursor-pointer shadow-2xs"
+            className="relative p-2 rounded-xl border border-[#F5B942]/20 hover:border-[#F5B942]/50 hover:bg-[#F5B942]/10 text-[#9E988F] hover:text-[#F5B942] transition-all cursor-pointer shadow-2xs"
             title="Share pod link with peers"
           >
             {copied ? (
-              <Check className="w-3.5 h-3.5 text-emerald-600" />
+              <Check className="w-3.5 h-3.5 text-[#F5B942]" />
             ) : (
               <Share2 className="w-3.5 h-3.5" />
             )}
             {copied && (
-              <span className="absolute -top-7 right-0 px-2 py-0.5 rounded-md bg-zinc-900 text-white text-[10px] font-medium whitespace-nowrap shadow-lg animate-in fade-in slide-in-from-bottom-1">
+              <span className="absolute -top-7 right-0 px-2 py-0.5 rounded-md bg-[#1C1A17] border border-[#F5B942]/30 text-[#F5B942] text-[10px] font-semibold whitespace-nowrap shadow-lg animate-in fade-in slide-in-from-bottom-1">
                 Link copied!
               </span>
             )}
@@ -188,12 +188,12 @@ export const GroupCard: React.FC<GroupCardProps> = ({
 
           <button
             onClick={() => onJoinOrOpen(group)}
-            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 active:scale-[0.98] cursor-pointer ${
+            className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 active:scale-[0.98] cursor-pointer ${
               isMember
-                ? 'bg-emerald-50 border border-emerald-200 text-emerald-700 hover:bg-emerald-100'
+                ? 'bg-[#F5B942]/15 border border-[#F5B942]/40 text-[#F5B942] hover:bg-[#F5B942]/25'
                 : isFull
-                ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed border border-zinc-200'
-                : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm shadow-emerald-600/20 cta-glow'
+                ? 'bg-[#1C1A17] text-[#7A756D] cursor-not-allowed border border-[#2A2723]'
+                : 'bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] shadow-sm shadow-[#F5B942]/20 cta-glow'
             }`}
             disabled={isFull && !isMember}
           >
@@ -207,7 +207,7 @@ export const GroupCard: React.FC<GroupCardProps> = ({
             ) : (
               <>
                 <span>Join Pod</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.5]" />
               </>
             )}
           </button>

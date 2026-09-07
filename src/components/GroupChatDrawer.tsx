@@ -287,16 +287,16 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="w-screen max-w-md bg-white flex flex-col shadow-2xl border-l border-zinc-200"
+              className="w-screen max-w-md bg-[#141310] flex flex-col shadow-2xl border-l border-[#F5B942]/20 text-white"
             >
               {/* Drawer Header */}
-              <div className="p-4 border-b border-zinc-200 bg-white">
+              <div className="p-4 border-b border-[#F5B942]/15 bg-[#141310]">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-[#F5B942]/10 text-[#F5B942] border border-[#F5B942]/30">
                       {group.curriculum}
                     </span>
-                    <span className="text-xs font-semibold text-zinc-700 truncate max-w-[180px]">
+                    <span className="text-xs font-semibold text-[#A8A39D] truncate max-w-[180px]">
                       {group.subject}
                     </span>
                   </div>
@@ -307,8 +307,8 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       onClick={() => setIsTimerExpanded(!isTimerExpanded)}
                       className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
                         isTimerRunning
-                          ? 'text-emerald-600 bg-emerald-50'
-                          : 'text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100'
+                          ? 'text-[#0E0D0B] bg-[#F5B942]'
+                          : 'text-[#A8A39D] hover:text-white hover:bg-[#1C1A17]'
                       }`}
                       title="Toggle 25-Min Study Sprint Timer"
                     >
@@ -319,7 +319,7 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                     <button
                       onClick={() => onOpenReport(group)}
                       title="Report room or participant for safety"
-                      className="p-1.5 rounded-lg text-zinc-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg text-[#A8A39D] hover:text-red-400 hover:bg-red-950/40 transition-colors cursor-pointer"
                     >
                       <ShieldAlert className="w-4 h-4" />
                     </button>
@@ -327,22 +327,22 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                     {/* Close Button */}
                     <button
                       onClick={onClose}
-                      className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
                     >
                       <X className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
 
-                <h2 className="mt-2 text-base font-bold text-zinc-900 leading-snug">
+                <h2 className="mt-2 text-base font-bold text-white leading-snug">
                   {group.title}
                 </h2>
 
                 {/* Venue & Calendar Actions */}
-                <div className="mt-3 p-2.5 rounded-xl bg-zinc-50 border border-zinc-200 text-xs flex flex-col gap-1.5">
+                <div className="mt-3 p-2.5 rounded-xl bg-[#1A1815] border border-[#F5B942]/15 text-xs flex flex-col gap-1.5">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center text-zinc-800">
-                      <MapPin className="w-3.5 h-3.5 text-emerald-600 mr-1.5 shrink-0" />
+                    <div className="flex items-center text-white">
+                      <MapPin className="w-3.5 h-3.5 text-[#F5B942] mr-1.5 shrink-0" />
                       <span className="font-semibold truncate">{group.venueLabel}</span>
                     </div>
 
@@ -351,13 +351,13 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       <button
                         type="button"
                         onClick={handleShare}
-                        className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-white border border-zinc-200 hover:border-emerald-300 text-[10px] text-zinc-700 hover:text-emerald-700 font-medium transition-colors cursor-pointer shadow-2xs"
+                        className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-[#141310] border border-[#F5B942]/20 hover:border-[#F5B942]/60 text-[10px] text-[#EDEDEB] hover:text-[#F5B942] font-medium transition-colors cursor-pointer shadow-2xs"
                         title="Share pod link"
                       >
                         {shareCopied ? (
-                          <Check className="w-3 h-3 text-emerald-600" />
+                          <Check className="w-3 h-3 text-[#F5B942]" />
                         ) : (
-                          <Share2 className="w-3 h-3 text-emerald-600" />
+                          <Share2 className="w-3 h-3 text-[#F5B942]" />
                         )}
                         <span>{shareCopied ? 'Copied' : 'Share'}</span>
                       </button>
@@ -365,54 +365,54 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                         href={getGoogleMapsUrl(group.venueLabel, venueInfo?.address)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-white border border-zinc-200 hover:border-emerald-300 text-[10px] text-zinc-700 hover:text-emerald-700 font-medium transition-colors cursor-pointer shadow-2xs"
+                        className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-[#141310] border border-[#F5B942]/20 hover:border-[#F5B942]/60 text-[10px] text-[#EDEDEB] hover:text-[#F5B942] font-medium transition-colors cursor-pointer shadow-2xs"
                         title="Open venue in Google Maps"
                       >
-                        <ExternalLink className="w-3 h-3 text-emerald-600" />
+                        <ExternalLink className="w-3 h-3 text-[#F5B942]" />
                         <span>Maps</span>
                       </a>
                       <a
                         href={generateGoogleCalendarUrl(group)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-white border border-zinc-200 hover:border-emerald-300 text-[10px] text-zinc-700 hover:text-emerald-700 font-medium transition-colors cursor-pointer shadow-2xs"
+                        className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-[#141310] border border-[#F5B942]/20 hover:border-[#F5B942]/60 text-[10px] text-[#EDEDEB] hover:text-[#F5B942] font-medium transition-colors cursor-pointer shadow-2xs"
                         title="Add meeting to Google Calendar"
                       >
-                        <Calendar className="w-3 h-3 text-emerald-600" />
+                        <Calendar className="w-3 h-3 text-[#F5B942]" />
                         <span>Google Cal</span>
                       </a>
                       <button
                         onClick={() => downloadIcsFile(group)}
-                        className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-white border border-zinc-200 hover:border-emerald-300 text-[10px] text-zinc-700 hover:text-emerald-700 font-medium transition-colors cursor-pointer shadow-2xs"
+                        className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-md bg-[#141310] border border-[#F5B942]/20 hover:border-[#F5B942]/60 text-[10px] text-[#EDEDEB] hover:text-[#F5B942] font-medium transition-colors cursor-pointer shadow-2xs"
                         title="Download .ics for Apple Calendar / Outlook"
                       >
-                        <Download className="w-3 h-3 text-zinc-500" />
+                        <Download className="w-3 h-3 text-[#A8A39D]" />
                         <span>.ics</span>
                       </button>
                     </div>
                   </div>
 
                   {venueInfo?.address && (
-                    <p className="text-[11px] text-zinc-500 pl-5 leading-tight">
+                    <p className="text-[11px] text-[#7A756D] pl-5 leading-tight">
                       {venueInfo.address}
                     </p>
                   )}
 
-                  <div className="flex items-center justify-between pt-1 border-t border-zinc-200 text-[11px] text-zinc-500">
+                  <div className="flex items-center justify-between pt-1 border-t border-[#F5B942]/10 text-[11px] text-[#A8A39D]">
                     <span className="flex items-center">
-                      <Clock className="w-3 h-3 text-amber-500 mr-1" />
+                      <Clock className="w-3 h-3 text-[#F5B942] mr-1" />
                       {group.meetingTime} ({group.durationMinutes} mins)
                     </span>
                     <div className="flex items-center space-x-2">
                       <span className="flex items-center">
-                        <Users className="w-3 h-3 text-emerald-600 mr-1" />
+                        <Users className="w-3 h-3 text-[#F5B942] mr-1" />
                         {group.members.length}/{group.maxMembers} Students
                       </span>
                       {isHost ? (
                         <button
                           type="button"
                           onClick={() => setIsCancelModalOpen(true)}
-                          className="text-[10px] text-red-500 hover:text-red-700 font-medium hover:underline cursor-pointer pl-1.5 border-l border-zinc-200"
+                          className="text-[10px] text-red-400 hover:text-red-300 font-medium hover:underline cursor-pointer pl-1.5 border-l border-[#F5B942]/15"
                           title="Cancel and remove this study session"
                         >
                           Cancel Pod
@@ -421,7 +421,7 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                         <button
                           type="button"
                           onClick={() => setIsLeaveModalOpen(true)}
-                          className="text-[10px] text-zinc-500 hover:text-red-600 font-medium hover:underline cursor-pointer pl-1.5 border-l border-zinc-200"
+                          className="text-[10px] text-[#A8A39D] hover:text-red-400 font-medium hover:underline cursor-pointer pl-1.5 border-l border-[#F5B942]/15"
                           title="Leave this study pod"
                         >
                           Leave Pod
@@ -438,22 +438,22 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="mt-3 p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200 overflow-hidden"
+                      className="mt-3 p-3 rounded-2xl bg-[#1C1A17] border border-[#F5B942]/30 overflow-hidden shadow-inner"
                     >
                       <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center space-x-1.5 text-xs text-emerald-900 font-semibold">
-                          <Timer className="w-4 h-4 text-emerald-600" />
+                        <div className="flex items-center space-x-1.5 text-xs text-[#F5B942] font-semibold">
+                          <Timer className="w-4 h-4 text-[#F5B942]" />
                           <span>Pomodoro Focus Sprint</span>
                         </div>
-                        <span className="font-mono text-base font-extrabold text-emerald-800">
+                        <span className="font-mono text-base font-extrabold text-white">
                           {formatTimerDigits(timerSeconds)}
                         </span>
                       </div>
 
                       {/* Progress Bar */}
-                      <div className="w-full h-1.5 bg-emerald-200/60 rounded-full overflow-hidden mb-2.5">
+                      <div className="w-full h-1.5 bg-[#0E0D0B] rounded-full overflow-hidden mb-2.5 border border-[#F5B942]/20">
                         <div
-                          className="h-full bg-emerald-600 transition-all duration-300 rounded-full"
+                          className="h-full bg-[#F5B942] transition-all duration-300 rounded-full shadow-[0_0_8px_rgba(245,185,66,0.5)]"
                           style={{ width: `${timerPercent}%` }}
                         />
                       </div>
@@ -462,7 +462,7 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                         <button
                           type="button"
                           onClick={handleResetTimer}
-                          className="px-2 py-1 rounded-lg bg-white border border-zinc-200 text-zinc-600 text-[11px] hover:bg-zinc-50 font-medium cursor-pointer"
+                          className="px-2 py-1 rounded-lg bg-[#141310] border border-[#F5B942]/20 text-[#A8A39D] hover:text-white text-[11px] hover:bg-[#1A1815] font-medium cursor-pointer"
                         >
                           <RotateCcw className="w-3 h-3 inline mr-1" />
                           Reset
@@ -470,10 +470,10 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                         <button
                           type="button"
                           onClick={handleToggleTimer}
-                          className={`px-3 py-1 rounded-lg text-white text-[11px] font-semibold transition-all cursor-pointer flex items-center space-x-1 ${
+                          className={`px-3 py-1 rounded-lg text-[#0E0D0B] text-[11px] font-bold transition-all cursor-pointer flex items-center space-x-1 ${
                             isTimerRunning
-                              ? 'bg-amber-600 hover:bg-amber-500'
-                              : 'bg-emerald-600 hover:bg-emerald-500'
+                              ? 'bg-amber-400 hover:bg-amber-300'
+                              : 'bg-[#F5B942] hover:bg-[#E5A832]'
                           }`}
                         >
                           {isTimerRunning ? (
@@ -491,9 +491,9 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       </div>
 
                       {/* Ambient Focus Audio Soundboard */}
-                      <div className="mt-2.5 pt-2 border-t border-emerald-200/60 flex items-center justify-between">
-                        <span className="text-[10px] font-semibold text-emerald-900 flex items-center gap-1">
-                          <Headphones className="w-3 h-3 text-emerald-600" />
+                      <div className="mt-2.5 pt-2 border-t border-[#F5B942]/15 flex items-center justify-between">
+                        <span className="text-[10px] font-semibold text-[#A8A39D] flex items-center gap-1">
+                          <Headphones className="w-3 h-3 text-[#F5B942]" />
                           <span>Focus Audio</span>
                         </span>
                         <div className="flex items-center space-x-1">
@@ -513,8 +513,8 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                               }}
                               className={`px-2 py-0.5 rounded-md text-[10px] font-medium transition-all cursor-pointer ${
                                 ambientSound === snd.id
-                                  ? 'bg-emerald-600 text-white shadow-2xs font-semibold'
-                                  : 'bg-white/80 text-zinc-600 hover:bg-white border border-emerald-200/60'
+                                  ? 'bg-[#F5B942] text-[#0E0D0B] font-bold shadow-2xs'
+                                  : 'bg-[#141310] text-[#A8A39D] hover:text-white border border-[#F5B942]/20'
                               }`}
                             >
                               {snd.label}
@@ -530,15 +530,15 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
               {/* Chat Message Stream */}
               <div className="flex-1 overflow-y-auto p-4 space-y-3.5">
                 {/* Academic Honesty Banner */}
-                <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 flex items-start space-x-2">
-                  <Lock className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="p-3 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-xs text-[#EDEDEB] flex items-start space-x-2">
+                  <Lock className="w-4 h-4 text-[#F5B942] shrink-0 mt-0.5" />
                   <p className="leading-relaxed">
-                    <strong>Tokyo Student Safety Shield:</strong> Verified school emails only. No test bank leaks or commercial requests permitted.
+                    <strong className="text-[#F5B942]">Tokyo Student Safety Shield:</strong> Verified school emails only. No test bank leaks or commercial requests permitted.
                   </p>
                 </div>
 
                 {messages.length === 0 ? (
-                  <div className="text-center py-12 text-zinc-400 text-xs">
+                  <div className="text-center py-12 text-[#7A756D] text-xs">
                     <p>No messages yet. Be the first to say hi and coordinate past papers!</p>
                   </div>
                 ) : (
@@ -550,7 +550,7 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       return (
                         <div
                           key={msg.id}
-                          className="my-2 p-2 rounded-xl bg-emerald-50/60 border border-emerald-100 text-center text-[11px] text-emerald-800 font-medium"
+                          className="my-2 p-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-center text-[11px] text-[#F5B942] font-medium"
                         >
                           {msg.content}
                         </div>
@@ -570,17 +570,17 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                             <img
                               src={msg.sender.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60'}
                               alt={msg.sender.fullName}
-                              className="w-7 h-7 rounded-full object-cover ring-1 ring-zinc-200"
+                              className="w-7 h-7 rounded-full object-cover ring-1 ring-[#F5B942]/30"
                             />
                           )}
 
                           <div className={`max-w-[85%] ${isMe ? 'items-end' : 'items-start'}`}>
                             {!isMe && (
                               <div className="flex items-center space-x-1.5 mb-1 px-1">
-                                <span className="text-[11px] font-semibold text-zinc-700">
+                                <span className="text-[11px] font-semibold text-[#EDEDEB]">
                                   {msg.sender.fullName}
                                 </span>
-                                <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                                <span className="text-[10px] text-[#F5B942] bg-[#F5B942]/10 px-1.5 py-0.5 rounded border border-[#F5B942]/30 font-medium">
                                   {msg.sender.schoolName.split(' ')[0]}
                                 </span>
                               </div>
@@ -591,26 +591,26 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                               href={msg.resource.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="block p-3.5 rounded-2xl bg-white border border-emerald-200 shadow-xs hover:border-emerald-400 hover:shadow-md transition-all group"
+                              className="block p-3.5 rounded-2xl bg-[#1A1815] border border-[#F5B942]/20 shadow-xs hover:border-[#F5B942] hover:shadow-[0_0_15px_rgba(245,185,66,0.15)] transition-all group"
                             >
                               <div className="flex items-start justify-between gap-2">
-                                <div className="flex items-center space-x-2 text-emerald-700">
+                                <div className="flex items-center space-x-2 text-[#F5B942]">
                                   <FileText className="w-4 h-4" />
-                                  <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-50 border border-emerald-200">
+                                  <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#F5B942]/10 border border-[#F5B942]/30">
                                     {msg.resource.category.replace('_', ' ')}
                                   </span>
                                 </div>
-                                <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-emerald-600 transition-colors" />
+                                <ExternalLink className="w-3.5 h-3.5 text-[#A8A39D] group-hover:text-[#F5B942] transition-colors" />
                               </div>
-                              <p className="mt-1.5 text-xs font-bold text-zinc-900 group-hover:text-emerald-700 transition-colors leading-snug">
+                              <p className="mt-1.5 text-xs font-bold text-white group-hover:text-[#F5B942] transition-colors leading-snug">
                                 {msg.resource.title}
                               </p>
-                              <p className="text-[10px] text-zinc-400 mt-1 truncate">
+                              <p className="text-[10px] text-[#7A756D] mt-1 truncate">
                                 {msg.resource.url}
                               </p>
                             </a>
 
-                            <p className="text-[10px] text-zinc-400 mt-1 px-1 text-right">
+                            <p className="text-[10px] text-[#7A756D] mt-1 px-1 text-right">
                               {new Date(msg.createdAt).toLocaleTimeString([], {
                                 hour: '2-digit',
                                 minute: '2-digit',
@@ -636,17 +636,17 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                               'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60'
                             }
                             alt={msg.sender.fullName}
-                            className="w-7 h-7 rounded-full object-cover ring-1 ring-zinc-200"
+                            className="w-7 h-7 rounded-full object-cover ring-1 ring-[#F5B942]/30"
                           />
                         )}
 
                         <div className={`max-w-[78%] ${isMe ? 'items-end' : 'items-start'}`}>
                           {!isMe && (
                             <div className="flex items-center space-x-1.5 mb-1 px-1">
-                              <span className="text-[11px] font-semibold text-zinc-700">
+                              <span className="text-[11px] font-semibold text-[#EDEDEB]">
                                 {msg.sender.fullName}
                               </span>
-                              <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                              <span className="text-[10px] text-[#F5B942] bg-[#F5B942]/10 px-1.5 py-0.5 rounded border border-[#F5B942]/30 font-medium">
                                 {msg.sender.schoolName.split(' ')[0]}
                               </span>
                             </div>
@@ -655,14 +655,14 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                           <div
                             className={`p-3 rounded-2xl text-xs leading-relaxed shadow-xs ${
                               isMe
-                                ? 'bg-emerald-600 text-white rounded-br-xs shadow-emerald-600/15'
-                                : 'bg-zinc-100 text-zinc-900 rounded-bl-xs border border-zinc-200'
+                                ? 'bg-[#F5B942] text-[#0E0D0B] font-medium rounded-br-xs shadow-md shadow-[#F5B942]/10'
+                                : 'bg-[#1A1815] text-[#EDEDEB] rounded-bl-xs border border-[#F5B942]/15'
                             }`}
                           >
                             {msg.content}
                           </div>
 
-                          <p className="text-[10px] text-zinc-400 mt-1 px-1 text-right">
+                          <p className="text-[10px] text-[#7A756D] mt-1 px-1 text-right">
                             {new Date(msg.createdAt).toLocaleTimeString([], {
                               hour: '2-digit',
                               minute: '2-digit',
@@ -678,8 +678,8 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
 
               {/* Safety Warning */}
               {safetyAlert && (
-                <div className="px-4 py-2 bg-red-50 border-t border-red-200 text-xs text-red-700 flex items-center space-x-2">
-                  <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
+                <div className="px-4 py-2 bg-red-950/60 border-t border-red-900/60 text-xs text-red-300 flex items-center space-x-2">
+                  <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
                   <span className="text-[11px] leading-tight">{safetyAlert}</span>
                 </div>
               )}
@@ -691,18 +691,18 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    className="p-3 border-t border-zinc-200 bg-emerald-50/50"
+                    className="p-3 border-t border-[#F5B942]/20 bg-[#161513]"
                   >
                     <form onSubmit={handleAttachResource} className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-zinc-800 flex items-center space-x-1.5">
-                          <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-xs font-bold text-white flex items-center space-x-1.5">
+                          <Paperclip className="w-3.5 h-3.5 text-[#F5B942]" />
                           <span>Share Past Paper / Markscheme Link</span>
                         </span>
                         <button
                           type="button"
                           onClick={() => setIsAttachOpen(false)}
-                          className="text-zinc-400 hover:text-zinc-700 text-xs"
+                          className="text-[#A8A39D] hover:text-white text-xs cursor-pointer"
                         >
                           Cancel
                         </button>
@@ -714,19 +714,19 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                         onChange={(e) => setResourceTitle(e.target.value)}
                         placeholder="e.g., May 2024 Math AA HL Paper 1 PDF"
                         required
-                        className="w-full px-3 py-1.5 bg-white border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                        className="w-full px-3 py-1.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942]"
                       />
 
                       <div className="flex gap-2">
                         <select
                           value={resourceCategory}
                           onChange={(e) => setResourceCategory(e.target.value as ResourceCategory)}
-                          className="w-1/3 px-2 py-1.5 bg-white border border-zinc-200 rounded-xl text-xs text-zinc-800 focus:outline-none focus:border-emerald-500"
+                          className="w-1/3 px-2 py-1.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white focus:outline-none focus:border-[#F5B942]"
                         >
-                          <option value="past_paper">Past Paper</option>
-                          <option value="markscheme">Markscheme</option>
-                          <option value="notes">Notes</option>
-                          <option value="rubric">IA Rubric</option>
+                          <option value="past_paper" className="bg-[#1C1A17] text-white">Past Paper</option>
+                          <option value="markscheme" className="bg-[#1C1A17] text-white">Markscheme</option>
+                          <option value="notes" className="bg-[#1C1A17] text-white">Notes</option>
+                          <option value="rubric" className="bg-[#1C1A17] text-white">IA Rubric</option>
                         </select>
 
                         <input
@@ -735,13 +735,13 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                           onChange={(e) => setResourceUrl(e.target.value)}
                           placeholder="https://drive.google.com/..."
                           required
-                          className="flex-1 px-3 py-1.5 bg-white border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                          className="flex-1 px-3 py-1.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942]"
                         />
                       </div>
 
                       <button
                         type="submit"
-                        className="w-full py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-all shadow-xs cursor-pointer"
+                        className="w-full py-1.5 bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer"
                       >
                         Attach Link to Chat
                       </button>
@@ -751,13 +751,13 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
               </AnimatePresence>
 
               {/* Quick Action Chips */}
-              <div className="px-3 pt-2 pb-1 bg-white border-t border-zinc-100 flex items-center space-x-1.5 overflow-x-auto no-scrollbar">
+              <div className="px-3 pt-2 pb-1 bg-[#141310] border-t border-[#F5B942]/10 flex items-center space-x-1.5 overflow-x-auto no-scrollbar">
                 {quickChips.map((chip) => (
                   <button
                     key={chip}
                     type="button"
                     onClick={() => sendMessageContent(chip)}
-                    className="px-2.5 py-1 rounded-full bg-zinc-50 hover:bg-emerald-50 border border-zinc-200 hover:border-emerald-300 text-[11px] text-zinc-600 hover:text-emerald-800 whitespace-nowrap transition-colors cursor-pointer"
+                    className="px-2.5 py-1 rounded-full bg-[#1A1815] hover:bg-[#F5B942]/10 border border-[#F5B942]/20 hover:border-[#F5B942] text-[11px] text-[#A8A39D] hover:text-[#F5B942] whitespace-nowrap transition-colors cursor-pointer"
                   >
                     {chip}
                   </button>
@@ -765,7 +765,7 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
               </div>
 
               {/* Chat Input Bar */}
-              <form onSubmit={handleSend} className="p-3 bg-white border-t border-zinc-200">
+              <form onSubmit={handleSend} className="p-3 bg-[#141310] border-t border-[#F5B942]/15">
                 <div className="flex items-center space-x-2">
                   <button
                     type="button"
@@ -773,8 +773,8 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                     title="Attach past paper or resource link"
                     className={`p-2 rounded-xl border transition-colors cursor-pointer ${
                       isAttachOpen
-                        ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
-                        : 'bg-zinc-50 border-zinc-200 text-zinc-500 hover:text-emerald-600 hover:border-emerald-300'
+                        ? 'bg-[#F5B942] border-[#F5B942] text-[#0E0D0B]'
+                        : 'bg-[#1A1815] border-[#F5B942]/20 text-[#A8A39D] hover:text-[#F5B942] hover:border-[#F5B942]/50'
                     }`}
                   >
                     <Paperclip className="w-4 h-4" />
@@ -788,13 +788,13 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       if (safetyAlert) setSafetyAlert(null);
                     }}
                     placeholder={`Message ${group.members.length} peers...`}
-                    className="flex-1 bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    className="flex-1 bg-[#1A1815] border border-[#F5B942]/20 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942] focus:ring-1 focus:ring-[#F5B942] transition-all"
                   />
 
                   <button
                     type="submit"
                     disabled={!inputText.trim()}
-                    className="p-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:hover:bg-emerald-600 text-white transition-all shadow-md shadow-emerald-600/15 active:scale-95 cursor-pointer"
+                    className="p-2.5 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] disabled:opacity-40 disabled:hover:bg-[#F5B942] text-[#0E0D0B] font-bold transition-all shadow-md shadow-[#F5B942]/20 active:scale-95 cursor-pointer"
                   >
                     <Send className="w-4 h-4" />
                   </button>
@@ -809,28 +809,28 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       onClick={() => setIsLeaveModalOpen(false)}
-                      className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+                      className="fixed inset-0 bg-black/70 backdrop-blur-xs"
                     />
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95, y: 10 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                      className="relative w-full max-w-sm bg-white rounded-3xl p-5 shadow-2xl border border-zinc-200 z-10 space-y-3"
+                      className="relative w-full max-w-sm bg-[#161513] rounded-3xl p-5 shadow-2xl border border-[#F5B942]/20 z-10 space-y-3"
                     >
-                      <div className="flex items-center space-x-2 text-zinc-900 font-bold text-sm">
-                        <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                      <div className="flex items-center space-x-2 text-white font-bold text-sm">
+                        <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-[#F5B942]/30 text-[#F5B942] flex items-center justify-center">
                           <LogOut className="w-4 h-4" />
                         </div>
                         <span>Leave Study Pod?</span>
                       </div>
-                      <p className="text-xs text-zinc-600 leading-relaxed">
+                      <p className="text-xs text-[#A8A39D] leading-relaxed">
                         Your seat will open for another student. To be respectful, a brief notice will be posted in the chat so your study partners aren't left waiting.
                       </p>
                       <div className="flex items-center justify-end space-x-2 pt-1">
                         <button
                           type="button"
                           onClick={() => setIsLeaveModalOpen(false)}
-                          className="px-3.5 py-1.5 rounded-xl border border-zinc-200 hover:bg-zinc-50 text-xs text-zinc-700 font-medium cursor-pointer transition-colors"
+                          className="px-3.5 py-1.5 rounded-xl border border-[#F5B942]/20 hover:bg-[#1C1A17] text-xs text-[#EDEDEB] font-medium cursor-pointer transition-colors"
                         >
                           Stay in Pod
                         </button>
@@ -856,28 +856,28 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       onClick={() => setIsCancelModalOpen(false)}
-                      className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+                      className="fixed inset-0 bg-black/70 backdrop-blur-xs"
                     />
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95, y: 10 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                      className="relative w-full max-w-sm bg-white rounded-3xl p-5 shadow-2xl border border-zinc-200 z-10 space-y-3"
+                      className="relative w-full max-w-sm bg-[#161513] rounded-3xl p-5 shadow-2xl border border-[#F5B942]/20 z-10 space-y-3"
                     >
-                      <div className="flex items-center space-x-2 text-zinc-900 font-bold text-sm">
-                        <div className="w-8 h-8 rounded-xl bg-red-50 text-red-600 flex items-center justify-center">
+                      <div className="flex items-center space-x-2 text-white font-bold text-sm">
+                        <div className="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 flex items-center justify-center">
                           <Trash2 className="w-4 h-4" />
                         </div>
                         <span>Cancel Study Session?</span>
                       </div>
-                      <p className="text-xs text-zinc-600 leading-relaxed">
-                        As host, cancelling will remove <strong>{group.title}</strong> from KantoPrep listings and notify all joined members.
+                      <p className="text-xs text-[#A8A39D] leading-relaxed">
+                        As host, cancelling will remove <strong className="text-white">{group.title}</strong> from KantoPrep listings and notify all joined members.
                       </p>
                       <div className="flex items-center justify-end space-x-2 pt-1">
                         <button
                           type="button"
                           onClick={() => setIsCancelModalOpen(false)}
-                          className="px-3.5 py-1.5 rounded-xl border border-zinc-200 hover:bg-zinc-50 text-xs text-zinc-700 font-medium cursor-pointer transition-colors"
+                          className="px-3.5 py-1.5 rounded-xl border border-[#F5B942]/20 hover:bg-[#1C1A17] text-xs text-[#EDEDEB] font-medium cursor-pointer transition-colors"
                         >
                           Keep Session
                         </button>

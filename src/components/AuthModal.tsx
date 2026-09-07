@@ -140,7 +140,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-black/40 backdrop-blur-md"
+        className="absolute inset-0 bg-black/70 backdrop-blur-md"
       />
 
       {/* Modal Dialog */}
@@ -149,28 +149,28 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-        className="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-zinc-200 z-10 overflow-hidden"
+        className="relative w-full max-w-md bg-[#161513] rounded-3xl p-6 sm:p-7 shadow-2xl border border-[#F5B942]/20 z-10 overflow-hidden text-white"
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-zinc-100">
+        <div className="flex items-center justify-between pb-4 border-b border-[#F5B942]/15">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white font-bold flex items-center justify-center text-sm shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#F5B942] to-amber-300 text-[#0E0D0B] font-black flex items-center justify-center text-sm shadow-xs">
               KP
             </div>
             <div>
-              <h2 className="text-base font-bold text-zinc-900">
+              <h2 className="text-base font-bold text-white">
                 {step === 'email' && 'Student Sign In & Whitelist'}
                 {step === 'code' && 'Verify School Email'}
                 {step === 'profile' && 'Complete Student Profile'}
               </h2>
-              <p className="text-[11px] text-zinc-500">
+              <p className="text-[11px] text-[#A8A39D]">
                 Tokyo International School Study Network
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -178,8 +178,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {/* Error Banner */}
         {errorMessage && (
-          <div className="mt-4 p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start space-x-2">
-            <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+          <div className="mt-4 p-3 rounded-xl bg-red-950/50 border border-red-500/40 text-xs text-red-200 flex items-start space-x-2">
+            <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
             <span className="text-[11px] leading-tight">{errorMessage}</span>
           </div>
         )}
@@ -193,11 +193,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           >
             <form onSubmit={handleEmailSubmit} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1.5">
+                <label className="block text-xs font-semibold text-[#EDEDEB] mb-1.5">
                   Official School Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A756D]" />
                   <input
                     type="email"
                     value={email}
@@ -208,7 +208,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     placeholder="e.g. yourname@students.aobajapan.jp"
                     required
                     autoFocus
-                    className="w-full pl-9 pr-4 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    className="w-full pl-9 pr-4 py-2.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942] focus:ring-1 focus:ring-[#F5B942] transition-all"
                   />
                 </div>
               </div>
@@ -218,27 +218,27 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <motion.div
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200 flex items-center justify-between"
+                  className="p-3 rounded-2xl bg-[#1C1A17] border border-[#F5B942]/30 flex items-center justify-between"
                 >
                   <div className="flex items-center space-x-2.5">
                     <div
                       className={`w-3 h-3 rounded-full bg-gradient-to-r ${detectedSchool.badgeColor}`}
                     />
                     <div>
-                      <p className="text-xs font-bold text-emerald-950">
+                      <p className="text-xs font-bold text-white">
                         {detectedSchool.name}
                       </p>
-                      <p className="text-[10px] text-emerald-700">
+                      <p className="text-[10px] text-[#F5B942]">
                         Authorized Campus: {detectedSchool.campus}
                       </p>
                     </div>
                   </div>
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <ShieldCheck className="w-5 h-5 text-[#F5B942] shrink-0" />
                 </motion.div>
               ) : email.includes('@') && email.split('@')[1].length > 3 ? (
-                <div className="p-3 rounded-2xl bg-amber-50/80 border border-amber-200 text-xs text-amber-800 flex items-start space-x-2">
-                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                  <p className="text-[11px] leading-tight">
+                <div className="p-3 rounded-2xl bg-amber-950/40 border border-[#F5B942]/30 text-xs text-amber-200 flex items-start space-x-2">
+                  <AlertCircle className="w-4 h-4 text-[#F5B942] shrink-0 mt-0.5" />
+                  <p className="text-[11px] leading-tight text-[#EDEDEB]">
                     Domain not recognized yet. KantoPrep currently whitelists A-JIS (@students.aobajapan.jp), BST, ASIJ, KIST, St. Mary&apos;s, Seisen, ISSH, YIS, CAJ, and Saint Maur.
                   </p>
                 </div>
@@ -246,7 +246,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-all shadow-md shadow-emerald-600/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
+                className="w-full py-2.5 bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
               >
                 <span>Continue with School Email</span>
                 <ArrowRight className="w-4 h-4" />
@@ -254,8 +254,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </form>
 
             {/* Quick Pilot Testing Bypass */}
-            <div className="pt-3 border-t border-zinc-100 text-center">
-              <span className="text-[11px] text-zinc-400 font-medium">
+            <div className="pt-3 border-t border-[#F5B942]/10 text-center">
+              <span className="text-[11px] text-[#A8A39D] font-medium">
                 — OR INSTANT DEMO LOGIN FOR TESTING —
               </span>
               <div className="mt-2.5 flex flex-wrap gap-1.5 justify-center">
@@ -266,7 +266,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       key={dom}
                       type="button"
                       onClick={() => handleQuickPilotLogin(dom)}
-                      className="px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-200 border border-zinc-200 text-[11px] text-zinc-600 font-medium transition-colors cursor-pointer"
+                      className="px-2.5 py-1 rounded-lg bg-[#1C1A17] hover:bg-[#F5B942]/15 hover:text-[#F5B942] hover:border-[#F5B942]/40 border border-[#F5B942]/15 text-[11px] text-[#A8A39D] font-medium transition-colors cursor-pointer"
                     >
                       Login as {s?.shortName}
                     </button>
@@ -284,19 +284,19 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             animate={{ opacity: 1, x: 0 }}
             className="mt-5 space-y-4"
           >
-            <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-xs text-emerald-900 flex items-start space-x-2.5">
-              <Mail className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+            <div className="p-3.5 rounded-2xl bg-[#1C1A17] border border-[#F5B942]/20 text-xs text-[#EDEDEB] flex items-start space-x-2.5">
+              <Mail className="w-5 h-5 text-[#F5B942] shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold">Security Code Sent</p>
-                <p className="text-[11px] text-emerald-700 mt-0.5">
-                  We sent a 6-digit access code to <strong className="font-bold">{email}</strong>. (In pilot mode, you can enter any 6 digits).
+                <p className="font-bold text-white">Security Code Sent</p>
+                <p className="text-[11px] text-[#A8A39D] mt-0.5">
+                  We sent a 6-digit access code to <strong className="font-bold text-[#F5B942]">{email}</strong>. (In pilot mode, you can enter any 6 digits).
                 </p>
               </div>
             </div>
 
             <form onSubmit={handleVerifyCode} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1.5">
+                <label className="block text-xs font-semibold text-[#EDEDEB] mb-1.5">
                   6-Digit Verification Code
                 </label>
                 <input
@@ -306,7 +306,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   onChange={(e) => setVerificationCode(e.target.value)}
                   placeholder="e.g. 123456"
                   autoFocus
-                  className="w-full text-center tracking-[0.4em] font-mono text-base py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                  className="w-full text-center tracking-[0.4em] font-mono text-base py-2.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942] focus:ring-1 focus:ring-[#F5B942]"
                 />
               </div>
 
@@ -314,13 +314,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep('email')}
-                  className="w-1/3 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+                  className="w-1/3 py-2.5 bg-[#1C1A17] hover:bg-[#25221E] border border-[#F5B942]/20 text-[#EDEDEB] text-xs font-semibold rounded-xl transition-all cursor-pointer"
                 >
                   Back
                 </button>
                 <button
                   type="submit"
-                  className="w-2/3 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-all shadow-md shadow-emerald-600/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
+                  className="w-2/3 py-2.5 bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Verify & Enter</span>
@@ -338,7 +338,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             className="mt-4 space-y-3.5 max-h-[70vh] overflow-y-auto pr-1"
           >
             <div>
-              <label className="block text-xs font-semibold text-zinc-700 mb-1">
+              <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
                 Your Preferred Full Name
               </label>
               <input
@@ -347,38 +347,38 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="e.g. Maya Tanaka"
                 required
-                className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                className="w-full px-3 py-2 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942]"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
                   Grade Level
                 </label>
                 <select
                   value={gradeLevel}
                   onChange={(e) => setGradeLevel(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white focus:outline-none focus:border-[#F5B942]"
                 >
-                  <option value={9}>Grade 9 (Year 10)</option>
-                  <option value={10}>Grade 10 (Year 11)</option>
-                  <option value={11}>Grade 11 (IB1 / Junior)</option>
-                  <option value={12}>Grade 12 (IB2 / Senior)</option>
+                  <option value={9} className="bg-[#1C1A17] text-white">Grade 9 (Year 10)</option>
+                  <option value={10} className="bg-[#1C1A17] text-white">Grade 10 (Year 11)</option>
+                  <option value={11} className="bg-[#1C1A17] text-white">Grade 11 (IB1 / Junior)</option>
+                  <option value={12} className="bg-[#1C1A17] text-white">Grade 12 (IB2 / Senior)</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
                   Curriculum
                 </label>
                 <select
                   value={curriculum}
                   onChange={(e) => setCurriculum(e.target.value as Curriculum)}
-                  className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                  className="w-full px-3 py-2 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white focus:outline-none focus:border-[#F5B942]"
                 >
                   {CURRICULUM_OPTIONS.map((c) => (
-                    <option key={c.id} value={c.id}>
+                    <option key={c.id} value={c.id} className="bg-[#1C1A17] text-white">
                       {c.label}
                     </option>
                   ))}
@@ -387,10 +387,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-zinc-700 mb-1.5">
+              <label className="block text-xs font-semibold text-[#EDEDEB] mb-1.5">
                 Target Study Subjects (Tap to select)
               </label>
-              <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1.5 bg-zinc-50 rounded-xl border border-zinc-200">
+              <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1.5 bg-[#1C1A17] rounded-xl border border-[#F5B942]/15">
                 {SUBJECTS_BY_CURRICULUM[curriculum].map((sub) => {
                   const isSelected = selectedSubjects.includes(sub);
                   return (
@@ -400,8 +400,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       onClick={() => toggleSubject(sub)}
                       className={`text-[10px] px-2 py-1 rounded-md border font-medium transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-emerald-600 text-white border-emerald-600'
-                          : 'bg-white text-zinc-700 border-zinc-200 hover:border-zinc-300'
+                          ? 'bg-[#F5B942] text-[#0E0D0B] font-bold border-[#F5B942]'
+                          : 'bg-[#141310] text-[#A8A39D] border-[#F5B942]/20 hover:text-white hover:border-[#F5B942]/50'
                       }`}
                     >
                       {sub}
@@ -415,7 +415,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 type="button"
                 onClick={completeLogin}
-                className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-all shadow-md shadow-emerald-600/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
+                className="w-full py-2.5 bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>Complete Profile & Start Studying</span>

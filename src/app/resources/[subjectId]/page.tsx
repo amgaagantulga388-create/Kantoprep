@@ -94,7 +94,7 @@ export default function SubjectDetailPage() {
 
   if (!syllabus) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#f7faf8] text-zinc-900">
+      <div className="min-h-screen flex flex-col bg-[#0E0D0B] text-white selection:bg-[#F5B942]/20 selection:text-[#F5B942]">
         <InteractiveBackground />
         <Navbar
           currentUser={currentUser}
@@ -109,22 +109,22 @@ export default function SubjectDetailPage() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center p-8 rounded-3xl bg-white border border-zinc-200 max-w-md shadow-sm dotted-bg"
+            className="text-center p-8 rounded-3xl bg-[#161513] border border-[#F5B942]/20 max-w-md shadow-sm"
           >
             <motion.div
               animate={{ y: [0, -6, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-              className="mx-auto mb-4 w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center shadow-sm"
+              className="mx-auto mb-4 w-16 h-16 rounded-2xl bg-[#F5B942]/10 border border-[#F5B942]/20 flex items-center justify-center shadow-sm"
             >
-              <BookOpen className="w-8 h-8 text-emerald-500" />
+              <BookOpen className="w-8 h-8 text-[#F5B942]" />
             </motion.div>
-            <h3 className="text-base font-bold text-zinc-900">Subject not found</h3>
-            <p className="text-xs text-zinc-500 mt-1.5 max-w-xs mx-auto leading-relaxed">
+            <h3 className="text-base font-bold text-white">Subject not found</h3>
+            <p className="text-xs text-[#A8A39D] mt-1.5 max-w-xs mx-auto leading-relaxed">
               This subject might not exist yet. Head back to browse available subjects.
             </p>
             <button
               onClick={() => router.push('/resources')}
-              className="mt-5 inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/15 active:scale-95 cursor-pointer"
+              className="mt-5 inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold shadow-md shadow-[#F5B942]/20 active:scale-95 cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Library</span>
@@ -155,7 +155,7 @@ export default function SubjectDetailPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f7faf8] text-zinc-900 selection:bg-emerald-500/20 selection:text-emerald-900">
+    <div className="min-h-screen flex flex-col bg-[#0E0D0B] text-white selection:bg-[#F5B942]/20 selection:text-[#F5B942]">
       <InteractiveBackground />
 
       <Navbar
@@ -177,7 +177,7 @@ export default function SubjectDetailPage() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               onClick={() => router.push('/resources')}
-              className="flex items-center space-x-1.5 text-sm text-zinc-500 hover:text-emerald-700 transition-colors mb-5 cursor-pointer"
+              className="flex items-center space-x-1.5 text-sm text-[#A8A39D] hover:text-[#F5B942] transition-colors mb-5 cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Prep Library</span>
@@ -190,12 +190,12 @@ export default function SubjectDetailPage() {
               transition={{ duration: 0.5 }}
             >
               <div className="flex items-center space-x-3 mb-3">
-                <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
+                <span className="px-2.5 py-0.5 text-[10px] font-bold bg-[#F5B942]/10 text-[#F5B942] border border-[#F5B942]/30 rounded-full">
                   {curriculumLabel[syllabus.curriculum] || syllabus.curriculum}
                 </span>
               </div>
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-zinc-900">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
                   {syllabus.subject}
                 </h1>
 
@@ -205,12 +205,12 @@ export default function SubjectDetailPage() {
                   onClick={handleToggleBookmark}
                   className={`inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer shadow-2xs ${
                     isBookmarked
-                      ? 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100'
-                      : 'bg-white text-zinc-700 border-zinc-200 hover:border-amber-300 hover:bg-zinc-50'
+                      ? 'bg-[#F5B942]/20 text-[#F5B942] border-[#F5B942]/60 hover:bg-[#F5B942]/30'
+                      : 'bg-[#1C1A17] text-[#EDEDEB] border-[#F5B942]/20 hover:border-[#F5B942]/50 hover:text-[#F5B942]'
                   }`}
                   title={isBookmarked ? 'Remove from My Subjects' : 'Pin to My Subjects'}
                 >
-                  <Star className={`w-3.5 h-3.5 ${isBookmarked ? 'fill-amber-400 text-amber-500' : 'text-zinc-400'}`} />
+                  <Star className={`w-3.5 h-3.5 ${isBookmarked ? 'fill-[#F5B942] text-[#F5B942]' : 'text-[#7A756D]'}`} />
                   <span>{isBookmarked ? 'Bookmarked' : 'Pin Subject'}</span>
                 </button>
               </div>
@@ -221,22 +221,22 @@ export default function SubjectDetailPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              className="mt-4 flex flex-wrap items-center gap-2.5 text-xs text-zinc-600"
+              className="mt-4 flex flex-wrap items-center gap-2.5 text-xs text-[#EDEDEB]"
             >
-              <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 shadow-2xs">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#161513] border border-[#F5B942]/15 shadow-2xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#F5B942]" />
                 <span className="font-medium">{stats.topics} Topics</span>
               </div>
-              <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 shadow-2xs">
-                <Video className="w-3.5 h-3.5 text-emerald-600" />
+              <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#161513] border border-[#F5B942]/15 shadow-2xs">
+                <Video className="w-3.5 h-3.5 text-[#F5B942]" />
                 <span className="font-medium">{stats.videos} Videos</span>
               </div>
-              <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 shadow-2xs">
-                <FileText className="w-3.5 h-3.5 text-emerald-600" />
+              <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#161513] border border-[#F5B942]/15 shadow-2xs">
+                <FileText className="w-3.5 h-3.5 text-[#F5B942]" />
                 <span className="font-medium">{stats.papers} Past Papers</span>
               </div>
-              <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 shadow-2xs">
-                <Link2 className="w-3.5 h-3.5 text-emerald-600" />
+              <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#161513] border border-[#F5B942]/15 shadow-2xs">
+                <Link2 className="w-3.5 h-3.5 text-[#F5B942]" />
                 <span className="font-medium">{stats.links} Links</span>
               </div>
 
@@ -245,10 +245,10 @@ export default function SubjectDetailPage() {
                 <button
                   type="button"
                   onClick={() => setIsBookletOpen(true)}
-                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-xs font-semibold transition-all cursor-pointer shadow-2xs hover:border-blue-300"
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#1C1A17] hover:bg-[#F5B942]/10 text-[#EDEDEB] hover:text-[#F5B942] border border-[#F5B942]/25 text-xs font-semibold transition-all cursor-pointer shadow-2xs hover:border-[#F5B942]/40"
                   title="Open official formula booklet"
                 >
-                  <FileSpreadsheet className="w-3.5 h-3.5 text-blue-600" />
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-[#F5B942]" />
                   <span>Formula Booklet</span>
                 </button>
               )}
@@ -258,10 +258,10 @@ export default function SubjectDetailPage() {
                 <button
                   type="button"
                   onClick={() => setIsCalculatorOpen(true)}
-                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold transition-all cursor-pointer shadow-2xs hover:border-emerald-300"
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#1C1A17] hover:bg-[#F5B942]/10 text-[#EDEDEB] hover:text-[#F5B942] border border-[#F5B942]/25 text-xs font-semibold transition-all cursor-pointer shadow-2xs hover:border-[#F5B942]/40"
                   title="Open TI-84 Plus Online Calculator Simulator"
                 >
-                  <Calculator className="w-3.5 h-3.5 text-emerald-600" />
+                  <Calculator className="w-3.5 h-3.5 text-[#F5B942]" />
                   <span>TI-84 Calculator</span>
                 </button>
               )}
@@ -269,10 +269,10 @@ export default function SubjectDetailPage() {
               <button
                 type="button"
                 onClick={() => setIsSuggestModalOpen(true)}
-                className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs ml-auto"
+                className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-[#1C1A17] hover:bg-[#25221E] text-[#EDEDEB] hover:text-[#F5B942] border border-[#F5B942]/20 text-xs font-semibold transition-all cursor-pointer shadow-2xs ml-auto"
                 title="Suggest a resource for this subject"
               >
-                <Plus className="w-3.5 h-3.5 text-zinc-500" />
+                <Plus className="w-3.5 h-3.5 text-[#A8A39D]" />
                 <span>Suggest Resource</span>
               </button>
             </motion.div>
@@ -285,18 +285,18 @@ export default function SubjectDetailPage() {
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              className="max-w-3xl mx-auto p-8 sm:p-10 rounded-3xl bg-white border border-emerald-200/90 shadow-sm text-center relative overflow-hidden"
+              className="max-w-3xl mx-auto p-8 sm:p-10 rounded-3xl bg-[#161513] border border-[#F5B942]/20 shadow-sm text-center relative overflow-hidden"
             >
-              <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-4 text-emerald-600 shadow-sm">
+              <div className="w-16 h-16 rounded-2xl bg-[#F5B942]/10 border border-[#F5B942]/20 flex items-center justify-center mx-auto mb-4 text-[#F5B942] shadow-sm">
                 <GraduationCap className="w-8 h-8" />
               </div>
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 mb-3">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#F5B942]/10 text-[#F5B942] border border-[#F5B942]/30 mb-3">
                 Official College Board Partner
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Digital SAT® Prep on Khan Academy
               </h2>
-              <p className="mt-3 text-sm text-zinc-600 max-w-lg mx-auto leading-relaxed">
+              <p className="mt-3 text-sm text-[#A8A39D] max-w-lg mx-auto leading-relaxed">
                 Khan Academy provides the official, 100% free digital SAT preparation built in direct collaboration with College Board. Includes diagnostic tests, personalized skill trees, video explanations, and official practice questions.
               </p>
               <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -304,7 +304,7 @@ export default function SubjectDetailPage() {
                   href="https://www.khanacademy.org/test-prep/v2-sat-prep"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold shadow-md shadow-emerald-600/15 active:scale-95 transition-all cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-sm font-bold shadow-md shadow-[#F5B942]/20 active:scale-95 transition-all cursor-pointer"
                 >
                   <span>Open Khan Academy Official SAT Prep</span>
                   <ExternalLink className="w-4 h-4" />
@@ -313,25 +313,25 @@ export default function SubjectDetailPage() {
                   href="https://bluebook.collegeboard.org/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-5 py-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-sm font-semibold transition-all cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-5 py-3 rounded-xl bg-[#1C1A17] hover:bg-[#25221E] text-white border border-[#F5B942]/20 text-sm font-semibold transition-all cursor-pointer"
                 >
                   <span>College Board Bluebook App</span>
-                  <ExternalLink className="w-4 h-4 text-zinc-500" />
+                  <ExternalLink className="w-4 h-4 text-[#A8A39D]" />
                 </a>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-zinc-100 grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-left">
-                <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-100">
-                  <p className="text-xs font-bold text-zinc-900">Diagnostic Quizzes</p>
-                  <p className="text-[11px] text-zinc-500 mt-0.5">Identifies your exact weak areas in Math and Reading & Writing.</p>
+              <div className="mt-8 pt-6 border-t border-[#F5B942]/15 grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-left">
+                <div className="p-3.5 rounded-xl bg-[#1C1A17] border border-[#F5B942]/15">
+                  <p className="text-xs font-bold text-white">Diagnostic Quizzes</p>
+                  <p className="text-[11px] text-[#A8A39D] mt-0.5">Identifies your exact weak areas in Math and Reading & Writing.</p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-100">
-                  <p className="text-xs font-bold text-zinc-900">Adaptive Practice</p>
-                  <p className="text-[11px] text-zinc-500 mt-0.5">Thousands of official College Board questions leveled from Foundation to Advanced.</p>
+                <div className="p-3.5 rounded-xl bg-[#1C1A17] border border-[#F5B942]/15">
+                  <p className="text-xs font-bold text-white">Adaptive Practice</p>
+                  <p className="text-[11px] text-[#A8A39D] mt-0.5">Thousands of official College Board questions leveled from Foundation to Advanced.</p>
                 </div>
-                <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-100">
-                  <p className="text-xs font-bold text-zinc-900">Full Tests on Bluebook</p>
-                  <p className="text-[11px] text-zinc-500 mt-0.5">Pair your Khan Academy review with full timed adaptive tests on the Bluebook app.</p>
+                <div className="p-3.5 rounded-xl bg-[#1C1A17] border border-[#F5B942]/15">
+                  <p className="text-xs font-bold text-white">Full Tests on Bluebook</p>
+                  <p className="text-[11px] text-[#A8A39D] mt-0.5">Pair your Khan Academy review with full timed adaptive tests on the Bluebook app.</p>
                 </div>
               </div>
             </motion.div>
@@ -340,14 +340,14 @@ export default function SubjectDetailPage() {
           /* Topic Sections */
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
             {hasHlTopics && (
-              <div className="flex items-center space-x-2 py-2 border-b border-zinc-200 mb-2">
-                <span className="text-xs font-semibold text-zinc-500">Curriculum Scope:</span>
+              <div className="flex items-center space-x-2 py-2 border-b border-[#F5B942]/15 mb-2">
+                <span className="text-xs font-semibold text-[#A8A39D]">Curriculum Scope:</span>
                 <button
                   onClick={() => setHlFilter('ALL')}
                   className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                     hlFilter === 'ALL'
-                      ? 'bg-zinc-900 text-white shadow-xs'
-                      : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                      ? 'bg-[#F5B942] text-[#0E0D0B] font-bold shadow-xs'
+                      : 'bg-[#1C1A17] text-[#A8A39D] hover:text-white border border-[#F5B942]/15'
                   }`}
                 >
                   All Topics ({syllabus.topics.length})
@@ -356,13 +356,13 @@ export default function SubjectDetailPage() {
                   onClick={() => setHlFilter('HL_ONLY')}
                   className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                     hlFilter === 'HL_ONLY'
-                      ? 'bg-amber-500 text-white shadow-xs'
-                      : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
+                      ? 'bg-[#F5B942] text-[#0E0D0B] font-bold shadow-xs'
+                      : 'bg-[#1C1A17] text-[#EDEDEB] border border-[#F5B942]/25 hover:bg-[#F5B942]/10'
                   }`}
                 >
                   <span>⚡ HL Only Section</span>
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    hlFilter === 'HL_ONLY' ? 'bg-amber-600 text-white' : 'bg-amber-200/80 text-amber-900'
+                    hlFilter === 'HL_ONLY' ? 'bg-[#0E0D0B] text-[#F5B942]' : 'bg-[#F5B942]/20 text-[#F5B942]'
                   }`}>
                     {syllabus.topics.filter((t) => t.isHlOnly).length}
                   </span>
@@ -394,14 +394,14 @@ export default function SubjectDetailPage() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-10"
         >
-          <div className="text-center py-10 px-6 rounded-3xl bg-white border border-emerald-200 shadow-sm relative overflow-hidden dotted-bg">
-            <h3 className="text-lg font-bold text-zinc-900">Ready to study {syllabus.subject}?</h3>
-            <p className="text-sm text-zinc-500 mt-1.5 max-w-md mx-auto leading-relaxed">
+          <div className="text-center py-10 px-6 rounded-3xl bg-[#161513] border border-[#F5B942]/20 shadow-sm relative overflow-hidden">
+            <h3 className="text-lg font-bold text-white">Ready to study {syllabus.subject}?</h3>
+            <p className="text-sm text-[#A8A39D] mt-1.5 max-w-md mx-auto leading-relaxed">
               Find peers preparing for the same topics. Create or join a study pod and tackle it together.
             </p>
             <button
               onClick={handleStudyGeneral}
-              className="mt-5 inline-flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold shadow-md shadow-emerald-600/15 active:scale-95 cursor-pointer cta-glow transition-all"
+              className="mt-5 inline-flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-sm font-bold shadow-md shadow-[#F5B942]/20 active:scale-95 cursor-pointer cta-glow transition-all"
             >
               <span>Host a Study Pod for This Subject →</span>
             </button>

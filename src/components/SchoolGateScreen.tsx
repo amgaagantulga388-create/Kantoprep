@@ -19,6 +19,7 @@ import { StudentProfile, Curriculum } from '@/types';
 import { ALLOWED_SCHOOLS, CURRICULUM_OPTIONS, SUBJECTS_BY_CURRICULUM, PRESET_AVATARS } from '@/lib/constants';
 import { validateSchoolEmail, sendSchoolOtp, verifySchoolOtp } from '@/lib/supabase';
 import { InteractiveBackground } from './InteractiveBackground';
+import { ThemeToggle } from './ThemeToggle';
 
 interface SchoolGateScreenProps {
   onAuthenticated: (user: StudentProfile) => void;
@@ -155,14 +156,14 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#f7faf8] text-zinc-900 selection:bg-emerald-500/20 selection:text-emerald-900 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col justify-between bg-[#0E0D0B] text-[#EDEDEB] selection:bg-[#F5B942]/30 selection:text-white relative overflow-hidden">
       {/* Interactive cursor spotlight */}
       <InteractiveBackground />
 
       {/* Top Header */}
       <header className="relative z-10 w-full px-4 sm:px-6 py-4 sm:py-5 max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-2.5">
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-md shadow-emerald-600/15 border border-emerald-200/80 shrink-0 bg-white">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-md shadow-[#F5B942]/15 border border-[#F5B942]/30 shrink-0 bg-[#161513]">
             <img
               src="/logo.png"
               alt="KantoPrep Logo"
@@ -170,39 +171,40 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
             />
           </div>
           <div>
-            <span className="text-base sm:text-lg font-bold tracking-tight text-zinc-900">KantoPrep</span>
-            <span className="ml-1.5 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-semibold uppercase tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
+            <span className="text-base sm:text-lg font-bold tracking-tight text-white">KantoPrep</span>
+            <span className="ml-1.5 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-semibold uppercase tracking-wide bg-[#F5B942]/10 text-[#F5B942] border border-[#F5B942]/30 rounded-full">
               Pilot
             </span>
           </div>
         </div>
 
         <div className="flex items-center space-x-2">
+          <ThemeToggle />
           {onOpenWhyKantoPrep && (
             <button
               onClick={onOpenWhyKantoPrep}
-              className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-emerald-50/80 border border-emerald-200 hover:border-emerald-300 text-xs text-emerald-800 font-semibold transition-all shadow-2xs cursor-pointer"
+              className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#F5B942]/10 border border-[#F5B942]/25 hover:border-[#F5B942]/40 text-xs text-[#F5B942] font-semibold transition-all shadow-2xs cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <Sparkles className="w-3.5 h-3.5 text-[#F5B942]" />
               <span>Why KantoPrep?</span>
             </button>
           )}
           {onOpenInvite && (
             <button
               onClick={onOpenInvite}
-              className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-white/80 border border-zinc-200 hover:border-emerald-300 text-xs text-zinc-700 hover:text-emerald-700 font-medium transition-all shadow-2xs cursor-pointer"
+              className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#161513] border border-[#F5B942]/20 hover:border-[#F5B942]/40 text-xs text-[#D1CEC7] hover:text-[#F5B942] font-medium transition-all shadow-2xs cursor-pointer"
               title="Print school noticeboard flyer or copy invite"
             >
-              <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+              <Share2 className="w-3.5 h-3.5 text-[#F5B942]" />
               <span>Flyer / Invite</span>
             </button>
           )}
           {onOpenFeedback && (
             <button
               onClick={onOpenFeedback}
-              className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-white/80 border border-zinc-200 hover:border-emerald-300 text-xs text-zinc-600 hover:text-emerald-700 font-medium transition-all shadow-2xs cursor-pointer"
+              className="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-[#161513] border border-[#F5B942]/20 hover:border-[#F5B942]/40 text-xs text-[#D1CEC7] hover:text-[#F5B942] font-medium transition-all shadow-2xs cursor-pointer"
             >
-              <MessageSquarePlus className="w-3.5 h-3.5 text-emerald-600" />
+              <MessageSquarePlus className="w-3.5 h-3.5 text-[#F5B942]" />
               <span className="hidden sm:inline">Suggest a Venue</span>
             </button>
           )}
@@ -218,7 +220,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
-              className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3.5 rounded-full overflow-hidden shadow-lg shadow-emerald-600/15 border-2 border-emerald-500/20 bg-white p-0.5"
+              className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3.5 rounded-full overflow-hidden shadow-lg shadow-[#F5B942]/20 border-2 border-[#F5B942]/30 bg-[#161513] p-0.5"
             >
               <img
                 src="/logo.png"
@@ -229,10 +231,10 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-2xl sm:text-4xl font-extrabold tracking-tight text-zinc-900 leading-tight"
+              className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight"
             >
               You don&apos;t have to study alone.{' '}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-500">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#F5B942] via-[#FFE08A] to-[#F5B942]">
                 Ever.
               </span>
             </motion.h1>
@@ -240,7 +242,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-zinc-600 max-w-xs sm:max-w-sm mx-auto"
+              className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-[#A8A39D] max-w-xs sm:max-w-sm mx-auto"
             >
               Tokyo&apos;s verified student study network for IB & AP. Sign in with your school email to unlock study pods.
             </motion.p>
@@ -254,9 +256,9 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                 <button
                   type="button"
                   onClick={onOpenWhyKantoPrep}
-                  className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50/90 hover:bg-emerald-100 border border-emerald-200/90 text-xs font-semibold text-emerald-800 transition-all cursor-pointer shadow-2xs group active:scale-95"
+                  className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-[#F5B942]/10 hover:bg-[#F5B942]/20 border border-[#F5B942]/30 text-xs font-semibold text-[#F5B942] transition-all cursor-pointer shadow-2xs group active:scale-95"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#F5B942] group-hover:scale-110 transition-transform" />
                   <span>Why KantoPrep? (Our Mission)</span>
                 </button>
               </motion.div>
@@ -268,31 +270,31 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 350, delay: 0.15 }}
-            className="p-5 sm:p-7 rounded-3xl bg-white/95 border border-emerald-100 shadow-xl shadow-emerald-600/5 relative overflow-hidden"
+            className="p-5 sm:p-7 rounded-3xl bg-[#161513] border border-[#F5B942]/20 shadow-2xl relative overflow-hidden"
           >
             {/* Step 1: Email Entry */}
             {step === 'email' && (
               <form onSubmit={handleSendOtp} className="space-y-3.5 sm:space-y-4">
-                <div className="flex items-center space-x-2 pb-2.5 border-b border-zinc-100">
-                  <Lock className="w-4 h-4 text-emerald-600" />
-                  <h2 className="text-xs sm:text-sm font-bold text-zinc-900">
+                <div className="flex items-center space-x-2 pb-2.5 border-b border-[#F5B942]/15">
+                  <Lock className="w-4 h-4 text-[#F5B942]" />
+                  <h2 className="text-xs sm:text-sm font-bold text-white">
                     School Email Verification
                   </h2>
                 </div>
 
                 {errorMessage && (
-                  <div className="p-2.5 sm:p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start space-x-2">
-                    <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                  <div className="p-2.5 sm:p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-start space-x-2">
+                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
                     <span className="text-[11px] leading-tight">{errorMessage}</span>
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                  <label className="block text-xs font-semibold text-[#D1CEC7] mb-1">
                     Official School Email
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A756D]" />
                     <input
                       type="email"
                       value={email}
@@ -303,7 +305,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                       placeholder="e.g. name@students.aobajapan.jp"
                       required
                       autoFocus
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-base sm:text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-base sm:text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942] focus:ring-1 focus:ring-[#F5B942] transition-all"
                     />
                   </div>
                 </div>
@@ -313,26 +315,26 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                   <motion.div
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200 flex items-center justify-between"
+                    className="p-3 rounded-2xl bg-[#F5B942]/10 border border-[#F5B942]/30 flex items-center justify-between"
                   >
                     <div className="flex items-center space-x-2.5">
                       <div
                         className={`w-3 h-3 rounded-full bg-gradient-to-r ${detectedSchool.badgeColor}`}
                       />
                       <div>
-                        <p className="text-xs font-bold text-emerald-950">
+                        <p className="text-xs font-bold text-[#F5B942]">
                           {detectedSchool.name}
                         </p>
-                        <p className="text-[10px] text-emerald-700">
+                        <p className="text-[10px] text-[#D1CEC7]">
                           Campus: {detectedSchool.campus}
                         </p>
                       </div>
                     </div>
-                    <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+                    <ShieldCheck className="w-5 h-5 text-[#F5B942] shrink-0" />
                   </motion.div>
                 ) : email.includes('@') && email.split('@')[1].length > 3 ? (
-                  <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 flex items-start space-x-2">
-                    <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 flex items-start space-x-2">
+                    <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                     <p className="text-[11px] leading-tight">
                       Domain not recognized. Whitelisted: A-JIS (@students.aobajapan.jp), BST, ASIJ, KIST, St. Mary&apos;s, Seisen, ISSH, YIS, CAJ, and Saint Maur.
                     </p>
@@ -342,42 +344,42 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-2.5 sm:py-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-xs sm:text-sm font-semibold rounded-xl transition-all shadow-md shadow-emerald-600/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
+                  className="w-full py-2.5 sm:py-3 bg-[#F5B942] hover:bg-[#E5A832] disabled:opacity-50 text-[#0E0D0B] text-xs sm:text-sm font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
                 >
                   {loading ? (
                     <span>Sending Code...</span>
                   ) : (
                     <>
                       <span>Receive 6-Digit Code</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 stroke-[2.5]" />
                     </>
                   )}
                 </button>
 
                 {/* Instant Pilot Testing Section */}
-                <div className="pt-2.5 border-t border-zinc-100 text-center">
-                  <span className="text-[10px] text-zinc-400 font-semibold tracking-wider uppercase">
+                <div className="pt-2.5 border-t border-[#F5B942]/15 text-center">
+                  <span className="text-[10px] text-[#7A756D] font-semibold tracking-wider uppercase">
                     — Or 1-Click Pilot Testing Login —
                   </span>
                   <div className="mt-2 flex flex-wrap gap-1.5 justify-center">
                     <button
                       type="button"
                       onClick={() => handleQuickPilotLogin('students.aobajapan.jp')}
-                      className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-xs text-emerald-800 font-bold transition-all cursor-pointer shadow-2xs"
+                      className="px-3 py-1.5 rounded-xl bg-[#F5B942]/15 hover:bg-[#F5B942]/25 border border-[#F5B942]/35 text-xs text-[#F5B942] font-bold transition-all cursor-pointer shadow-2xs"
                     >
                       Login as A-JIS Student
                     </button>
                     <button
                       type="button"
                       onClick={() => handleQuickPilotLogin('bst.ac.jp')}
-                      className="px-2.5 py-1.5 rounded-xl bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 text-xs text-zinc-600 font-medium transition-all cursor-pointer"
+                      className="px-2.5 py-1.5 rounded-xl bg-[#1C1A17] hover:bg-[#24211D] border border-[#F5B942]/20 text-xs text-[#D1CEC7] font-medium transition-all cursor-pointer"
                     >
                       BST
                     </button>
                     <button
                       type="button"
                       onClick={() => handleQuickPilotLogin('asij.ac.jp')}
-                      className="px-2.5 py-1.5 rounded-xl bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 text-xs text-zinc-600 font-medium transition-all cursor-pointer"
+                      className="px-2.5 py-1.5 rounded-xl bg-[#1C1A17] hover:bg-[#24211D] border border-[#F5B942]/20 text-xs text-[#D1CEC7] font-medium transition-all cursor-pointer"
                     >
                       ASIJ
                     </button>
@@ -389,25 +391,25 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
             {/* Step 2: 6-Digit Code Entry */}
             {step === 'code' && (
               <form onSubmit={handleVerifyOtp} className="space-y-3.5 sm:space-y-4">
-                <div className="p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200 text-xs text-emerald-950 flex items-start space-x-2.5">
-                  <Mail className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="p-3 rounded-2xl bg-[#F5B942]/10 border border-[#F5B942]/30 text-xs text-[#EDEDEB] flex items-start space-x-2.5">
+                  <Mail className="w-4 h-4 text-[#F5B942] shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-bold">6-Digit Code Sent</p>
-                    <p className="text-[11px] text-emerald-700 mt-0.5">
-                      Sent to <strong className="font-semibold">{email}</strong>. (In pilot mode, type any 6 digits to verify).
+                    <p className="font-bold text-white">6-Digit Code Sent</p>
+                    <p className="text-[11px] text-[#D1CEC7] mt-0.5">
+                      Sent to <strong className="font-semibold text-[#F5B942]">{email}</strong>. (In pilot mode, type any 6 digits to verify).
                     </p>
                   </div>
                 </div>
 
                 {errorMessage && (
-                  <div className="p-2.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start space-x-2">
-                    <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                  <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-start space-x-2">
+                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
                     <span className="text-[11px] leading-tight">{errorMessage}</span>
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                  <label className="block text-xs font-semibold text-[#D1CEC7] mb-1">
                     Enter 6-Digit Code
                   </label>
                   <input
@@ -420,7 +422,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                     }}
                     placeholder="123456"
                     autoFocus
-                    className="w-full text-center tracking-[0.4em] font-mono text-xl py-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-zinc-900 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+                    className="w-full text-center tracking-[0.4em] font-mono text-xl py-2.5 bg-[#1C1A17] border border-[#F5B942]/30 rounded-xl text-[#F5B942] focus:outline-none focus:border-[#F5B942] focus:ring-1 focus:ring-[#F5B942]"
                   />
                 </div>
 
@@ -431,17 +433,17 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                       setStep('email');
                       setCode('');
                     }}
-                    className="w-1/3 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 text-xs font-semibold rounded-xl transition-all cursor-pointer"
+                    className="w-1/3 py-2.5 bg-[#1C1A17] hover:bg-[#25221E] text-[#D1CEC7] text-xs font-semibold rounded-xl border border-[#F5B942]/20 transition-all cursor-pointer"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={loading || code.length < 6}
-                    className="w-2/3 py-2.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white text-xs font-semibold rounded-xl transition-all shadow-md shadow-emerald-600/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
+                    className="w-2/3 py-2.5 bg-[#F5B942] hover:bg-[#E5A832] disabled:opacity-40 text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
                   >
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Verify & Unlock</span>
+                    <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
+                    <span>Verify &amp; Unlock</span>
                   </button>
                 </div>
               </form>
@@ -450,9 +452,9 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
             {/* Step 3: Fast Profile Setup */}
             {step === 'profile' && (
               <div className="space-y-3">
-                <div className="flex items-center space-x-2 pb-2 border-b border-zinc-100">
-                  <Sparkles className="w-4 h-4 text-emerald-600" />
-                  <h2 className="text-xs sm:text-sm font-bold text-zinc-900">
+                <div className="flex items-center space-x-2 pb-2 border-b border-[#F5B942]/15">
+                  <Sparkles className="w-4 h-4 text-[#F5B942]" />
+                  <h2 className="text-xs sm:text-sm font-bold text-white">
                     Welcome! Set Up Your Profile
                   </h2>
                 </div>
@@ -460,10 +462,10 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                 {/* Avatar Selection (No real photo needed) */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-xs font-semibold text-zinc-700">
-                      Choose Avatar <span className="text-zinc-400 font-normal">(No real photo needed)</span>
+                    <label className="text-xs font-semibold text-[#D1CEC7]">
+                      Choose Avatar <span className="text-[#7A756D] font-normal">(No real photo needed)</span>
                     </label>
-                    <div className="w-6 h-6 rounded-full overflow-hidden ring-2 ring-emerald-500 shadow-xs">
+                    <div className="w-6 h-6 rounded-full overflow-hidden ring-2 ring-[#F5B942] shadow-xs">
                       <img
                         src={selectedAvatarUrl}
                         alt="Selected Avatar"
@@ -471,7 +473,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-5 gap-1.5 p-2 bg-zinc-50 rounded-2xl border border-zinc-200">
+                  <div className="grid grid-cols-5 gap-1.5 p-2 bg-[#1C1A17] rounded-2xl border border-[#F5B942]/20">
                     {PRESET_AVATARS.map((preset) => {
                       const isSelected = selectedAvatarUrl === preset.url;
                       return (
@@ -482,8 +484,8 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                           title={preset.name}
                           className={`p-1 rounded-xl transition-all cursor-pointer aspect-square flex items-center justify-center ${
                             isSelected
-                              ? 'ring-2 ring-emerald-600 bg-white shadow-xs scale-105'
-                              : 'hover:bg-white/80 hover:scale-105'
+                              ? 'ring-2 ring-[#F5B942] bg-[#2A2723] shadow-xs scale-105'
+                              : 'hover:bg-white/5 hover:scale-105'
                           }`}
                         >
                           <img src={preset.url} alt={preset.name} className="w-7 h-7 rounded-full" />
@@ -494,8 +496,8 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                    Nickname or Real Name <span className="text-emerald-600">* (Mandatory)</span>
+                  <label className="block text-xs font-semibold text-[#D1CEC7] mb-1">
+                    Nickname or Real Name <span className="text-[#F5B942]">* (Mandatory)</span>
                   </label>
                   <input
                     type="text"
@@ -506,22 +508,22 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                     }}
                     placeholder="e.g. Kai, Maya T, or your real name"
                     required
-                    className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-base sm:text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                    className="w-full px-3 py-2 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-base sm:text-xs text-white focus:outline-none focus:border-[#F5B942]"
                   />
                   {nameError && (
-                    <p className="text-[11px] text-red-600 font-medium mt-1">{nameError}</p>
+                    <p className="text-[11px] text-red-400 font-medium mt-1">{nameError}</p>
                   )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                    <label className="block text-xs font-semibold text-[#D1CEC7] mb-1">
                       Grade Level
                     </label>
                     <select
                       value={gradeLevel}
                       onChange={(e) => setGradeLevel(Number(e.target.value))}
-                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                      className="w-full px-3 py-2 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white focus:outline-none focus:border-[#F5B942]"
                     >
                       <option value={9}>Grade 9 (Year 10)</option>
                       <option value={10}>Grade 10 (Year 11)</option>
@@ -531,13 +533,13 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                    <label className="block text-xs font-semibold text-[#D1CEC7] mb-1">
                       Curriculum
                     </label>
                     <select
                       value={curriculum}
                       onChange={(e) => setCurriculum(e.target.value as Curriculum)}
-                      className="w-full px-3 py-2 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                      className="w-full px-3 py-2 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white focus:outline-none focus:border-[#F5B942]"
                     >
                       {CURRICULUM_OPTIONS.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -549,10 +551,10 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                  <label className="block text-xs font-semibold text-[#D1CEC7] mb-1">
                     Target Subjects
                   </label>
-                  <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto p-1.5 bg-zinc-50 rounded-xl border border-zinc-200">
+                  <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto p-1.5 bg-[#1C1A17] rounded-xl border border-[#F5B942]/20">
                     {SUBJECTS_BY_CURRICULUM[curriculum].map((sub) => {
                       const isSelected = selectedSubjects.includes(sub);
                       return (
@@ -562,8 +564,8 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                           onClick={() => toggleSubject(sub)}
                           className={`text-[10px] px-2 py-0.5 rounded-md border font-medium transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-emerald-600 text-white border-emerald-600'
-                              : 'bg-white text-zinc-700 border-zinc-200 hover:border-zinc-300'
+                              ? 'bg-[#F5B942] text-[#0E0D0B] border-[#F5B942] font-bold'
+                              : 'bg-[#161513] text-[#D1CEC7] border-[#F5B942]/20 hover:border-[#F5B942]/40'
                           }`}
                         >
                           {sub}
@@ -576,9 +578,9 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                 <button
                   type="button"
                   onClick={finishLogin}
-                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-all shadow-md shadow-emerald-600/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
+                  className="w-full py-2.5 bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
                 >
-                  <Sparkles className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4 stroke-[2.5]" />
                   <span>Enter KantoPrep</span>
                 </button>
               </div>
@@ -586,13 +588,13 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
           </motion.div>
 
           {/* Safety & Trust Pillars */}
-          <div className="mt-4 sm:mt-5 grid grid-cols-2 gap-2 text-center text-[11px] text-zinc-500">
-            <div className="p-2 rounded-xl bg-white/70 border border-emerald-100 flex items-center justify-center space-x-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          <div className="mt-4 sm:mt-5 grid grid-cols-2 gap-2 text-center text-[11px] text-[#9E988F]">
+            <div className="p-2 rounded-xl bg-[#161513] border border-[#F5B942]/20 flex items-center justify-center space-x-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#F5B942] shrink-0" />
               <span>Verified School Inboxes</span>
             </div>
-            <div className="p-2 rounded-xl bg-white/70 border border-emerald-100 flex items-center justify-center space-x-1.5">
-              <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <div className="p-2 rounded-xl bg-[#161513] border border-[#F5B942]/20 flex items-center justify-center space-x-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#F5B942] shrink-0" />
               <span>Safe Public Hubs Only</span>
             </div>
           </div>
@@ -600,7 +602,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
       </main>
 
       {/* Simple Footer */}
-      <footer className="relative z-10 w-full py-3 sm:py-4 text-center text-[11px] text-zinc-400 px-4 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1">
+      <footer className="relative z-10 w-full py-3 sm:py-4 text-center text-[11px] text-[#7A756D] px-4 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1">
         <span>KantoPrep</span>
         <span>•</span>
         <span>Verified Tokyo Peer Study Network</span>
@@ -609,9 +611,9 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
           href="https://instagram.com/kantoprep"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center space-x-1 text-emerald-700 hover:text-emerald-800 transition-colors"
+          className="inline-flex items-center space-x-1 text-[#F5B942] hover:text-[#FFD479] transition-colors"
         >
-          <svg className="w-3 h-3 text-emerald-600" viewBox="0 0 24 24" fill="currentColor">
+          <svg className="w-3 h-3 text-[#F5B942]" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
           </svg>
           <span>@kantoprep</span>

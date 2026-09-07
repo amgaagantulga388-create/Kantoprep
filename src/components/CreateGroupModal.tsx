@@ -120,7 +120,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
       particleCount: 50,
       spread: 60,
       origin: { y: 0.7 },
-      colors: ['#10b981', '#14b8a6', '#059669'],
+      colors: ['#F5B942', '#E5A832', '#FDE047'],
     });
 
     onClose();
@@ -140,7 +140,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-black/40 backdrop-blur-md"
+        className="absolute inset-0 bg-black/70 backdrop-blur-md"
       />
 
       <motion.div
@@ -148,15 +148,15 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-        className="relative w-full max-w-lg bg-white rounded-3xl p-6 shadow-2xl border border-zinc-200 z-10 overflow-hidden"
+        className="relative w-full max-w-lg bg-[#161513] rounded-3xl p-6 shadow-2xl border border-[#F5B942]/20 z-10 overflow-hidden text-white"
       >
         {/* Step Indicator */}
-        <div className="flex items-center justify-between pb-4 mb-5 border-b border-zinc-200">
+        <div className="flex items-center justify-between pb-4 mb-5 border-b border-[#F5B942]/15">
           <div>
-            <span className="text-[11px] font-semibold tracking-wider uppercase text-emerald-600">
+            <span className="text-[11px] font-bold tracking-wider uppercase text-[#F5B942]">
               Step {step} of 4
             </span>
-            <h2 className="text-lg font-bold text-zinc-900">
+            <h2 className="text-lg font-bold text-white">
               {step === 1 && 'Select Syllabus & Subject'}
               {step === 2 && 'Format & Safe Study Hub'}
               {step === 3 && 'Session Details & Time'}
@@ -165,15 +165,15 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {safetyError && (
-          <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-start space-x-2">
-            <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+          <div className="mb-4 p-3 rounded-xl bg-red-950/60 border border-red-900/60 text-xs text-red-300 flex items-start space-x-2">
+            <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
             <span>{safetyError}</span>
           </div>
         )}
@@ -188,7 +188,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
               className="space-y-4"
             >
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-2">
+                <label className="block text-xs font-semibold text-[#EDEDEB] mb-2">
                   Curriculum Program
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -199,28 +199,28 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                       onClick={() => handleCurriculumChange(c.id)}
                       className={`p-3 text-left rounded-2xl border text-xs transition-all cursor-pointer ${
                         curriculum === c.id
-                          ? 'bg-emerald-50 border-emerald-500 text-emerald-950 font-semibold shadow-xs'
-                          : 'bg-zinc-50 border-zinc-200 text-zinc-600 hover:border-zinc-300'
+                          ? 'bg-[#F5B942]/15 border-[#F5B942] text-white font-semibold shadow-[0_0_15px_rgba(245,185,66,0.15)]'
+                          : 'bg-[#1C1A17] border-[#F5B942]/15 text-[#A8A39D] hover:border-[#F5B942]/40'
                       }`}
                     >
-                      <span className="font-bold block text-zinc-900">{c.label}</span>
-                      <span className="text-[10px] text-zinc-500 block mt-0.5">{c.description}</span>
+                      <span className="font-bold block text-white">{c.label}</span>
+                      <span className="text-[10px] text-[#A8A39D] block mt-0.5">{c.description}</span>
                     </button>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
                   Specific Subject Module
                 </label>
                 <select
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="w-full p-3 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                  className="w-full p-3 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white focus:outline-none focus:border-[#F5B942]"
                 >
                   {SUBJECTS_BY_CURRICULUM[curriculum].map((sub) => (
-                    <option key={sub} value={sub}>
+                    <option key={sub} value={sub} className="bg-[#1C1A17] text-white">
                       {sub}
                     </option>
                   ))}
@@ -231,7 +231,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all active:scale-95 shadow-sm cursor-pointer"
+                  className="flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold transition-all active:scale-95 shadow-md shadow-[#F5B942]/20 cursor-pointer"
                 >
                   <span>Next: Format &amp; Study Hub</span>
                   <ArrowRight className="w-4 h-4" />
@@ -249,7 +249,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
               className="space-y-4"
             >
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-2">
+                <label className="block text-xs font-semibold text-[#EDEDEB] mb-2">
                   Session Format
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -262,12 +262,12 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                         onClick={() => setFormat(f)}
                         className={`p-2.5 text-left rounded-xl border text-xs transition-all cursor-pointer ${
                           format === f
-                            ? 'bg-emerald-50 border-emerald-500 text-zinc-900 font-semibold'
-                            : 'bg-zinc-50 border-zinc-200 text-zinc-600 hover:border-zinc-300'
+                            ? 'bg-[#F5B942]/15 border-[#F5B942] text-white font-semibold shadow-[0_0_15px_rgba(245,185,66,0.15)]'
+                            : 'bg-[#1C1A17] border-[#F5B942]/15 text-[#A8A39D] hover:border-[#F5B942]/40'
                         }`}
                       >
-                        <p className="font-semibold text-zinc-900">{cfg.label}</p>
-                        <p className="text-[10px] text-zinc-500 mt-0.5 line-clamp-1">
+                        <p className="font-semibold text-white">{cfg.label}</p>
+                        <p className="text-[10px] text-[#A8A39D] mt-0.5 line-clamp-1">
                           {cfg.description}
                         </p>
                       </button>
@@ -278,14 +278,14 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
 
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs font-semibold text-zinc-700">
+                  <label className="text-xs font-semibold text-[#EDEDEB]">
                     Pre-Approved Safe Study Venue
                   </label>
                   <a
                     href={mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-1 text-[11px] text-emerald-700 hover:underline font-medium"
+                    className="inline-flex items-center space-x-1 text-[11px] text-[#F5B942] hover:underline font-medium"
                     title="Open library in Google Maps"
                   >
                     <span>View on Google Maps</span>
@@ -295,15 +295,15 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 <select
                   value={venueType}
                   onChange={(e) => setVenueType(e.target.value as VenueType)}
-                  className="w-full p-3 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                  className="w-full p-3 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white focus:outline-none focus:border-[#F5B942]"
                 >
                   {(Object.keys(VENUE_CONFIG) as VenueType[]).map((v) => (
-                    <option key={v} value={v}>
+                    <option key={v} value={v} className="bg-[#1C1A17] text-white">
                       {VENUE_CONFIG[v].label} ({VENUE_CONFIG[v].isPhysical ? 'In-Person' : 'Virtual'})
                     </option>
                   ))}
                 </select>
-                <p className="text-[11px] text-zinc-500 mt-1.5 pl-1">
+                <p className="text-[11px] text-[#7A756D] mt-1.5 pl-1">
                   📍 {venueInfo.address}
                 </p>
               </div>
@@ -312,7 +312,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-zinc-100 text-zinc-700 text-xs font-semibold hover:bg-zinc-200 transition-all cursor-pointer"
+                  className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-[#EDEDEB] text-xs font-semibold hover:bg-[#25221E] transition-all cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <span>Back</span>
@@ -320,7 +320,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(3)}
-                  className="flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all active:scale-95 shadow-sm cursor-pointer"
+                  className="flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold transition-all active:scale-95 shadow-md shadow-[#F5B942]/20 cursor-pointer"
                 >
                   <span>Next: Details &amp; Time</span>
                   <ArrowRight className="w-4 h-4" />
@@ -338,7 +338,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
               className="space-y-4"
             >
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
                   Session Title *
                 </label>
                 <input
@@ -350,13 +350,13 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                   }}
                   placeholder="e.g., May 2024 Math AA HL Paper 1 Full Sprint"
                   required
-                  className="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                  className="w-full p-2.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942]"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                  <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
                     Scheduled Time
                   </label>
                   <input
@@ -364,11 +364,11 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                     value={meetingTime}
                     onChange={(e) => setMeetingTime(e.target.value)}
                     placeholder="e.g., Friday, 4:30 PM"
-                    className="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                    className="w-full p-2.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                  <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
                     Max Student Slots
                   </label>
                   <input
@@ -377,13 +377,13 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                     max={8}
                     value={maxMembers}
                     onChange={(e) => setMaxMembers(Number(e.target.value))}
-                    className="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                    className="w-full p-2.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white focus:outline-none focus:border-[#F5B942]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-zinc-700 mb-1">
+                <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
                   Goal &amp; Agenda Description
                 </label>
                 <textarea
@@ -394,7 +394,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                     if (safetyError) setSafetyError(null);
                   }}
                   placeholder="State what materials to bring (past paper year, rubric draft, calculator)..."
-                  className="w-full p-2.5 bg-zinc-50 border border-zinc-200 rounded-xl text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                  className="w-full p-2.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942]"
                 />
               </div>
 
@@ -402,7 +402,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-zinc-100 text-zinc-700 text-xs font-semibold hover:bg-zinc-200 transition-all cursor-pointer"
+                  className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-[#EDEDEB] text-xs font-semibold hover:bg-[#25221E] transition-all cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <span>Back</span>
@@ -410,7 +410,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 <button
                   type="submit"
                   disabled={!title.trim()}
-                  className="flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white text-xs font-semibold transition-all shadow-md shadow-emerald-600/20 active:scale-95 cursor-pointer"
+                  className="flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] disabled:opacity-40 text-[#0E0D0B] text-xs font-bold transition-all shadow-md shadow-[#F5B942]/20 active:scale-95 cursor-pointer"
                 >
                   <span>Review Host Commitment</span>
                   <ArrowRight className="w-4 h-4" />
@@ -427,17 +427,17 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
               exit={{ opacity: 0, x: -10 }}
               className="space-y-4"
             >
-              <div className="p-3.5 rounded-2xl bg-zinc-50 border border-zinc-200 text-xs space-y-1.5">
-                <div className="font-bold text-zinc-900 text-sm truncate">{title}</div>
-                <div className="text-emerald-800 font-semibold">{subject} • {curriculum}</div>
-                <div className="text-zinc-600">⏰ {meetingTime} ({durationMinutes} mins)</div>
-                <div className="flex items-center justify-between text-zinc-600 pt-1 border-t border-zinc-200">
+              <div className="p-3.5 rounded-2xl bg-[#1C1A17] border border-[#F5B942]/20 text-xs space-y-1.5">
+                <div className="font-bold text-white text-sm truncate">{title}</div>
+                <div className="text-[#F5B942] font-semibold">{subject} • {curriculum}</div>
+                <div className="text-[#A8A39D]">⏰ {meetingTime} ({durationMinutes} mins)</div>
+                <div className="flex items-center justify-between text-[#A8A39D] pt-1 border-t border-[#F5B942]/10">
                   <span>📍 {venueInfo.label}</span>
                   <a
                     href={mapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-1 text-emerald-700 hover:underline"
+                    className="inline-flex items-center space-x-1 text-[#F5B942] hover:underline"
                   >
                     <span>Maps</span>
                     <ExternalLink className="w-3 h-3" />
@@ -446,16 +446,16 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
               </div>
 
               {/* Responsibility Commitment */}
-              <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 text-xs text-zinc-700 space-y-2.5">
-                <div className="flex items-center space-x-1.5 text-emerald-900 font-bold text-sm">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <div className="p-4 rounded-2xl bg-[#1A1815] border border-[#F5B942]/30 text-xs text-[#EDEDEB] space-y-2.5">
+                <div className="flex items-center space-x-1.5 text-[#F5B942] font-bold text-sm">
+                  <ShieldCheck className="w-4 h-4 text-[#F5B942]" />
                   <span>Host Commitment &amp; Responsibility</span>
                 </div>
-                <p className="leading-relaxed text-zinc-600">
+                <p className="leading-relaxed text-[#A8A39D]">
                   As the session host, other students are setting aside their time and traveling to meet you. 
-                  <strong> Please assure that you will be present and not abandon this study pod.</strong>
+                  <strong className="text-white"> Please assure that you will be present and not abandon this study pod.</strong>
                 </p>
-                <p className="text-[11px] text-zinc-500 leading-relaxed">
+                <p className="text-[11px] text-[#7A756D] leading-relaxed">
                   If an emergency arises and you cannot attend, you agree to notify the group in the chat as soon as possible so peers are not left waiting.
                 </p>
 
@@ -464,9 +464,9 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                     type="checkbox"
                     checked={hasAgreedToPledge}
                     onChange={(e) => setHasAgreedToPledge(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
+                    className="mt-0.5 h-4 w-4 rounded border-[#F5B942]/40 text-[#F5B942] bg-[#1C1A17] focus:ring-[#F5B942] accent-[#F5B942] cursor-pointer"
                   />
-                  <span className="font-semibold text-zinc-900 text-xs">
+                  <span className="font-semibold text-white text-xs">
                     I commit to arriving on time, leading responsibly, and not abandoning my pod.
                   </span>
                 </label>
@@ -476,7 +476,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(3)}
-                  className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-zinc-100 text-zinc-700 text-xs font-semibold hover:bg-zinc-200 transition-all cursor-pointer"
+                  className="flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-[#EDEDEB] text-xs font-semibold hover:bg-[#25221E] transition-all cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   <span>Back</span>
@@ -484,7 +484,7 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
                 <button
                   type="submit"
                   disabled={!hasAgreedToPledge}
-                  className="flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white text-xs font-semibold transition-all shadow-md shadow-emerald-600/20 active:scale-95 cursor-pointer"
+                  className="flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] disabled:opacity-40 text-[#0E0D0B] text-xs font-bold transition-all shadow-md shadow-[#F5B942]/20 active:scale-95 cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Publish Study Pod</span>

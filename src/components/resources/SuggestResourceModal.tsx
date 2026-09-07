@@ -111,7 +111,7 @@ export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/40 backdrop-blur-xs"
+        className="fixed inset-0 bg-black/75 backdrop-blur-xs"
       />
 
       {/* Modal Card */}
@@ -119,12 +119,12 @@ export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
         initial={{ scale: 0.95, opacity: 0, y: 15 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.95, opacity: 0, y: 15 }}
-        className="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl border border-zinc-200 z-10 overflow-hidden"
+        className="relative w-full max-w-lg rounded-3xl bg-[#161513] p-6 shadow-2xl border border-[#F5B942]/20 z-10 overflow-hidden"
       >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 p-1.5 rounded-full text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-all cursor-pointer"
+          className="absolute right-5 top-5 p-1.5 rounded-full text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-all cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
@@ -137,29 +137,29 @@ export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               className="py-12 text-center"
             >
-              <div className="mx-auto w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center mb-4 text-emerald-600">
+              <div className="mx-auto w-14 h-14 rounded-full bg-[#F5B942]/15 flex items-center justify-center mb-4 text-[#F5B942]">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-bold text-zinc-900">Resource Submitted!</h3>
-              <p className="text-xs text-zinc-500 mt-2 max-w-xs mx-auto">
+              <h3 className="text-lg font-bold text-white">Resource Submitted!</h3>
+              <p className="text-xs text-[#A8A39D] mt-2 max-w-xs mx-auto">
                 Thank you for contributing to the KantoPrep library. Our student curators will review and index it!
               </p>
             </motion.div>
           ) : (
             <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <div className="flex items-center space-x-2 text-emerald-700 mb-1">
+              <div className="flex items-center space-x-2 text-[#F5B942] mb-1">
                 <Sparkles className="w-4 h-4" />
                 <span className="text-xs font-semibold uppercase tracking-wider">Community Contribution</span>
               </div>
-              <h2 className="text-xl font-bold text-zinc-900">Suggest a Study Resource</h2>
-              <p className="text-xs text-zinc-500 mt-1 mb-5">
+              <h2 className="text-xl font-bold text-white">Suggest a Study Resource</h2>
+              <p className="text-xs text-[#A8A39D] mt-1 mb-5">
                 Know a great YouTube breakdown, past paper link, or question bank trick? Share it with peers across Tokyo.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Resource Type Selector */}
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1.5">Resource Format</label>
+                  <label className="block text-xs font-semibold text-[#EDEDEB] mb-1.5">Resource Format</label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {resourceTypes.map((rt) => {
                       const Icon = rt.icon;
@@ -171,11 +171,11 @@ export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
                           onClick={() => setType(rt.id)}
                           className={`flex flex-col items-center justify-center p-2 rounded-xl border text-xs font-medium transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-emerald-50 border-emerald-300 text-emerald-800 shadow-2xs font-semibold'
-                              : 'bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50'
+                              ? 'bg-[#F5B942]/15 border-[#F5B942]/60 text-[#F5B942] shadow-2xs font-semibold'
+                              : 'bg-[#1C1A17] border-[#F5B942]/20 text-[#A8A39D] hover:border-[#F5B942]/40 hover:text-[#EDEDEB]'
                           }`}
                         >
-                          <Icon className={`w-4 h-4 mb-1 ${isSelected ? 'text-emerald-600' : 'text-zinc-400'}`} />
+                          <Icon className={`w-4 h-4 mb-1 ${isSelected ? 'text-[#F5B942]' : 'text-[#7A756D]'}`} />
                           <span className="text-[11px] text-center">{rt.label}</span>
                         </button>
                       );
@@ -186,14 +186,14 @@ export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
                 {/* Curriculum & Subject */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-zinc-700 mb-1">Curriculum</label>
+                    <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">Curriculum</label>
                     <select
                       value={curriculum}
                       onChange={(e) => handleCurriculumChange(e.target.value as Curriculum)}
-                      className="w-full px-3 py-2 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                      className="w-full px-3 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-xs text-white focus:border-[#F5B942] focus:ring-2 focus:ring-[#F5B942]/20 outline-none"
                     >
                       {CURRICULUM_OPTIONS.map((c) => (
-                        <option key={c.id} value={c.id}>
+                        <option key={c.id} value={c.id} className="bg-[#1C1A17] text-white">
                           {c.label}
                         </option>
                       ))}
@@ -201,14 +201,14 @@ export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-zinc-700 mb-1">Subject</label>
+                    <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">Subject</label>
                     <select
                       value={subject}
                       onChange={(e) => setSubject(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none truncate"
+                      className="w-full px-3 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-xs text-white focus:border-[#F5B942] focus:ring-2 focus:ring-[#F5B942]/20 outline-none truncate"
                     >
                       {(SUBJECTS_BY_CURRICULUM[curriculum] || []).map((s) => (
-                        <option key={s} value={s}>
+                        <option key={s} value={s} className="bg-[#1C1A17] text-white">
                           {s}
                         </option>
                       ))}
@@ -218,55 +218,55 @@ export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
 
                 {/* Topic / Chapter */}
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                    Specific Syllabus Topic / Chapter <span className="text-zinc-400 font-normal">(optional)</span>
+                  <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
+                    Specific Syllabus Topic / Chapter <span className="text-[#7A756D] font-normal">(optional)</span>
                   </label>
                   <input
                     type="text"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
                     placeholder="e.g. Integration by Parts, Desmos Sliders, Rotational Dynamics"
-                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-xs text-white placeholder:text-[#7A756D] focus:border-[#F5B942] focus:ring-2 focus:ring-[#F5B942]/20 outline-none"
                   />
                 </div>
 
                 {/* Title */}
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1">Resource Title</label>
+                  <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">Resource Title</label>
                   <input
                     type="text"
                     required
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. 10-Minute Guide to IB Math Vector Cross Products"
-                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-xs text-white placeholder:text-[#7A756D] focus:border-[#F5B942] focus:ring-2 focus:ring-[#F5B942]/20 outline-none"
                   />
                 </div>
 
                 {/* URL */}
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1">Resource URL / Link</label>
+                  <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">Resource URL / Link</label>
                   <input
                     type="url"
                     required
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                     placeholder="https://www.youtube.com/watch?v=... or link to paper"
-                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-xs text-white placeholder:text-[#7A756D] focus:border-[#F5B942] focus:ring-2 focus:ring-[#F5B942]/20 outline-none"
                   />
                 </div>
 
                 {/* Note */}
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 mb-1">
-                    Why is this helpful? <span className="text-zinc-400 font-normal">(optional)</span>
+                  <label className="block text-xs font-semibold text-[#EDEDEB] mb-1">
+                    Why is this helpful? <span className="text-[#7A756D] font-normal">(optional)</span>
                   </label>
                   <textarea
                     rows={2}
                     value={note}
                     onChange={(e) => setNote(e.target.value)}
                     placeholder="e.g. 'Best step-by-step breakdown for exam questions that came up in May 2023 TZ2!'"
-                    className="w-full px-3.5 py-2 rounded-xl bg-white border border-zinc-200 text-xs text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none resize-none"
+                    className="w-full px-3.5 py-2 rounded-xl bg-[#1C1A17] border border-[#F5B942]/20 text-xs text-white placeholder:text-[#7A756D] focus:border-[#F5B942] focus:ring-2 focus:ring-[#F5B942]/20 outline-none resize-none"
                   />
                 </div>
 
@@ -275,13 +275,13 @@ export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-4 py-2 rounded-xl text-xs font-semibold text-zinc-600 hover:bg-zinc-100 transition-colors cursor-pointer"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 transition-all cursor-pointer active:scale-95"
+                    className="px-5 py-2 rounded-xl bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold shadow-md shadow-[#F5B942]/20 transition-all cursor-pointer active:scale-95"
                   >
                     Submit Suggestion
                   </button>

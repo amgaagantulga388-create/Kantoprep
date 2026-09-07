@@ -66,7 +66,7 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-black/40 backdrop-blur-md"
+        className="absolute inset-0 bg-black/70 backdrop-blur-md"
       />
 
       <motion.div
@@ -74,30 +74,30 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-        className="relative w-full max-w-lg bg-white rounded-3xl p-6 shadow-2xl border border-zinc-200 z-10 max-h-[90vh] overflow-y-auto"
+        className="relative w-full max-w-lg bg-[#161513] rounded-3xl p-6 shadow-2xl border border-[#F5B942]/20 z-10 max-h-[90vh] overflow-y-auto text-white"
       >
-        <div className="flex items-center justify-between pb-4 border-b border-zinc-200">
+        <div className="flex items-center justify-between pb-4 border-b border-[#F5B942]/15">
           <div>
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-emerald-600">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#F5B942]">
               Pilot Testing Hub
             </span>
-            <h2 className="text-base font-bold text-zinc-900">Switch School / Test Gate</h2>
+            <h2 className="text-base font-bold text-white">Switch School / Test Gate</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-800 hover:bg-zinc-100 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Email Whitelist Gate Tester */}
-        <div className="mt-4 p-4 rounded-2xl bg-zinc-50 border border-zinc-200">
-          <div className="flex items-center space-x-2 text-xs font-semibold text-zinc-900 mb-1">
-            <Mail className="w-4 h-4 text-emerald-600" />
+        <div className="mt-4 p-4 rounded-2xl bg-[#1C1A17] border border-[#F5B942]/15">
+          <div className="flex items-center space-x-2 text-xs font-semibold text-white mb-1">
+            <Mail className="w-4 h-4 text-[#F5B942]" />
             <span>Test Email Domain Gate</span>
           </div>
-          <p className="text-[11px] text-zinc-600 mb-3">
+          <p className="text-[11px] text-[#A8A39D] mb-3">
             Try a personal email (e.g. <code>student@gmail.com</code>) vs a verified school domain (e.g. <code>alex@bst.ac.jp</code> or <code>sato@asij.ac.jp</code>):
           </p>
 
@@ -110,11 +110,11 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
                 setEmailValidationResult(null);
               }}
               placeholder="e.g. test@students.aobajapan.jp"
-              className="flex-1 px-3 py-2 bg-white border border-zinc-200 rounded-xl text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-emerald-500 shadow-2xs"
+              className="flex-1 px-3 py-2 bg-[#141310] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942] shadow-2xs"
             />
             <button
               type="submit"
-              className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-xl transition-all shadow-xs cursor-pointer"
+              className="px-3.5 py-2 bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 cursor-pointer"
             >
               Verify
             </button>
@@ -126,14 +126,14 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
               animate={{ opacity: 1, y: 0 }}
               className={`mt-2.5 p-2.5 rounded-xl text-xs flex items-start space-x-2 ${
                 emailValidationResult.valid
-                  ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
-                  : 'bg-red-50 border border-red-200 text-red-800'
+                  ? 'bg-[#F5B942]/10 border border-[#F5B942]/30 text-[#F5B942]'
+                  : 'bg-red-950/40 border border-red-500/30 text-red-200'
               }`}
             >
               {emailValidationResult.valid ? (
-                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <ShieldCheck className="w-4 h-4 text-[#F5B942] shrink-0 mt-0.5" />
               ) : (
-                <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
               )}
               <span className="text-[11px] leading-relaxed">
                 {emailValidationResult.message}
@@ -144,7 +144,7 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
 
         {/* Switch Demo Student Profile */}
         <div className="mt-5">
-          <h3 className="text-xs font-semibold text-zinc-700 mb-2">
+          <h3 className="text-xs font-semibold text-[#EDEDEB] mb-2">
             Select Active Pilot Student Profile
           </h3>
           <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
@@ -160,30 +160,30 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
                   }}
                   className={`w-full p-3 rounded-2xl border text-left flex items-center justify-between transition-all cursor-pointer ${
                     isCurrent
-                      ? 'bg-emerald-50 border-emerald-400 text-zinc-900'
-                      : 'bg-zinc-50/70 border-zinc-200 text-zinc-700 hover:bg-zinc-100'
+                      ? 'bg-[#F5B942]/15 border-[#F5B942] text-white shadow-2xs'
+                      : 'bg-[#1C1A17] border-[#F5B942]/15 text-[#A8A39D] hover:bg-[#25221E]'
                   }`}
                 >
                   <div className="flex items-center space-x-3">
                     <img
                       src={user.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60'}
                       alt={user.fullName}
-                      className="w-9 h-9 rounded-full object-cover ring-1 ring-zinc-200"
+                      className="w-9 h-9 rounded-full object-cover ring-1 ring-[#F5B942]/30"
                     />
                     <div>
                       <div className="flex items-center space-x-2">
-                        <span className="text-xs font-bold text-zinc-900">{user.fullName}</span>
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-white text-zinc-700 border border-zinc-200">
+                        <span className="text-xs font-bold text-white">{user.fullName}</span>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#141310] text-[#EDEDEB] border border-[#F5B942]/20">
                           Gr. {user.gradeLevel} • {user.curriculum}
                         </span>
                       </div>
-                      <p className="text-[11px] text-zinc-500">
+                      <p className="text-[11px] text-[#7A756D]">
                         {user.schoolName} ({user.email})
                       </p>
                     </div>
                   </div>
 
-                  {isCurrent && <Check className="w-4 h-4 text-emerald-600" />}
+                  {isCurrent && <Check className="w-4 h-4 text-[#F5B942]" />}
                 </button>
               );
             })}

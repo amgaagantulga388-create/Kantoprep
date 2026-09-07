@@ -48,19 +48,19 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 onClick={() => onFormatChange(f.id)}
                 className={`relative px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 flex items-center space-x-1.5 cursor-pointer ${
                   isActive
-                    ? 'text-zinc-900 font-semibold'
-                    : 'text-zinc-500 hover:text-zinc-800 hover:bg-emerald-50/40'
+                    ? 'text-[#0E0D0B] font-bold'
+                    : 'text-[#9E988F] hover:text-white hover:bg-white/5'
                 }`}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeFormatPill"
-                    className="absolute inset-0 bg-white border border-emerald-200/80 rounded-xl shadow-xs"
+                    className="absolute inset-0 bg-[#F5B942] rounded-xl shadow-xs"
                     transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                   />
                 )}
                 <span className="relative z-10 flex items-center space-x-1.5">
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-emerald-600' : 'text-zinc-400'}`} />
+                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#0E0D0B]' : 'text-[#7A756D]'}`} />
                   <span>{f.label}</span>
                 </span>
               </button>
@@ -73,14 +73,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               onClick={() => onToggleMyPods(!isMyPodsOnly)}
               className={`relative px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 flex items-center space-x-1.5 cursor-pointer ml-1 ${
                 isMyPodsOnly
-                  ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'text-emerald-800 bg-emerald-50/80 border border-emerald-200 hover:bg-emerald-100/80'
+                  ? 'bg-[#F5B942] text-[#0E0D0B] shadow-xs'
+                  : 'text-[#F5B942] bg-[#F5B942]/10 border border-[#F5B942]/30 hover:bg-[#F5B942]/20'
               }`}
             >
               <UserCheck className="w-3.5 h-3.5" />
               <span>My Pods</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                isMyPodsOnly ? 'bg-emerald-700 text-white' : 'bg-emerald-200/80 text-emerald-900'
+                isMyPodsOnly ? 'bg-[#0E0D0B]/20 text-[#0E0D0B]' : 'bg-[#F5B942]/20 text-[#F5B942]'
               }`}>
                 {myPodsCount}
               </span>
@@ -91,13 +91,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         {/* Search & Counter */}
         <div className="flex items-center space-x-3 w-full md:w-auto">
           <div className="relative w-full md:w-72">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7A756D]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search subject, past paper, or topic..."
-              className="w-full pl-9 pr-4 py-2 bg-white border border-emerald-100 rounded-xl text-xs text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all shadow-xs"
+              className="w-full pl-9 pr-4 py-2 bg-[#161513] border border-[#F5B942]/20 rounded-xl text-xs text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942] focus:ring-2 focus:ring-[#F5B942]/20 transition-all shadow-xs"
             />
           </div>
           <AnimatePresence mode="wait">
@@ -107,7 +107,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 4 }}
               transition={{ duration: 0.2 }}
-              className="text-xs text-zinc-500 whitespace-nowrap hidden sm:inline tabular-nums"
+              className="text-xs text-[#9E988F] whitespace-nowrap hidden sm:inline tabular-nums"
             >
               {totalResults} {totalResults === 1 ? 'pod' : 'pods'} found
             </motion.span>

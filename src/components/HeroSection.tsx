@@ -89,10 +89,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-white/90 border border-emerald-200/80 text-xs text-emerald-800 shadow-2xs mb-5"
+          className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-[#161513] border border-[#F5B942]/25 text-xs text-[#F5B942] shadow-2xs mb-5"
         >
-          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-          <span className="font-medium">100% Free • Student-Run Across Tokyo International Schools</span>
+          <Sparkles className="w-3.5 h-3.5 text-[#F5B942]" />
+          <span className="font-semibold">100% Free • Student-Run Across Tokyo International Schools</span>
         </motion.div>
 
         {/* Display Headline with Shimmer Gradient */}
@@ -102,9 +102,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           transition={{ duration: 0.6, delay: 0.1 }}
           className="space-y-3"
         >
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-zinc-900 leading-tight sm:leading-[1.15]">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight sm:leading-[1.15]">
             Welcome to{' '}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 via-teal-500 to-emerald-600 shimmer-text">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#F5B942] via-[#FFE08A] to-[#F5B942] shimmer-text">
               KantoPrep
             </span>
           </h1>
@@ -116,12 +116,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             transition={{ duration: 0.5, delay: 0.15 }}
             className="flex items-center justify-center pt-0.5"
           >
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-emerald-50/90 border border-emerald-200/80 shadow-2xs">
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#F5B942]/10 border border-[#F5B942]/30 shadow-2xs">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#F5B942] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F5B942]" />
               </span>
-              <span className="text-xs font-semibold text-emerald-800">
+              <span className="text-xs font-bold text-[#F5B942]">
                 {groupCount} active {groupCount === 1 ? 'pod' : 'pods'} right now
               </span>
             </div>
@@ -133,13 +133,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="inline-flex items-center space-x-2 px-4 py-2 rounded-2xl bg-white/90 border border-zinc-200/80 shadow-sm max-w-xl text-left"
+              className="inline-flex items-center space-x-2 px-4 py-2 rounded-2xl bg-[#161513] border border-[#F5B942]/20 shadow-md max-w-xl text-left"
             >
-              <Quote className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-              <span className="text-xs sm:text-sm italic text-zinc-700 font-medium">
+              <Quote className="w-3.5 h-3.5 text-[#F5B942] shrink-0" />
+              <span className="text-xs sm:text-sm italic text-[#E4E2DD] font-medium">
                 &ldquo;{activeQuote.quote}&rdquo;
               </span>
-              <span className="text-[11px] font-bold text-emerald-700 shrink-0 not-italic">
+              <span className="text-[11px] font-bold text-[#F5B942] shrink-0 not-italic">
                 — {activeQuote.author}
               </span>
             </motion.div>
@@ -151,7 +151,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.25 }}
-          className="mt-4 text-base sm:text-lg text-zinc-600 max-w-2xl mx-auto font-normal leading-relaxed"
+          className="mt-4 text-base sm:text-lg text-[#A8A39D] max-w-2xl mx-auto font-normal leading-relaxed"
         >
           Connect with verified Tokyo peers preparing for the same past papers, IA rubrics, and exams.
         </motion.p>
@@ -161,24 +161,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 text-xs text-zinc-700"
+          className="mt-6 flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 text-xs text-[#EDEDEB]"
         >
-          <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white border border-emerald-100 shadow-2xs">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#161513] border border-[#F5B942]/20 shadow-2xs">
+            <ShieldCheck className="w-4 h-4 text-[#F5B942]" />
             <span className="font-medium">School Email Whitelisted</span>
           </div>
-          <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white border border-emerald-100 shadow-2xs">
-            <MapPin className="w-4 h-4 text-emerald-600" />
+          <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#161513] border border-[#F5B942]/20 shadow-2xs">
+            <MapPin className="w-4 h-4 text-[#F5B942]" />
             <span className="font-medium">Public Library Hubs (Hiroo, Mita)</span>
           </div>
-          <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white border border-emerald-100 shadow-2xs">
-            <Users className="w-4 h-4 text-emerald-600" />
+          <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#161513] border border-[#F5B942]/20 shadow-2xs">
+            <Users className="w-4 h-4 text-[#F5B942]" />
             <span className="font-medium">{groupCount} Active Study Pods</span>
           </div>
           {examCountdown && (
-            <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 shadow-2xs">
-              <CalendarClock className="w-4 h-4 text-amber-600" />
-              <span className="font-semibold text-amber-800">
+            <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#F5B942]/15 border border-[#F5B942]/35 shadow-2xs">
+              <CalendarClock className="w-4 h-4 text-[#F5B942]" />
+              <span className="font-bold text-[#F5B942]">
                 D-{examCountdown.daysLeft} {examCountdown.label}
               </span>
             </div>
@@ -200,14 +200,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 onClick={() => onSelectCurriculum(c.id)}
                 className={`relative px-3.5 sm:px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
                   isActive
-                    ? 'text-white shadow-xs'
-                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-emerald-50/50'
+                    ? 'text-[#0E0D0B] font-bold shadow-xs'
+                    : 'text-[#9E988F] hover:text-white hover:bg-white/5'
                 }`}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeCurriculumPill"
-                    className="absolute inset-0 bg-emerald-600 rounded-xl"
+                    className="absolute inset-0 bg-[#F5B942] rounded-xl shadow-sm shadow-[#F5B942]/20"
                     transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                   />
                 )}
