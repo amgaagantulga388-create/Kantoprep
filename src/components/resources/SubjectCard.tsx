@@ -103,7 +103,7 @@ export const SubjectCard: React.FC<SubjectCardProps> = ({
             {syllabus.hasCalculator && (
               <span className="inline-flex items-center space-x-1 text-[10px] font-medium text-emerald-700 bg-emerald-50 border border-emerald-200/80 rounded-md px-1.5 py-0.5">
                 <Calculator className="w-3 h-3" />
-                <span>Desmos</span>
+                <span>TI-84</span>
               </span>
             )}
           </div>

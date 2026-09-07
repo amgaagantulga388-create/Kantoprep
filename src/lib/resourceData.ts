@@ -14,12 +14,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'Calculator',
     hasCalculator: true,
     defaultCalculatorMode: 'graphing',
-    formulaBooklet: {
-      title: "IB Math Analysis & Approaches Formula Booklet",
-      url: "https://ibresources.org/wp-content/uploads/2020/09/Maths-AA-Formula-Booklet.pdf",
-      edition: "First Assessment 2021",
-      description: "Official formula booklet containing prior learning, algebra, functions, geometry, trigonometry, statistics, and calculus formulas.",
-    },
     topics: [
       {
         id: 'ib-math-aa-t1-core',
@@ -174,12 +168,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'LineChart',
     hasCalculator: true,
     defaultCalculatorMode: 'graphing',
-    formulaBooklet: {
-      title: "IB Math Applications & Interpretation Formula Booklet",
-      url: "https://ibresources.org/wp-content/uploads/2020/09/Maths-AI-Formula-Booklet.pdf",
-      edition: "First Assessment 2021",
-      description: "Official formula booklet with statistical distributions, Voronoi diagrams, matrix operations, and regression formulas.",
-    },
     topics: [
       {
         id: 'ib-math-ai-t1-core',
@@ -281,12 +269,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'Atom',
     hasCalculator: true,
     defaultCalculatorMode: 'scientific',
-    formulaBooklet: {
-      title: "IB Physics Data Booklet",
-      url: "https://ibresources.org/wp-content/uploads/2020/09/Physics-Data-Booklet.pdf",
-      edition: "Official Syllabus Edition",
-      description: "Physical constants, metric prefixes, unit conversions, and all Core and Additional Higher Level (AHL) equations.",
-    },
     topics: [
       {
         id: 'ib-phys-a-core',
@@ -388,12 +370,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'FlaskConical',
     hasCalculator: true,
     defaultCalculatorMode: 'scientific',
-    formulaBooklet: {
-      title: "IB Chemistry Data Booklet",
-      url: "https://ibresources.org/wp-content/uploads/2020/09/Chemistry-Data-Booklet.pdf",
-      edition: "Official Syllabus Edition",
-      description: "The periodic table of elements, thermodynamic constants, bond enthalpies, infrared and NMR spectroscopic data tables.",
-    },
     topics: [
       {
         id: 'ib-chem-s1-core',
@@ -495,12 +471,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'Dna',
     hasCalculator: true,
     defaultCalculatorMode: 'scientific',
-    formulaBooklet: {
-      title: "IB Biology Statistical Formula Sheet",
-      url: "https://ibresources.org/wp-content/uploads/2020/09/Biology-Formula-Sheet.pdf",
-      edition: "Official Reference",
-      description: "Chi-squared distribution table, t-test critical values, standard deviation, and Simpson diversity index.",
-    },
     topics: [
       {
         id: 'ib-bio-a-core',
@@ -1010,12 +980,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'Calculator',
     hasCalculator: true,
     defaultCalculatorMode: 'graphing',
-    formulaBooklet: {
-      title: "AP Calculus BC Equations & Formula Sheet",
-      url: "https://apcentral.collegeboard.org/media/pdf/ap-calculus-bc-course-and-exam-description.pdf",
-      edition: "College Board CED",
-      description: "Derivatives, indefinite integrals, Maclaurin series expansions, polar coordinates, and parametric calculus formulas.",
-    },
     topics: [
       {
         id: 'ap-calc-bc-u1-2',
@@ -1072,12 +1036,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'Calculator',
     hasCalculator: true,
     defaultCalculatorMode: 'graphing',
-    formulaBooklet: {
-      title: "AP Calculus AB Equations & Formula Sheet",
-      url: "https://apcentral.collegeboard.org/media/pdf/ap-calculus-ab-course-and-exam-description.pdf",
-      edition: "College Board CED",
-      description: "Fundamental theorem of calculus, standard integration rules, and differential equation models.",
-    },
     topics: [
       {
         id: 'ap-calc-ab-u1-2',
@@ -1116,12 +1074,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'Zap',
     hasCalculator: true,
     defaultCalculatorMode: 'scientific',
-    formulaBooklet: {
-      title: "AP Physics C Equations & Information Sheet",
-      url: "https://apcentral.collegeboard.org/media/pdf/ap-physics-c-tables-equations.pdf",
-      edition: "Official College Board",
-      description: "Physical constants, conversion factors, trigonometric functions, and calculus-based mechanics equations.",
-    },
     topics: [
       {
         id: 'ap-phys-c-u1-2',
@@ -1169,12 +1121,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'Atom',
     hasCalculator: true,
     defaultCalculatorMode: 'scientific',
-    formulaBooklet: {
-      title: "AP Physics 1 Equation Sheet",
-      url: "https://apcentral.collegeboard.org/media/pdf/ap-physics-1-equations-table.pdf",
-      edition: "Official College Board",
-      description: "Kinematics, dynamics, circular motion, energy, momentum, and simple harmonic motion equations.",
-    },
     topics: [
       {
         id: 'ap-phys-1-u1-2',
@@ -1213,12 +1159,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'FlaskConical',
     hasCalculator: true,
     defaultCalculatorMode: 'scientific',
-    formulaBooklet: {
-      title: "AP Chemistry Equations and Constants Sheet",
-      url: "https://apcentral.collegeboard.org/media/pdf/ap-chemistry-equations-and-constants.pdf",
-      edition: "Official College Board",
-      description: "Periodic table of elements, gas laws, thermodynamics, equilibrium constants, and electrochemistry equations.",
-    },
     topics: [
       {
         id: 'ap-chem-u1-3',
@@ -1257,12 +1197,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'Dna',
     hasCalculator: true,
     defaultCalculatorMode: 'scientific',
-    formulaBooklet: {
-      title: "AP Biology Equations & Formulas Sheet",
-      url: "https://apcentral.collegeboard.org/media/pdf/ap-biology-equations-formulas-sheet.pdf",
-      edition: "Official College Board",
-      description: "Statistical analysis, Chi-square table, Hardy-Weinberg equilibrium equations, and metric prefixes.",
-    },
     topics: [
       {
         id: 'ap-bio-u1-2',
@@ -1493,12 +1427,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'Compass',
     hasCalculator: true,
     defaultCalculatorMode: 'scientific',
-    formulaBooklet: {
-      title: "Cambridge IGCSE Mathematics (0580) Formulae",
-      url: "https://www.cambridgeinternational.org/Images/597380-2023-2024-syllabus.pdf",
-      edition: "Cambridge Assessment",
-      description: "Curved surface area, volume of cone/sphere/pyramid, quadratic formula, sine rule, and cosine rule.",
-    },
     topics: [
       {
         id: 'igcse-ext-t1',
@@ -1573,12 +1501,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'Calculator',
     hasCalculator: true,
     defaultCalculatorMode: 'scientific',
-    formulaBooklet: {
-      title: "Cambridge IGCSE Additional Mathematics (0606) Formulae",
-      url: "https://www.cambridgeinternational.org/Images/597382-2023-2024-syllabus.pdf",
-      edition: "Cambridge Assessment",
-      description: "Binomial expansion, trigonometric identities, differentiation and integration rules.",
-    },
     topics: [
       {
         id: 'igcse-add-t1-3',
@@ -1664,12 +1586,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     icon: 'FlaskConical',
     hasCalculator: true,
     defaultCalculatorMode: 'scientific',
-    formulaBooklet: {
-      title: "Cambridge IGCSE Chemistry Periodic Table & Data",
-      url: "https://www.cambridgeinternational.org/Images/597384-2023-2024-syllabus.pdf",
-      edition: "Cambridge Assessment",
-      description: "The periodic table of elements, ion charges, and analytical test identification tables.",
-    },
     topics: [
       {
         id: 'igcse-chem-t1-3',
@@ -1810,14 +1726,6 @@ export const SYLLABUS_DATA: SubjectSyllabus[] = [
     curriculum: 'SAT_ACT',
     subject: 'Digital SAT Math (Advanced & Desmos)',
     icon: 'Target',
-    hasCalculator: true,
-    defaultCalculatorMode: 'graphing',
-    formulaBooklet: {
-      title: "Digital SAT Math Reference Information & Formulae",
-      url: "https://satsuite.collegeboard.org/media/pdf/sat-math-reference.pdf",
-      edition: "Official College Board Bluebook",
-      description: "Official reference sheet provided directly in the Bluebook testing app: circle formulas, Pythagorean theorem, special right triangles, and 3D volume formulas.",
-    },
     topics: [
       {
         id: 'sat-official-qb-practice',

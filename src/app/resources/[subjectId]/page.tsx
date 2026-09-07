@@ -17,7 +17,7 @@ import { FormulaBookletDrawer } from '@/components/resources/FormulaBookletDrawe
 import { CalculatorDrawer } from '@/components/resources/CalculatorDrawer';
 import { SYLLABUS_DATA } from '@/lib/resourceData';
 import { isSubjectBookmarked, toggleSubjectBookmark } from '@/lib/bookmarks';
-import { ArrowLeft, BookOpen, Video, FileText, Link2, Sparkles, Plus, Star, FileSpreadsheet, Calculator } from 'lucide-react';
+import { ArrowLeft, BookOpen, Video, FileText, Link2, Sparkles, Plus, Star, FileSpreadsheet, Calculator, GraduationCap, ExternalLink } from 'lucide-react';
 
 export default function SubjectDetailPage() {
   const { currentUser, updateUser, logout } = useAuth();
@@ -253,16 +253,16 @@ export default function SubjectDetailPage() {
                 </button>
               )}
 
-              {/* Digital Calculator Launcher (if applicable) */}
+              {/* TI-84 Calculator Launcher (if applicable) */}
               {syllabus.hasCalculator && (
                 <button
                   type="button"
                   onClick={() => setIsCalculatorOpen(true)}
                   className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold transition-all cursor-pointer shadow-2xs hover:border-emerald-300"
-                  title="Open Desmos Graphing & Scientific Calculator"
+                  title="Open TI-84 Plus Online Calculator Simulator"
                 >
                   <Calculator className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Desmos Calculator</span>
+                  <span>TI-84 Calculator</span>
                 </button>
               )}
 
@@ -279,54 +279,113 @@ export default function SubjectDetailPage() {
           </div>
         </section>
 
-        {/* Topic Sections */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-          {hasHlTopics && (
-            <div className="flex items-center space-x-2 py-2 border-b border-zinc-200 mb-2">
-              <span className="text-xs font-semibold text-zinc-500">Curriculum Scope:</span>
-              <button
-                onClick={() => setHlFilter('ALL')}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  hlFilter === 'ALL'
-                    ? 'bg-zinc-900 text-white shadow-xs'
-                    : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
-                }`}
-              >
-                All Topics ({syllabus.topics.length})
-              </button>
-              <button
-                onClick={() => setHlFilter('HL_ONLY')}
-                className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  hlFilter === 'HL_ONLY'
-                    ? 'bg-amber-500 text-white shadow-xs'
-                    : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
-                }`}
-              >
-                <span>⚡ HL Only Section</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                  hlFilter === 'HL_ONLY' ? 'bg-amber-600 text-white' : 'bg-amber-200/80 text-amber-900'
-                }`}>
-                  {syllabus.topics.filter((t) => t.isHlOnly).length}
-                </span>
-              </button>
-            </div>
-          )}
-
-          {displayedTopics.map((topic, i) => (
+        {/* Content Section: Dedicated Khan Academy Portal for SAT, or Topic List for others */}
+        {syllabus.curriculum === 'SAT_ACT' ? (
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
-              key={topic.id}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 + i * 0.05 }}
+              className="max-w-3xl mx-auto p-8 sm:p-10 rounded-3xl bg-white border border-emerald-200/90 shadow-sm text-center relative overflow-hidden"
             >
-              <TopicSection
-                topic={topic}
-                defaultOpen={i === 0}
-                onStudyTopic={handleStudyTopic}
-              />
+              <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-4 text-emerald-600 shadow-sm">
+                <GraduationCap className="w-8 h-8" />
+              </div>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 mb-3">
+                Official College Board Partner
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">
+                Digital SAT® Prep on Khan Academy
+              </h2>
+              <p className="mt-3 text-sm text-zinc-600 max-w-lg mx-auto leading-relaxed">
+                Khan Academy provides the official, 100% free digital SAT preparation built in direct collaboration with College Board. Includes diagnostic tests, personalized skill trees, video explanations, and official practice questions.
+              </p>
+              <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href="https://www.khanacademy.org/test-prep/v2-sat-prep"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold shadow-md shadow-emerald-600/15 active:scale-95 transition-all cursor-pointer"
+                >
+                  <span>Open Khan Academy Official SAT Prep</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://bluebook.collegeboard.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-5 py-3 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-sm font-semibold transition-all cursor-pointer"
+                >
+                  <span>College Board Bluebook App</span>
+                  <ExternalLink className="w-4 h-4 text-zinc-500" />
+                </a>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-zinc-100 grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-left">
+                <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-100">
+                  <p className="text-xs font-bold text-zinc-900">Diagnostic Quizzes</p>
+                  <p className="text-[11px] text-zinc-500 mt-0.5">Identifies your exact weak areas in Math and Reading & Writing.</p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-100">
+                  <p className="text-xs font-bold text-zinc-900">Adaptive Practice</p>
+                  <p className="text-[11px] text-zinc-500 mt-0.5">Thousands of official College Board questions leveled from Foundation to Advanced.</p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-zinc-50 border border-zinc-100">
+                  <p className="text-xs font-bold text-zinc-900">Full Tests on Bluebook</p>
+                  <p className="text-[11px] text-zinc-500 mt-0.5">Pair your Khan Academy review with full timed adaptive tests on the Bluebook app.</p>
+                </div>
+              </div>
             </motion.div>
-          ))}
-        </div>
+          </div>
+        ) : (
+          /* Topic Sections */
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+            {hasHlTopics && (
+              <div className="flex items-center space-x-2 py-2 border-b border-zinc-200 mb-2">
+                <span className="text-xs font-semibold text-zinc-500">Curriculum Scope:</span>
+                <button
+                  onClick={() => setHlFilter('ALL')}
+                  className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    hlFilter === 'ALL'
+                      ? 'bg-zinc-900 text-white shadow-xs'
+                      : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                  }`}
+                >
+                  All Topics ({syllabus.topics.length})
+                </button>
+                <button
+                  onClick={() => setHlFilter('HL_ONLY')}
+                  className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                    hlFilter === 'HL_ONLY'
+                      ? 'bg-amber-500 text-white shadow-xs'
+                      : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
+                  }`}
+                >
+                  <span>⚡ HL Only Section</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                    hlFilter === 'HL_ONLY' ? 'bg-amber-600 text-white' : 'bg-amber-200/80 text-amber-900'
+                  }`}>
+                    {syllabus.topics.filter((t) => t.isHlOnly).length}
+                  </span>
+                </button>
+              </div>
+            )}
+
+            {displayedTopics.map((topic, i) => (
+              <motion.div
+                key={topic.id}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1 + i * 0.05 }}
+              >
+                <TopicSection
+                  topic={topic}
+                  defaultOpen={i === 0}
+                  onStudyTopic={handleStudyTopic}
+                />
+              </motion.div>
+            ))}
+          </div>
+        )}
 
         {/* Study Pod CTA */}
         <motion.div
@@ -374,12 +433,11 @@ export default function SubjectDetailPage() {
         />
       )}
 
-      {/* Digital Calculator Drawer */}
+      {/* TI-84 Online Calculator Drawer */}
       {syllabus.hasCalculator && (
         <CalculatorDrawer
           isOpen={isCalculatorOpen}
           onClose={() => setIsCalculatorOpen(false)}
-          initialMode={syllabus.defaultCalculatorMode || 'graphing'}
         />
       )}
     </div>
