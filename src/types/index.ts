@@ -155,11 +155,21 @@ export interface SyllabusTopic {
   externalResources: ExternalResource[];
 }
 
+export interface FormulaBookletInfo {
+  title: string;
+  url: string;
+  edition?: string;
+  description?: string;
+}
+
 export interface SubjectSyllabus {
   id: string;
   curriculum: Curriculum;
   subject: string;
   icon: string;
   topics: SyllabusTopic[];
+  formulaBooklet?: FormulaBookletInfo;
+  hasCalculator?: boolean;
+  defaultCalculatorMode?: 'graphing' | 'scientific';
 }
 

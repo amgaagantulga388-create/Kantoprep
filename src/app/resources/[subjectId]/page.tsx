@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthProvider';
@@ -13,14 +13,39 @@ import { SchoolSwitchModal } from '@/components/SchoolSwitchModal';
 import { InteractiveBackground } from '@/components/InteractiveBackground';
 import { TopicSection } from '@/components/resources/TopicSection';
 import { SuggestResourceModal } from '@/components/resources/SuggestResourceModal';
+import { FormulaBookletDrawer } from '@/components/resources/FormulaBookletDrawer';
+import { CalculatorDrawer } from '@/components/resources/CalculatorDrawer';
 import { SYLLABUS_DATA } from '@/lib/resourceData';
-import { ArrowLeft, BookOpen, Video, FileText, Link2, Sparkles, Plus } from 'lucide-react';
+import { isSubjectBookmarked, toggleSubjectBookmark } from '@/lib/bookmarks';
+import { ArrowLeft, BookOpen, Video, FileText, Link2, Sparkles, Plus, Star, FileSpreadsheet, Calculator } from 'lucide-react';
 
 export default function SubjectDetailPage() {
   const { currentUser, updateUser, logout } = useAuth();
   const router = useRouter();
   const params = useParams();
   const subjectId = params.subjectId as string;
+
+  // Bookmarks & Academic Tools Modals
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isBookletOpen, setIsBookletOpen] = useState(false);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
+
+  useEffect(() => {
+    if (subjectId) {
+      setIsBookmarked(isSubjectBookmarked(subjectId));
+    }
+    const handleSync = () => {
+      if (subjectId) setIsBookmarked(isSubjectBookmarked(subjectId));
+    };
+    window.addEventListener('kantoprep:bookmarks-updated', handleSync);
+    return () => window.removeEventListener('kantoprep:bookmarks-updated', handleSync);
+  }, [subjectId]);
+
+  const handleToggleBookmark = () => {
+    if (!subjectId) return;
+    const { bookmarked } = toggleSubjectBookmark(subjectId);
+    setIsBookmarked(bookmarked);
+  };
 
   // Modals
   const [isSuggestModalOpen, setIsSuggestModalOpen] = useState(false);
@@ -169,17 +194,34 @@ export default function SubjectDetailPage() {
                   {curriculumLabel[syllabus.curriculum] || syllabus.curriculum}
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-zinc-900">
-                {syllabus.subject}
-              </h1>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-zinc-900">
+                  {syllabus.subject}
+                </h1>
+
+                {/* Pin Subject Button */}
+                <button
+                  type="button"
+                  onClick={handleToggleBookmark}
+                  className={`inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer shadow-2xs ${
+                    isBookmarked
+                      ? 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100'
+                      : 'bg-white text-zinc-700 border-zinc-200 hover:border-amber-300 hover:bg-zinc-50'
+                  }`}
+                  title={isBookmarked ? 'Remove from My Subjects' : 'Pin to My Subjects'}
+                >
+                  <Star className={`w-3.5 h-3.5 ${isBookmarked ? 'fill-amber-400 text-amber-500' : 'text-zinc-400'}`} />
+                  <span>{isBookmarked ? 'Bookmarked' : 'Pin Subject'}</span>
+                </button>
+              </div>
             </motion.div>
 
-            {/* Stats Bar */}
+            {/* Stats & Tools Bar */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              className="mt-4 flex flex-wrap items-center gap-3 text-xs text-zinc-600"
+              className="mt-4 flex flex-wrap items-center gap-2.5 text-xs text-zinc-600"
             >
               <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 shadow-2xs">
                 <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
@@ -195,14 +237,42 @@ export default function SubjectDetailPage() {
               </div>
               <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white border border-zinc-200 shadow-2xs">
                 <Link2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span className="font-medium">{stats.links} External Links</span>
+                <span className="font-medium">{stats.links} Links</span>
               </div>
+
+              {/* Formula Booklet Launcher (if applicable) */}
+              {syllabus.formulaBooklet && (
+                <button
+                  type="button"
+                  onClick={() => setIsBookletOpen(true)}
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-xs font-semibold transition-all cursor-pointer shadow-2xs hover:border-blue-300"
+                  title="Open official formula booklet"
+                >
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Formula Booklet</span>
+                </button>
+              )}
+
+              {/* Digital Calculator Launcher (if applicable) */}
+              {syllabus.hasCalculator && (
+                <button
+                  type="button"
+                  onClick={() => setIsCalculatorOpen(true)}
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold transition-all cursor-pointer shadow-2xs hover:border-emerald-300"
+                  title="Open Desmos Graphing & Scientific Calculator"
+                >
+                  <Calculator className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Desmos Calculator</span>
+                </button>
+              )}
+
               <button
+                type="button"
                 onClick={() => setIsSuggestModalOpen(true)}
-                className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-semibold transition-all cursor-pointer shadow-2xs hover:border-emerald-300 ml-auto"
+                className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs ml-auto"
                 title="Suggest a resource for this subject"
               >
-                <Plus className="w-3.5 h-3.5 text-emerald-600" />
+                <Plus className="w-3.5 h-3.5 text-zinc-500" />
                 <span>Suggest Resource</span>
               </button>
             </motion.div>
@@ -293,6 +363,25 @@ export default function SubjectDetailPage() {
       <InviteModal isOpen={isInviteOpen} onClose={() => setIsInviteOpen(false)} currentUser={currentUser} />
       <EditProfileModal isOpen={isEditProfileOpen} currentUser={currentUser} onUpdateUser={updateUser} onClose={() => setIsEditProfileOpen(false)} />
       <SchoolSwitchModal isOpen={isSchoolSwitchOpen} onClose={() => setIsSchoolSwitchOpen(false)} currentUser={currentUser} onSelectUser={updateUser} />
+
+      {/* Formula Booklet Drawer */}
+      {syllabus.formulaBooklet && (
+        <FormulaBookletDrawer
+          isOpen={isBookletOpen}
+          onClose={() => setIsBookletOpen(false)}
+          subjectName={syllabus.subject}
+          booklet={syllabus.formulaBooklet}
+        />
+      )}
+
+      {/* Digital Calculator Drawer */}
+      {syllabus.hasCalculator && (
+        <CalculatorDrawer
+          isOpen={isCalculatorOpen}
+          onClose={() => setIsCalculatorOpen(false)}
+          initialMode={syllabus.defaultCalculatorMode || 'graphing'}
+        />
+      )}
     </div>
   );
 }

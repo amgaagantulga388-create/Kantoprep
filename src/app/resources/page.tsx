@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthProvider';
@@ -15,14 +15,39 @@ import { SubjectCard } from '@/components/resources/SubjectCard';
 import { SuggestResourceModal } from '@/components/resources/SuggestResourceModal';
 import { SYLLABUS_DATA } from '@/lib/resourceData';
 import { Curriculum } from '@/types';
-import { BookOpen, Search, Sparkles, GraduationCap, MessageSquarePlus, Share2, Plus } from 'lucide-react';
+import { getBookmarkedSubjects, toggleSubjectBookmark } from '@/lib/bookmarks';
+import { BookOpen, Search, Sparkles, GraduationCap, Plus, Star, Share2, MessageSquarePlus } from 'lucide-react';
+
+type FilterType = Curriculum | 'ALL' | 'MY_SUBJECTS';
 
 export default function ResourcesPage() {
   const { currentUser, updateUser, logout } = useAuth();
   const router = useRouter();
 
+  // Bookmarks
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    setBookmarkedIds(getBookmarkedSubjects());
+    const handleSync = (e: Event) => {
+      const custom = e as CustomEvent<string[]>;
+      if (custom.detail) {
+        setBookmarkedIds(custom.detail);
+      } else {
+        setBookmarkedIds(getBookmarkedSubjects());
+      }
+    };
+    window.addEventListener('kantoprep:bookmarks-updated', handleSync);
+    return () => window.removeEventListener('kantoprep:bookmarks-updated', handleSync);
+  }, []);
+
+  const handleToggleBookmark = (id: string) => {
+    const { all } = toggleSubjectBookmark(id);
+    setBookmarkedIds(all);
+  };
+
   // Filters
-  const [selectedCurriculum, setSelectedCurriculum] = useState<Curriculum | 'ALL'>('ALL');
+  const [selectedCurriculum, setSelectedCurriculum] = useState<FilterType>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Modals
@@ -33,8 +58,12 @@ export default function ResourcesPage() {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isSchoolSwitchOpen, setIsSchoolSwitchOpen] = useState(false);
 
-  const curriculumTabs: { id: Curriculum | 'ALL'; label: string }[] = [
+  const curriculumTabs: { id: FilterType; label: string }[] = [
     { id: 'ALL', label: 'All Syllabi' },
+    {
+      id: 'MY_SUBJECTS',
+      label: `⭐ My Subjects${bookmarkedIds.length > 0 ? ` (${bookmarkedIds.length})` : ''}`,
+    },
     { id: 'IB', label: 'IB Diploma' },
     { id: 'AP', label: 'Advanced Placement' },
     { id: 'IGCSE', label: 'IGCSE' },
@@ -43,7 +72,9 @@ export default function ResourcesPage() {
 
   const filteredSubjects = useMemo(() => {
     return SYLLABUS_DATA.filter((syllabus) => {
-      if (selectedCurriculum !== 'ALL' && syllabus.curriculum !== selectedCurriculum) {
+      if (selectedCurriculum === 'MY_SUBJECTS') {
+        if (!bookmarkedIds.includes(syllabus.id)) return false;
+      } else if (selectedCurriculum !== 'ALL' && syllabus.curriculum !== selectedCurriculum) {
         return false;
       }
       if (searchQuery.trim()) {
@@ -54,7 +85,7 @@ export default function ResourcesPage() {
       }
       return true;
     });
-  }, [selectedCurriculum, searchQuery]);
+  }, [selectedCurriculum, searchQuery, bookmarkedIds]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f7faf8] text-zinc-900 selection:bg-emerald-500/20 selection:text-emerald-900">
@@ -176,12 +207,30 @@ export default function ResourcesPage() {
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                 className="mx-auto mb-4 w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center shadow-sm"
               >
-                <BookOpen className="w-8 h-8 text-emerald-500" />
+                {selectedCurriculum === 'MY_SUBJECTS' ? (
+                  <Star className="w-8 h-8 text-amber-500 fill-amber-400" />
+                ) : (
+                  <BookOpen className="w-8 h-8 text-emerald-500" />
+                )}
               </motion.div>
-              <h3 className="text-base font-bold text-zinc-900">No subjects found</h3>
+              <h3 className="text-base font-bold text-zinc-900">
+                {selectedCurriculum === 'MY_SUBJECTS'
+                  ? 'No bookmarked subjects yet'
+                  : 'No subjects found'}
+              </h3>
               <p className="text-xs text-zinc-500 mt-1.5 max-w-xs mx-auto leading-relaxed">
-                Try selecting a different curriculum or clearing your search.
+                {selectedCurriculum === 'MY_SUBJECTS'
+                  ? 'Click the star icon on any subject card to pin your enrolled courses here for quick access, just like Khan Academy!'
+                  : 'Try selecting a different curriculum or clearing your search.'}
               </p>
+              {selectedCurriculum === 'MY_SUBJECTS' && (
+                <button
+                  onClick={() => setSelectedCurriculum('ALL')}
+                  className="mt-4 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold cursor-pointer shadow-sm transition-all"
+                >
+                  Browse All Syllabi
+                </button>
+              )}
             </motion.div>
           ) : (
             <motion.div
@@ -198,6 +247,8 @@ export default function ResourcesPage() {
                   <SubjectCard
                     syllabus={syllabus}
                     onClick={() => router.push(`/resources/${syllabus.id}`)}
+                    isBookmarked={bookmarkedIds.includes(syllabus.id)}
+                    onToggleBookmark={() => handleToggleBookmark(syllabus.id)}
                   />
                 </motion.div>
               ))}
@@ -256,7 +307,11 @@ export default function ResourcesPage() {
         isOpen={isSuggestModalOpen}
         onClose={() => setIsSuggestModalOpen(false)}
         currentUser={currentUser}
-        defaultCurriculum={selectedCurriculum !== 'ALL' ? selectedCurriculum : 'IB'}
+        defaultCurriculum={
+          selectedCurriculum === 'ALL' || selectedCurriculum === 'MY_SUBJECTS'
+            ? 'IB'
+            : selectedCurriculum
+        }
       />
       <FeedbackModal isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} currentUser={currentUser} />
       <WhyKantoPrepModal isOpen={isWhyOpen} onClose={() => setIsWhyOpen(false)} />
