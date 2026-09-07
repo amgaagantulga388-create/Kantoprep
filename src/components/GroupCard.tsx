@@ -59,6 +59,12 @@ export const GroupCard: React.FC<GroupCardProps> = ({
     SAT_ACT: 'border-teal-400/30 text-teal-300 bg-teal-500/10',
   };
 
+  const isEnrolledSubject = currentUser.subjects?.some(
+    (subj) =>
+      subj.toLowerCase().includes(group.subject.toLowerCase()) ||
+      group.subject.toLowerCase().includes(subj.toLowerCase())
+  );
+
   return (
     <motion.div
       layout
@@ -66,12 +72,14 @@ export const GroupCard: React.FC<GroupCardProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="relative flex flex-col justify-between p-5 rounded-2xl glass-card glow-card transition-all duration-300 group"
+      className={`relative flex flex-col justify-between p-5 rounded-2xl glass-card glow-card transition-all duration-300 group ${
+        isEnrolledSubject ? 'ring-1 ring-[#F5B942]/30' : ''
+      }`}
     >
       <div>
         {/* Top Header: Curriculum + Format Badges */}
         <div className="flex items-center justify-between gap-2 mb-3">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center flex-wrap gap-1.5">
             <span
               className={`px-2.5 py-0.5 text-[11px] font-semibold tracking-wide uppercase rounded-full border ${
                 curriculumStyles[group.curriculum] || curriculumStyles.IB
@@ -84,6 +92,11 @@ export const GroupCard: React.FC<GroupCardProps> = ({
             >
               {formatInfo.label}
             </span>
+            {isEnrolledSubject && (
+              <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-[#F5B942] text-[#0E0D0B] shadow-2xs flex items-center space-x-0.5">
+                <span>⭐ Your Subject</span>
+              </span>
+            )}
           </div>
 
           {/* Safe Venue Tag (Links directly to Google Maps) */}

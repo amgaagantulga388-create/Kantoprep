@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles, Share2, BookOpen, Users } from 'lucide-react';
+import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles, Share2, BookOpen, Users, Target } from 'lucide-react';
 import { StudentProfile } from '@/types';
 import { ALLOWED_SCHOOLS } from '@/lib/constants';
 import { ThemeToggle } from './ThemeToggle';
@@ -14,6 +14,7 @@ interface NavbarProps {
   onOpenFeedback: () => void;
   onOpenWhyKantoPrep?: () => void;
   onOpenEditProfile?: () => void;
+  onOpenSubjectSurvey?: () => void;
   onOpenInvite?: () => void;
   onOpenAuthModal?: () => void;
   onOpenCreateModal?: () => void;
@@ -27,6 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenFeedback,
   onOpenWhyKantoPrep,
   onOpenEditProfile,
+  onOpenSubjectSurvey,
   onOpenInvite,
   onOpenAuthModal,
   onOpenCreateModal,
@@ -201,6 +203,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <Sparkles className="w-3.5 h-3.5 text-[#F5B942]" />
                       <span>Edit Nickname &amp; Avatar</span>
                     </button>
+
+                    {onOpenSubjectSurvey && (
+                      <button
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          onOpenSubjectSurvey();
+                        }}
+                        className="w-full px-3.5 py-2 text-left hover:bg-white/5 flex items-center space-x-2 text-[#E4E2DD] hover:text-[#F5B942] cursor-pointer transition-colors"
+                      >
+                        <Target className="w-3.5 h-3.5 text-[#F5B942]" />
+                        <span>Customize My Subjects</span>
+                      </button>
+                    )}
 
                     {onOpenInvite && (
                       <button

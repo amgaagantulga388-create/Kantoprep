@@ -16,6 +16,7 @@ import { FeedbackModal } from '@/components/FeedbackModal';
 import { WhyKantoPrepModal } from '@/components/WhyKantoPrepModal';
 import { JoinGroupModal } from '@/components/JoinGroupModal';
 import { EditProfileModal } from '@/components/EditProfileModal';
+import { SubjectSurveyModal } from '@/components/SubjectSurveyModal';
 import { InviteModal } from '@/components/InviteModal';
 import { InteractiveBackground } from '@/components/InteractiveBackground';
 import {
@@ -28,7 +29,7 @@ import {
   MessageType,
 } from '@/types';
 import { INITIAL_GROUPS, INITIAL_CHAT_MESSAGES } from '@/lib/mockData';
-import { Plus, BookOpen, MessageSquarePlus, Share2 } from 'lucide-react';
+import { Plus, BookOpen, MessageSquarePlus, Share2, Target, Sparkles } from 'lucide-react';
 import { sanitizeInput } from '@/lib/safety';
 
 export default function Home() {
@@ -53,6 +54,7 @@ export default function Home() {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isWhyModalOpen, setIsWhyModalOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const [isSubjectSurveyOpen, setIsSubjectSurveyOpen] = useState(false);
   const [pendingJoinGroup, setPendingJoinGroup] = useState<StudyGroup | null>(null);
   const [reportingGroup, setReportingGroup] = useState<StudyGroup | null>(null);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
@@ -194,9 +196,9 @@ export default function Home() {
     ).length;
   }, [groups, currentUser]);
 
-  // Filter Logic
+  // Filter and prioritize pods matching student's enrolled subjects
   const filteredGroups = useMemo(() => {
-    return groups.filter((group) => {
+    const list = groups.filter((group) => {
       if (isMyPodsOnly) {
         const isMyPod =
           group.members.some((m) => m.id === currentUser.id) || group.host.id === currentUser.id;
@@ -220,6 +222,27 @@ export default function Home() {
       }
       return true;
     });
+
+    // Prioritize pods matching student's enrolled subjects to appear above others
+    if (currentUser.subjects && currentUser.subjects.length > 0) {
+      return [...list].sort((a, b) => {
+        const aMatches = currentUser.subjects.some(
+          (s) =>
+            s.toLowerCase().includes(a.subject.toLowerCase()) ||
+            a.subject.toLowerCase().includes(s.toLowerCase())
+        );
+        const bMatches = currentUser.subjects.some(
+          (s) =>
+            s.toLowerCase().includes(b.subject.toLowerCase()) ||
+            b.subject.toLowerCase().includes(s.toLowerCase())
+        );
+        if (aMatches && !bMatches) return -1;
+        if (!aMatches && bMatches) return 1;
+        return 0;
+      });
+    }
+
+    return list;
   }, [groups, selectedCurriculum, selectedFormat, searchQuery, isMyPodsOnly, currentUser]);
 
   // Handle Joining or Opening Group
@@ -368,6 +391,7 @@ export default function Home() {
         onOpenFeedback={() => setIsFeedbackModalOpen(true)}
         onOpenWhyKantoPrep={() => setIsWhyModalOpen(true)}
         onOpenEditProfile={() => setIsEditProfileOpen(true)}
+        onOpenSubjectSurvey={() => setIsSubjectSurveyOpen(true)}
         onOpenInvite={() => setIsInviteModalOpen(true)}
         onOpenAuthModal={() => {}}
         onOpenCreateModal={() => setIsCreateModalOpen(true)}
@@ -399,6 +423,55 @@ export default function Home() {
             setIsCreateModalOpen(true);
           }}
         />
+
+        {/* Khan Academy-style Subject Personalization Shelf */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+          <div className="p-3 sm:p-4 rounded-2xl bg-[#161513] border border-[#F5B942]/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 rounded-xl bg-[#F5B942]/10 border border-[#F5B942]/25 text-[#F5B942] shrink-0">
+                <Target className="w-4 h-4" />
+              </div>
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs font-bold text-white">Your Enrolled Subjects</span>
+                  {currentUser.subjects && currentUser.subjects.length > 0 && (
+                    <span className="px-1.5 py-0.5 rounded-md bg-[#F5B942]/15 text-[#F5B942] text-[10px] font-bold">
+                      {currentUser.subjects.length} active
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                  {currentUser.subjects && currentUser.subjects.length > 0 ? (
+                    currentUser.subjects.map((subj) => (
+                      <span
+                        key={subj}
+                        className="px-2 py-0.5 rounded-md bg-[#1C1A17] border border-[#F5B942]/15 text-[10px] font-medium text-[#EDEDEB]"
+                      >
+                        {subj}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="text-[11px] text-[#A8A39D]">
+                      Select what you&apos;re taking this semester to pin matching pods and past papers above everything else.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setIsSubjectSurveyOpen(true)}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#F5B942]/15 hover:bg-[#F5B942] text-[#F5B942] hover:text-[#0E0D0B] border border-[#F5B942]/30 text-xs font-bold transition-all cursor-pointer whitespace-nowrap self-end sm:self-auto shrink-0"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>
+                {currentUser.subjects && currentUser.subjects.length > 0
+                  ? 'Customize Subjects'
+                  : 'Choose Your Subjects'}
+              </span>
+            </button>
+          </div>
+        </div>
 
         <FilterBar
           searchQuery={searchQuery}
@@ -486,6 +559,14 @@ export default function Home() {
         currentUser={currentUser}
         onUpdateUser={handleUpdateUser}
         onClose={() => setIsEditProfileOpen(false)}
+      />
+
+      {/* Khan Academy-style Subject Customization Survey Modal */}
+      <SubjectSurveyModal
+        isOpen={isSubjectSurveyOpen}
+        currentUser={currentUser}
+        onUpdateUser={handleUpdateUser}
+        onClose={() => setIsSubjectSurveyOpen(false)}
       />
 
       {/* Create Study Group Modal */}

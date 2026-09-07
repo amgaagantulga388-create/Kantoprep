@@ -9,6 +9,7 @@ import { FeedbackModal } from '@/components/FeedbackModal';
 import { WhyKantoPrepModal } from '@/components/WhyKantoPrepModal';
 import { InviteModal } from '@/components/InviteModal';
 import { EditProfileModal } from '@/components/EditProfileModal';
+import { SubjectSurveyModal } from '@/components/SubjectSurveyModal';
 import { SchoolSwitchModal } from '@/components/SchoolSwitchModal';
 import { InteractiveBackground } from '@/components/InteractiveBackground';
 import { SubjectCard } from '@/components/resources/SubjectCard';
@@ -16,7 +17,7 @@ import { SuggestResourceModal } from '@/components/resources/SuggestResourceModa
 import { SYLLABUS_DATA } from '@/lib/resourceData';
 import { Curriculum } from '@/types';
 import { getBookmarkedSubjects, toggleSubjectBookmark } from '@/lib/bookmarks';
-import { BookOpen, Search, Sparkles, GraduationCap, Plus, Star, Share2, MessageSquarePlus } from 'lucide-react';
+import { BookOpen, Search, Sparkles, GraduationCap, Plus, Star, Share2, MessageSquarePlus, Target } from 'lucide-react';
 
 type FilterType = Curriculum | 'ALL' | 'MY_SUBJECTS';
 
@@ -56,6 +57,7 @@ export default function ResourcesPage() {
   const [isWhyOpen, setIsWhyOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const [isSubjectSurveyOpen, setIsSubjectSurveyOpen] = useState(false);
   const [isSchoolSwitchOpen, setIsSchoolSwitchOpen] = useState(false);
 
   const curriculumTabs: { id: FilterType; label: string }[] = [
@@ -71,7 +73,7 @@ export default function ResourcesPage() {
   ];
 
   const filteredSubjects = useMemo(() => {
-    return SYLLABUS_DATA.filter((syllabus) => {
+    const list = SYLLABUS_DATA.filter((syllabus) => {
       if (selectedCurriculum === 'MY_SUBJECTS') {
         if (!bookmarkedIds.includes(syllabus.id)) return false;
       } else if (selectedCurriculum !== 'ALL' && syllabus.curriculum !== selectedCurriculum) {
@@ -85,6 +87,15 @@ export default function ResourcesPage() {
       }
       return true;
     });
+
+    // Pin student's chosen/bookmarked subjects above everything else!
+    return [...list].sort((a, b) => {
+      const aBookmarked = bookmarkedIds.includes(a.id);
+      const bBookmarked = bookmarkedIds.includes(b.id);
+      if (aBookmarked && !bBookmarked) return -1;
+      if (!aBookmarked && bBookmarked) return 1;
+      return 0;
+    });
   }, [selectedCurriculum, searchQuery, bookmarkedIds]);
 
   return (
@@ -96,6 +107,7 @@ export default function ResourcesPage() {
         onOpenFeedback={() => setIsFeedbackOpen(true)}
         onOpenWhyKantoPrep={() => setIsWhyOpen(true)}
         onOpenEditProfile={() => setIsEditProfileOpen(true)}
+        onOpenSubjectSurvey={() => setIsSubjectSurveyOpen(true)}
         onOpenInvite={() => setIsInviteOpen(true)}
         onOpenSchoolSwitch={() => setIsSchoolSwitchOpen(true)}
         onSignOut={logout}
@@ -183,6 +195,15 @@ export default function ResourcesPage() {
                 className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-[#161513] border border-[#F5B942]/20 focus:border-[#F5B942] focus:ring-2 focus:ring-[#F5B942]/20 text-sm text-white placeholder:text-[#7A756D] transition-all outline-none shadow-sm"
               />
             </div>
+
+            <button
+              onClick={() => setIsSubjectSurveyOpen(true)}
+              className="inline-flex items-center space-x-1.5 px-3.5 py-2.5 rounded-xl bg-[#F5B942]/15 hover:bg-[#F5B942] text-[#F5B942] hover:text-[#0E0D0B] border border-[#F5B942]/30 text-xs font-bold transition-all cursor-pointer whitespace-nowrap shadow-sm shrink-0"
+              title="Select which subjects are pinned to your profile"
+            >
+              <Target className="w-3.5 h-3.5" />
+              <span>Customize Subjects</span>
+            </button>
             <button
               onClick={() => setIsSuggestModalOpen(true)}
               className="w-full sm:w-auto inline-flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-xl bg-[#161513] border border-[#F5B942]/20 hover:border-[#F5B942]/60 text-[#EDEDEB] hover:text-[#F5B942] text-xs font-semibold transition-all cursor-pointer shadow-2xs shrink-0"
@@ -317,6 +338,7 @@ export default function ResourcesPage() {
       <WhyKantoPrepModal isOpen={isWhyOpen} onClose={() => setIsWhyOpen(false)} />
       <InviteModal isOpen={isInviteOpen} onClose={() => setIsInviteOpen(false)} currentUser={currentUser} />
       <EditProfileModal isOpen={isEditProfileOpen} currentUser={currentUser} onUpdateUser={updateUser} onClose={() => setIsEditProfileOpen(false)} />
+      <SubjectSurveyModal isOpen={isSubjectSurveyOpen} currentUser={currentUser} onUpdateUser={updateUser} onClose={() => setIsSubjectSurveyOpen(false)} />
       <SchoolSwitchModal isOpen={isSchoolSwitchOpen} onClose={() => setIsSchoolSwitchOpen(false)} currentUser={currentUser} onSelectUser={updateUser} />
     </div>
   );
