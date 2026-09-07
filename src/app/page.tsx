@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/context/AuthProvider';
 import { Navbar } from '@/components/Navbar';
 import { HeroSection } from '@/components/HeroSection';
 import { FilterBar } from '@/components/FilterBar';
@@ -10,7 +11,6 @@ import { GroupChatDrawer } from '@/components/GroupChatDrawer';
 import { CreateGroupModal } from '@/components/CreateGroupModal';
 import { SafetyReportModal } from '@/components/SafetyReportModal';
 import { SchoolSwitchModal } from '@/components/SchoolSwitchModal';
-import { SchoolGateScreen } from '@/components/SchoolGateScreen';
 import { FeedbackModal } from '@/components/FeedbackModal';
 import { WhyKantoPrepModal } from '@/components/WhyKantoPrepModal';
 import { JoinGroupModal } from '@/components/JoinGroupModal';
@@ -31,9 +31,8 @@ import { Plus, BookOpen, MessageSquarePlus, Share2 } from 'lucide-react';
 import { sanitizeInput } from '@/lib/safety';
 
 export default function Home() {
-  // Authentication & Current User State (null = held at gate)
-  const [currentUser, setCurrentUser] = useState<StudentProfile | null>(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  // Auth from shared context (gate screen handled by AuthProvider in layout)
+  const { currentUser, updateUser: authUpdateUser, logout } = useAuth();
 
   // App Data State
   const [groups, setGroups] = useState<StudyGroup[]>(INITIAL_GROUPS);
@@ -56,18 +55,16 @@ export default function Home() {
   const [pendingJoinGroup, setPendingJoinGroup] = useState<StudyGroup | null>(null);
   const [reportingGroup, setReportingGroup] = useState<StudyGroup | null>(null);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [prefillData, setPrefillData] = useState<{
+    curriculum?: Curriculum;
+    subject?: string;
+    title?: string;
+    tags?: string;
+  }>({});
 
-  // Restore session, groups, and chat history from localStorage on initial load
+  // Restore groups and chat history from localStorage on initial load
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('kantoprep_user');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed && parsed.id) {
-          setCurrentUser(parsed);
-        }
-      }
-
       const savedGroups = localStorage.getItem('kantoprep_groups');
       if (savedGroups) {
         const parsedGroups = JSON.parse(savedGroups);
@@ -86,7 +83,6 @@ export default function Home() {
     } catch {
       // Ignore
     } finally {
-      setIsAuthLoading(false);
       setIsDataLoaded(true);
     }
   }, []);
@@ -115,9 +111,9 @@ export default function Home() {
 
   const deepLinkProcessedRef = useRef(false);
 
-  // Deep link support (?pod=...) runs once after auth and data load
+  // Deep link support (?pod=...) runs once after data load
   useEffect(() => {
-    if (typeof window === 'undefined' || isAuthLoading || !currentUser || deepLinkProcessedRef.current) return;
+    if (typeof window === 'undefined' || deepLinkProcessedRef.current) return;
 
     const params = new URLSearchParams(window.location.search);
     const podId = params.get('pod');
@@ -132,8 +128,29 @@ export default function Home() {
       } else {
         setPendingJoinGroup(matched);
       }
+      return;
     }
-  }, [isAuthLoading, currentUser, groups]);
+
+    // Handle deep link from Prep Library: ?create=true&curriculum=...&subject=...&topic=...
+    const create = params.get('create');
+    const curriculumParam = params.get('curriculum') as Curriculum | null;
+    const subjectParam = params.get('subject');
+    const topicParam = params.get('topic');
+
+    if (create === 'true') {
+      deepLinkProcessedRef.current = true;
+      if (curriculumParam) setSelectedCurriculum(curriculumParam);
+      if (subjectParam) setSearchQuery(subjectParam);
+      setPrefillData({
+        curriculum: curriculumParam || undefined,
+        subject: subjectParam || undefined,
+        title: topicParam ? `${topicParam} Sprint` : (subjectParam ? `${subjectParam} Exam Prep` : ''),
+        tags: topicParam ? `${topicParam}, Past Papers` : 'Past Papers, Exam Prep',
+      });
+      setIsCreateModalOpen(true);
+      window.history.replaceState({}, '', '/');
+    }
+  }, [currentUser, groups]);
 
   // Keep active chat group in sync with any group updates (leave, join, profile update)
   useEffect(() => {
@@ -156,29 +173,21 @@ export default function Home() {
     }
   };
 
-  // Handle successful login
-  const handleAuthenticated = (user: StudentProfile) => {
-    setCurrentUser(user);
-    try {
-      localStorage.setItem('kantoprep_user', JSON.stringify(user));
-    } catch {
-      // Ignore
-    }
-  };
-
-  // Handle Sign Out (Locks app back to Gate Screen)
-  const handleSignOut = () => {
-    setCurrentUser(null);
-    try {
-      localStorage.removeItem('kantoprep_user');
-    } catch {
-      // Ignore
-    }
+  // Handle User Profile Update (Avatar, Nickname)
+  const handleUpdateUser = (updatedUser: StudentProfile) => {
+    authUpdateUser(updatedUser);
+    // Update local groups to reflect profile changes
+    setGroups((prev) =>
+      prev.map((g) => ({
+        ...g,
+        host: g.host.id === updatedUser.id ? updatedUser : g.host,
+        members: g.members.map((m) => (m.id === updatedUser.id ? updatedUser : m)),
+      }))
+    );
   };
 
   // Compute number of joined or hosted pods
   const myPodsCount = useMemo(() => {
-    if (!currentUser) return 0;
     return groups.filter(
       (g) => g.members.some((m) => m.id === currentUser.id) || g.host.id === currentUser.id
     ).length;
@@ -189,8 +198,7 @@ export default function Home() {
     return groups.filter((group) => {
       if (isMyPodsOnly) {
         const isMyPod =
-          currentUser &&
-          (group.members.some((m) => m.id === currentUser.id) || group.host.id === currentUser.id);
+          group.members.some((m) => m.id === currentUser.id) || group.host.id === currentUser.id;
         if (!isMyPod) return false;
       }
       if (selectedCurriculum !== 'ALL' && group.curriculum !== selectedCurriculum) {
@@ -215,7 +223,6 @@ export default function Home() {
 
   // Handle Joining or Opening Group
   const handleJoinOrOpen = (group: StudyGroup) => {
-    if (!currentUser) return;
     const isMember = group.members.some((m) => m.id === currentUser.id);
 
     if (!isMember) {
@@ -227,8 +234,6 @@ export default function Home() {
 
   // Handle Leaving a Study Pod
   const handleLeaveGroup = (groupId: string) => {
-    if (!currentUser) return;
-
     setGroups((prev) =>
       prev.map((g) => {
         if (g.id === groupId) {
@@ -259,15 +264,12 @@ export default function Home() {
 
   // Handle Cancelling a Study Pod (Host Only)
   const handleCancelGroup = (groupId: string) => {
-    if (!currentUser) return;
     setGroups((prev) => prev.filter((g) => g.id !== groupId));
     setActiveChatGroup(null);
   };
 
   // Handle Confirmed Join with Etiquette & Responsibility Acknowledgment
   const handleConfirmJoin = (group: StudyGroup) => {
-    if (!currentUser) return;
-
     const isMember = group.members.some((m) => m.id === currentUser.id);
     if (!isMember) {
       const updated = groups.map((g) => {
@@ -305,24 +307,6 @@ export default function Home() {
     setActiveChatGroup(updatedTargetGroup);
   };
 
-  // Handle User Profile Update (Avatar, Nickname)
-  const handleUpdateUser = (updatedUser: StudentProfile) => {
-    setCurrentUser(updatedUser);
-    try {
-      localStorage.setItem('kantoprep_user', JSON.stringify(updatedUser));
-    } catch {
-      // Ignore
-    }
-    // Update local groups
-    setGroups((prev) =>
-      prev.map((g) => ({
-        ...g,
-        host: g.host.id === updatedUser.id ? updatedUser : g.host,
-        members: g.members.map((m) => (m.id === updatedUser.id ? updatedUser : m)),
-      }))
-    );
-  };
-
   // Handle Sending Chat Message
   const handleSendMessage = (
     groupId: string,
@@ -330,7 +314,6 @@ export default function Home() {
     type: MessageType = 'text',
     resource?: ResourceMetadata
   ) => {
-    if (!currentUser) return;
     const cleanContent = sanitizeInput(content);
     if (!cleanContent) return;
 
@@ -352,8 +335,6 @@ export default function Home() {
 
   // Handle Creating a New Study Group
   const handleCreateGroup = (newGroup: StudyGroup) => {
-    if (!currentUser) return;
-
     setGroups((prev) => [newGroup, ...prev]);
 
     const welcomeMsg: ChatMessage = {
@@ -370,48 +351,6 @@ export default function Home() {
 
     setActiveChatGroup(newGroup);
   };
-
-  // Loading skeleton while checking localStorage
-  if (isAuthLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f7faf8] text-emerald-700">
-        <div className="flex items-center space-x-2 text-sm font-semibold animate-pulse">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-          <span>Entering KantoPrep...</span>
-        </div>
-      </div>
-    );
-  }
-
-  // =========================================================================
-  // STRICT GATEKEEPER: If not logged in, visitor CANNOT access website
-  // =========================================================================
-  if (!currentUser) {
-    return (
-      <>
-        <SchoolGateScreen
-          onAuthenticated={handleAuthenticated}
-          onOpenFeedback={() => setIsFeedbackModalOpen(true)}
-          onOpenWhyKantoPrep={() => setIsWhyModalOpen(true)}
-          onOpenInvite={() => setIsInviteModalOpen(true)}
-        />
-        <FeedbackModal
-          isOpen={isFeedbackModalOpen}
-          onClose={() => setIsFeedbackModalOpen(false)}
-          currentUser={null}
-        />
-        <WhyKantoPrepModal
-          isOpen={isWhyModalOpen}
-          onClose={() => setIsWhyModalOpen(false)}
-        />
-        <InviteModal
-          isOpen={isInviteModalOpen}
-          onClose={() => setIsInviteModalOpen(false)}
-          currentUser={null}
-        />
-      </>
-    );
-  }
 
   // =========================================================================
   // AUTHENTICATED DASHBOARD: Unlocked only for verified students
@@ -432,7 +371,7 @@ export default function Home() {
         onOpenAuthModal={() => {}}
         onOpenCreateModal={() => setIsCreateModalOpen(true)}
         onOpenSchoolSwitch={() => setIsSchoolSwitchOpen(true)}
-        onSignOut={handleSignOut}
+        onSignOut={logout}
       />
 
       {/* Main Content Area */}
@@ -535,9 +474,16 @@ export default function Home() {
       {/* Create Study Group Modal */}
       <CreateGroupModal
         isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
+        onClose={() => {
+          setIsCreateModalOpen(false);
+          setPrefillData({});
+        }}
         currentUser={currentUser}
         onCreateGroup={handleCreateGroup}
+        initialCurriculum={prefillData.curriculum}
+        initialSubject={prefillData.subject}
+        initialTitle={prefillData.title}
+        initialTags={prefillData.tags}
       />
 
       {/* Safety & Moderation Report Modal */}
@@ -553,7 +499,7 @@ export default function Home() {
         isOpen={isSchoolSwitchOpen}
         onClose={() => setIsSchoolSwitchOpen(false)}
         currentUser={currentUser}
-        onSelectUser={(u) => handleAuthenticated(u)}
+        onSelectUser={(u) => authUpdateUser(u)}
       />
 
       {/* Community Feedback & Venue Suggestion Modal */}

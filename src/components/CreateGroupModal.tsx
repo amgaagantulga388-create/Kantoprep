@@ -13,6 +13,10 @@ interface CreateGroupModalProps {
   onClose: () => void;
   currentUser: StudentProfile;
   onCreateGroup: (newGroup: StudyGroup) => void;
+  initialCurriculum?: Curriculum;
+  initialSubject?: string;
+  initialTitle?: string;
+  initialTags?: string;
 }
 
 export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
@@ -20,21 +24,36 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
   onClose,
   currentUser,
   onCreateGroup,
+  initialCurriculum,
+  initialSubject,
+  initialTitle,
+  initialTags,
 }) => {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 
-  const [curriculum, setCurriculum] = useState<Curriculum>(currentUser.curriculum || 'IB');
-  const [subject, setSubject] = useState<string>(SUBJECTS_BY_CURRICULUM[currentUser.curriculum || 'IB'][0]);
+  const [curriculum, setCurriculum] = useState<Curriculum>(initialCurriculum || currentUser.curriculum || 'IB');
+  const [subject, setSubject] = useState<string>(
+    initialSubject || (SUBJECTS_BY_CURRICULUM[initialCurriculum || currentUser.curriculum || 'IB'] ? SUBJECTS_BY_CURRICULUM[initialCurriculum || currentUser.curriculum || 'IB'][0] : 'General')
+  );
   const [format, setFormat] = useState<SessionFormat>('past_paper_sprint');
   const [venueType, setVenueType] = useState<VenueType>('hikarigaoka_library');
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(initialTitle || '');
   const [description, setDescription] = useState('');
   const [meetingTime, setMeetingTime] = useState('Tomorrow, 4:30 PM');
   const [durationMinutes, setDurationMinutes] = useState(90);
   const [maxMembers, setMaxMembers] = useState(5);
-  const [tagsInput, setTagsInput] = useState('Paper 1, Exam Prep');
+  const [tagsInput, setTagsInput] = useState(initialTags || 'Paper 1, Exam Prep');
   const [safetyError, setSafetyError] = useState<string | null>(null);
   const [hasAgreedToPledge, setHasAgreedToPledge] = useState(false);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      if (initialCurriculum) setCurriculum(initialCurriculum);
+      if (initialSubject) setSubject(initialSubject);
+      if (initialTitle) setTitle(initialTitle);
+      if (initialTags) setTagsInput(initialTags);
+    }
+  }, [isOpen, initialCurriculum, initialSubject, initialTitle, initialTags]);
 
   if (!isOpen) return null;
 

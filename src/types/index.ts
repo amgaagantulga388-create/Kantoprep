@@ -110,3 +110,56 @@ export interface FeedbackReport {
   studentEmail?: string;
   createdAt: string;
 }
+
+// ============================================================================
+// RESOURCES HUB (Prep Library) TYPES
+// ============================================================================
+
+export type ResourceType = 'youtube' | 'past_paper' | 'external_link' | 'student_notes';
+
+export interface YouTubeResource {
+  id: string;
+  videoId: string;
+  title: string;
+  channelName: string;
+  durationMinutes?: number;
+}
+
+export interface PastPaperLink {
+  id: string;
+  title: string;
+  url: string;
+  year: number;
+  session: 'may' | 'november';
+  paper: number;
+  timezone?: string;
+  hasMarkscheme: boolean;
+  markschemeUrl?: string;
+}
+
+export interface ExternalResource {
+  id: string;
+  title: string;
+  url: string;
+  source: string;
+  description?: string;
+}
+
+export interface SyllabusTopic {
+  id: string;
+  name: string;
+  subtopics?: string[];
+  isHlOnly?: boolean;
+  youtubeResources: YouTubeResource[];
+  pastPapers: PastPaperLink[];
+  externalResources: ExternalResource[];
+}
+
+export interface SubjectSyllabus {
+  id: string;
+  curriculum: Curriculum;
+  subject: string;
+  icon: string;
+  topics: SyllabusTopic[];
+}
+

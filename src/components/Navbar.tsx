@@ -1,20 +1,22 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles, Share2 } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles, Share2, BookOpen, Users } from 'lucide-react';
 import { StudentProfile } from '@/types';
 import { ALLOWED_SCHOOLS } from '@/lib/constants';
 
 interface NavbarProps {
   currentUser: StudentProfile | null;
-  onGoHome: () => void;
+  onGoHome?: () => void;
   onOpenFeedback: () => void;
   onOpenWhyKantoPrep?: () => void;
   onOpenEditProfile?: () => void;
   onOpenInvite?: () => void;
-  onOpenAuthModal: () => void;
-  onOpenCreateModal: () => void;
-  onOpenSchoolSwitch: () => void;
+  onOpenAuthModal?: () => void;
+  onOpenCreateModal?: () => void;
+  onOpenSchoolSwitch?: () => void;
   onSignOut: () => void;
 }
 
@@ -32,6 +34,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  const activeTab = pathname.startsWith('/resources') ? 'resources' : 'pods';
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -49,13 +54,19 @@ export const Navbar: React.FC<NavbarProps> = ({
     ? ALLOWED_SCHOOLS.find((s) => s.domain === currentUser.schoolDomain) || ALLOWED_SCHOOLS[0]
     : null;
 
+  const handleLogoClick = () => {
+    if (onGoHome) {
+      onGoHome();
+    }
+  };
+
   return (
     <header className="sticky top-0 z-40 w-full glass-nav transition-all duration-300">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Left: Brand Identity (Click to Go Home) */}
-        <button
-          type="button"
-          onClick={onGoHome}
+        {/* Left: Brand Identity (Always Links to Home) */}
+        <Link
+          href="/"
+          onClick={handleLogoClick}
           className="flex items-center space-x-2.5 text-left cursor-pointer group focus:outline-none"
           title="KantoPrep Home"
         >
@@ -79,21 +90,36 @@ export const Navbar: React.FC<NavbarProps> = ({
               Tokyo International School Study Network
             </p>
           </div>
-        </button>
+        </Link>
 
-        {/* Center: School Verified Badge (Hidden on mobile, visible on tablet/desktop) */}
-        {currentUser && currentSchool && (
-          <button
-            onClick={onOpenSchoolSwitch}
-            className="hidden md:flex items-center space-x-2 px-3.5 py-1.5 rounded-full glass-panel hover:border-emerald-300 transition-all duration-200 group text-left cursor-pointer shadow-2xs"
-            title="Click to test school gate / switch profile"
-          >
-            <div className={`w-2.5 h-2.5 rounded-full bg-gradient-to-r ${currentSchool.badgeColor}`} />
-            <span className="text-xs font-medium text-zinc-700 group-hover:text-zinc-900 transition-colors">
-              {currentSchool.shortName} • {currentUser.gradeLevel ? `Gr. ${currentUser.gradeLevel}` : 'Student'}
-            </span>
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          </button>
+        {/* Center: Navigation Tabs */}
+        {currentUser && (
+          <div className="flex items-center space-x-1 p-1 rounded-xl glass-panel">
+            <Link
+              href="/"
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                activeTab === 'pods'
+                  ? 'tab-active'
+                  : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/80'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Study Pods</span>
+              <span className="sm:hidden">Pods</span>
+            </Link>
+            <Link
+              href="/resources"
+              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 ${
+                activeTab === 'resources'
+                  ? 'tab-active'
+                  : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100/80'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Prep Library</span>
+              <span className="sm:hidden">Library</span>
+            </Link>
+          </div>
         )}
 
         {/* Right: Actions */}
@@ -102,7 +128,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {onOpenWhyKantoPrep && (
             <button
               onClick={onOpenWhyKantoPrep}
-              className="hidden sm:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-emerald-50/80 border border-emerald-200 hover:border-emerald-300 text-emerald-800 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
+              className="hidden lg:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-emerald-50/80 border border-emerald-200 hover:border-emerald-300 text-emerald-800 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
               title="Why KantoPrep? Our mission and research"
             >
               <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
@@ -110,22 +136,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
-          {/* Invite Peers / Print Flyer Button */}
-          {onOpenInvite && (
-            <button
-              onClick={onOpenInvite}
-              className="hidden sm:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-white border border-zinc-200 hover:border-emerald-300 text-zinc-700 hover:text-emerald-700 text-xs font-semibold transition-all cursor-pointer shadow-2xs"
-              title="Invite peers or print school flyer"
-            >
-              <Share2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Invite</span>
-            </button>
-          )}
-
           {/* Feedback Button */}
           <button
             onClick={onOpenFeedback}
-            className="flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-white border border-zinc-200 hover:border-emerald-300 text-zinc-600 hover:text-emerald-700 text-xs font-medium transition-all cursor-pointer shadow-2xs"
+            className="hidden sm:flex items-center space-x-1 px-2.5 py-1.5 rounded-xl bg-white border border-zinc-200 hover:border-emerald-300 text-zinc-600 hover:text-emerald-700 text-xs font-medium transition-all cursor-pointer shadow-2xs"
             title="Suggest a safe library venue or share feedback"
           >
             <MessageSquarePlus className="w-3.5 h-3.5 text-emerald-600" />
@@ -134,14 +148,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {currentUser ? (
             <>
-              {/* Primary CTA: Host Session */}
-              <button
-                onClick={onOpenCreateModal}
-                className="flex items-center space-x-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 hover:shadow-emerald-500/30 transition-all duration-200 active:scale-[0.98] cursor-pointer cta-glow"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>Host Pod</span>
-              </button>
+              {/* Primary CTA: Host Session (only on Study Pods page) */}
+              {activeTab === 'pods' && onOpenCreateModal && (
+                <button
+                  onClick={onOpenCreateModal}
+                  className="flex items-center space-x-1 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 hover:shadow-emerald-500/30 transition-all duration-200 active:scale-[0.98] cursor-pointer cta-glow"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Host Pod</span>
+                </button>
+              )}
 
               {/* Student Profile Dropdown */}
               <div className="relative" ref={dropdownRef}>
@@ -164,9 +180,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <div className="px-3.5 py-2.5 border-b border-zinc-100">
                       <p className="font-bold text-zinc-900 truncate">{currentUser.fullName}</p>
                       <p className="text-[11px] text-zinc-500 truncate">{currentUser.email}</p>
-                      <span className="mt-1 inline-block text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">
-                        {currentUser.schoolName}
-                      </span>
+                      {currentSchool && (
+                        <span className="mt-1 inline-block text-[10px] px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium">
+                          {currentSchool.shortName} • {currentUser.gradeLevel ? `Gr. ${currentUser.gradeLevel}` : 'Student'}
+                        </span>
+                      )}
                     </div>
 
                     <button
@@ -193,16 +211,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                       </button>
                     )}
 
-                    <button
-                      onClick={() => {
-                        setIsDropdownOpen(false);
-                        onOpenSchoolSwitch();
-                      }}
-                      className="w-full px-3.5 py-2 text-left hover:bg-zinc-50 flex items-center space-x-2 text-zinc-700 cursor-pointer"
-                    >
-                      <User className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Switch Student Account</span>
-                    </button>
+                    {onOpenSchoolSwitch && (
+                      <button
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          onOpenSchoolSwitch();
+                        }}
+                        className="w-full px-3.5 py-2 text-left hover:bg-zinc-50 flex items-center space-x-2 text-zinc-700 cursor-pointer"
+                      >
+                        <User className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Switch Student Account</span>
+                      </button>
+                    )}
 
                     <button
                       onClick={() => {
@@ -234,7 +254,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           ) : (
             /* Logged Out View */
             <button
-              onClick={onOpenAuthModal}
+              onClick={() => onOpenAuthModal?.()}
               className="flex items-center space-x-1.5 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/20 transition-all duration-200 active:scale-[0.98] cursor-pointer"
             >
               <LogIn className="w-3.5 h-3.5" />
