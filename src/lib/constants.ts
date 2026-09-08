@@ -251,3 +251,46 @@ export const getGoogleMapsUrl = (venueLabel: string, address?: string) => {
   return `https://www.google.com/maps/search/?api=1&query=${query}`;
 };
 
+/**
+ * Resolves school information from a student email address.
+ * Strictly extracts domain after the last '@' to prevent delimiter injection
+ * and ensures domain matches ALLOWED_SCHOOLS exactly (preventing subdomain and suffix spoofing).
+ */
+export function getSchoolByEmail(email: string): SchoolInfo | undefined {
+  if (!email || typeof email !== 'string') {
+    return undefined;
+  }
+
+  const trimmed = email.trim();
+  if (!trimmed || trimmed.includes(' ')) {
+    return undefined;
+  }
+
+  const atIndex = trimmed.lastIndexOf('@');
+  if (atIndex <= 0 || atIndex === trimmed.length - 1) {
+    return undefined;
+  }
+
+  const userPart = trimmed.slice(0, atIndex).trim();
+  if (!userPart || userPart.includes('@')) {
+    return undefined;
+  }
+
+  const domain = trimmed.slice(atIndex + 1).toLowerCase().trim();
+  if (!domain) {
+    return undefined;
+  }
+
+  return ALLOWED_SCHOOLS.find(
+    (school) => school.domain.toLowerCase() === domain
+  );
+}
+
+/**
+ * Checks whether an email belongs to an authorized school domain in ALLOWED_SCHOOLS.
+ */
+export function isSchoolEmailAllowed(email: string): boolean {
+  return getSchoolByEmail(email) !== undefined;
+}
+
+
