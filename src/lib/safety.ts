@@ -12,17 +12,17 @@ const PHONE_REGEX = /(\+?\d{1,3}[-.\s]?)?(\(?\d{2,4}\)?[-.\s]?)?\d{3,4}[-.\s]?\d
 
 // Academic dishonesty keywords
 const ACADEMIC_DISHONESTY_PATTERNS = [
-  /\bleak(ed)?\s+(exam|paper|test|markscheme)\b/i,
-  /\bbuy\s+(my\s+)?(ia|ee|internal assessment|extended essay|tok|paper)\b/i,
-  /\bpay\s+for\s+(ia|ee|homework|essay)\b/i,
-  /\bwrite\s+my\s+(ia|ee|essay|paper)\b/i,
-  /\bunreleased\s+exam\b/i,
-  /\btest\s+bank\s+(leak|trade|sell)\b/i,
+  /\bleak(ed)?\s+(exam|paper|test|markscheme)s?\b/i,
+  /\bbuy\s+(my\s+)?(ia|ee|internal assessment|extended essay|tok|paper)s?\b/i,
+  /\bpay\s+for\s+(an?\s+|my\s+)?(ia|ee|homework|essay)s?\b/i,
+  /\bwrite\s+my\s+(ia|ee|essay|paper)s?\b/i,
+  /\bunreleased\s+exams?\b/i,
+  /\btest\s+bank\s+(leak|trade|sell|leaks)\b/i,
 ];
 
 // Unsafe physical location invitations
 const UNSAFE_LOCATION_PATTERNS = [
-  /\bcome\s+(over\s+)?to\s+my\s+(house|home|apartment|room|mansion)\b/i,
+  /\bcome\s+(over\s+)?to\s+my\s+(house|home|apartment|room|mansion|place)\b/i,
   /\bat\s+my\s+(house|home|place|apartment)\b/i,
   /\bmy\s+address\s+is\b/i,
 ];
@@ -124,7 +124,7 @@ export function inspectContentSafety(rawText: string): SafetyCheckResult {
 /**
  * Rate limiting state machine to prevent flooding / spam
  */
-class RateLimiter {
+export class RateLimiter {
   private lastActionTimes: Map<string, number> = new Map();
 
   isRateLimited(key: string, cooldownMs: number): { limited: boolean; waitSeconds: number } {
@@ -139,6 +139,14 @@ class RateLimiter {
 
     this.lastActionTimes.set(key, now);
     return { limited: false, waitSeconds: 0 };
+  }
+
+  reset(key?: string): void {
+    if (key) {
+      this.lastActionTimes.delete(key);
+    } else {
+      this.lastActionTimes.clear();
+    }
   }
 }
 
