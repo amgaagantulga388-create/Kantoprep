@@ -149,6 +149,34 @@ export const OFFICIAL_EXAM_SCHEDULES: Record<Curriculum, AuthoritySchedule> = {
 };
 
 /**
+ * Accurately calculates whole days remaining until targetDate relative to referenceDate.
+ * Whole days difference = (targetDate - referenceDate):
+ * - Future dates return positive integer.
+ * - Current date / same timestamp returns 0.
+ * - Past dates return negative integer.
+ * - Accepts ISO string or Date object.
+ * - Safe against NaN and timezone shifts.
+ */
+export function calculateDaysRemaining(
+  targetDate: Date | string,
+  referenceDate: Date = new Date()
+): number {
+  const target = typeof targetDate === 'string' ? new Date(targetDate) : targetDate;
+  const ref = referenceDate instanceof Date ? referenceDate : new Date(referenceDate);
+
+  if (!target || isNaN(target.getTime()) || !ref || isNaN(ref.getTime())) {
+    return 0;
+  }
+
+  const diffMs = target.getTime() - ref.getTime();
+  const MS_PER_DAY = 1000 * 60 * 60 * 24;
+  const days = Math.round(diffMs / MS_PER_DAY);
+
+  // Normalize -0 to 0 in JavaScript
+  return days === 0 ? 0 : days;
+}
+
+/**
  * Returns the nearest upcoming official exam session for a given curriculum.
  */
 export function getNextOfficialSession(
@@ -156,10 +184,14 @@ export function getNextOfficialSession(
   referenceDate: Date = new Date(),
   overrideSessionId?: string
 ): ExamSessionSchedule {
+  const refDate = referenceDate instanceof Date && !isNaN(referenceDate.getTime())
+    ? referenceDate
+    : new Date();
+
   const schedule = OFFICIAL_EXAM_SCHEDULES[curriculum];
-  if (!schedule || schedule.sessions.length === 0) {
+  if (!schedule || !Array.isArray(schedule.sessions) || schedule.sessions.length === 0) {
     // Fallback if unexpected curriculum
-    const fallbackDate = new Date(referenceDate.getFullYear() + 1, 4, 1, 9, 0, 0);
+    const fallbackDate = new Date(refDate.getFullYear() + 1, 4, 1, 9, 0, 0);
     return {
       id: 'fallback',
       name: `${curriculum} Upcoming Session`,
@@ -173,7 +205,7 @@ export function getNextOfficialSession(
     if (matched) return matched;
   }
 
-  const nowMs = referenceDate.getTime();
+  const nowMs = refDate.getTime();
 
   // Find the earliest session whose testDate is in the future
   for (const session of schedule.sessions) {
@@ -195,3 +227,4 @@ export function getNextOfficialSession(
     testDate: rolledDate.toISOString(),
   };
 }
+
