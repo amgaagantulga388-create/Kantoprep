@@ -127,7 +127,7 @@ KantoPrep is committed to the highest standards of international academic honest
 
 ## 👤 Author & Contact
 
-**Amgaa Gantulga**  
+**Amgalanbaatar Gantulga**  
 Founder & Developer, KantoPrep  
 High School Student, Aoba-Japan International School (A-JIS), Tokyo  
 *Email:* [amgaagantulga388@gmail.com](mailto:amgaagantulga388@gmail.com)  
