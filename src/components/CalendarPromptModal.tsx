@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar,
@@ -35,6 +35,17 @@ export const CalendarPromptModal: React.FC<CalendarPromptModalProps> = ({
   const [syncedGoogle, setSyncedGoogle] = useState(false);
   const [syncedIcs, setSyncedIcs] = useState(false);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !group) return null;
 
   const venueInfo = VENUE_CONFIG[group.venueType];
@@ -64,6 +75,9 @@ export const CalendarPromptModal: React.FC<CalendarPromptModalProps> = ({
 
         {/* Modal Dialog */}
         <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="calendar-prompt-title"
           initial={{ opacity: 0, scale: 0.94, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.94, y: 20 }}
@@ -83,7 +97,7 @@ export const CalendarPromptModal: React.FC<CalendarPromptModalProps> = ({
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#F5B942] bg-[#F5B942]/10 px-2 py-0.5 rounded-md border border-[#F5B942]/30">
                   {isHost ? 'Pod Created Successfully' : 'Seat Reserved'}
                 </span>
-                <h3 className="text-lg font-bold text-white mt-1 leading-snug">
+                <h3 id="calendar-prompt-title" className="text-lg font-bold text-white mt-1 leading-snug">
                   Never Miss Your Pod Session
                 </h3>
               </div>
@@ -91,6 +105,7 @@ export const CalendarPromptModal: React.FC<CalendarPromptModalProps> = ({
 
             <button
               onClick={onClose}
+              aria-label="Close modal"
               className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />

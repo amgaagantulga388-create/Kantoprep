@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, Sparkles } from 'lucide-react';
@@ -25,6 +25,17 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
     currentUser.avatarUrl || PRESET_AVATARS[0].url
   );
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -60,6 +71,9 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
         {/* Modal Window */}
         <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="edit-profile-title"
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -70,12 +84,13 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
           <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#F5B942]/15">
             <div className="flex items-center space-x-2">
               <Sparkles className="w-4 h-4 text-[#F5B942]" />
-              <h3 className="text-base font-bold text-white">
+              <h3 id="edit-profile-title" className="text-base font-bold text-white">
                 Edit Profile &amp; Avatar
               </h3>
             </div>
             <button
               onClick={onClose}
+              aria-label="Close modal"
               className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />

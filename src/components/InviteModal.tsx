@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -29,6 +29,17 @@ export const InviteModal: React.FC<InviteModalProps> = ({
   currentUser,
 }) => {
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   const siteUrl = typeof window !== 'undefined'
     ? window.location.origin
@@ -73,6 +84,9 @@ export const InviteModal: React.FC<InviteModalProps> = ({
 
           {/* Modal Container */}
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="invite-modal-title"
             initial={{ opacity: 0, scale: 0.96, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 15 }}
@@ -86,12 +100,13 @@ export const InviteModal: React.FC<InviteModalProps> = ({
                   <Share2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Invite Classmates &amp; Library Flyer</h3>
+                  <h3 id="invite-modal-title" className="text-sm font-bold text-white">Invite Classmates &amp; Library Flyer</h3>
                   <p className="text-[11px] text-[#A8A39D]">Spread the word for your school study pods</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
+                aria-label="Close modal"
                 className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />

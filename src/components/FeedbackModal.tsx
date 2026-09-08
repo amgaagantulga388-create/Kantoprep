@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { X, MessageSquarePlus, CheckCircle2, Sparkles, MapPin, Bug, Lightbulb, MessageCircle } from 'lucide-react';
 import { StudentProfile, FeedbackReport } from '@/types';
@@ -19,6 +19,17 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const [category, setCategory] = useState<FeedbackReport['category']>('venue_suggestion');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -69,6 +80,9 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
       {/* Modal Card */}
       <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="feedback-modal-title"
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -81,12 +95,13 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
               <MessageSquarePlus className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-white">Share Feedback or Suggestion</h2>
+              <h2 id="feedback-modal-title" className="text-sm font-bold text-white">Share Feedback or Suggestion</h2>
               <p className="text-[11px] text-[#A8A39D]">Help shape KantoPrep for Tokyo students</p>
             </div>
           </div>
           <button
             onClick={onClose}
+            aria-label="Close modal"
             className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />

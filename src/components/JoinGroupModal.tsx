@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin, Clock, Users, ArrowRight, ExternalLink } from 'lucide-react';
 import { StudyGroup, StudentProfile } from '@/types';
@@ -20,6 +20,17 @@ export const JoinGroupModal: React.FC<JoinGroupModalProps> = ({
   onConfirmJoin,
   onClose,
 }) => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !group) return null;
 
   const venueInfo = VENUE_CONFIG[group.venueType];
@@ -40,6 +51,9 @@ export const JoinGroupModal: React.FC<JoinGroupModalProps> = ({
 
         {/* Modal Window */}
         <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="join-group-title"
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -52,12 +66,13 @@ export const JoinGroupModal: React.FC<JoinGroupModalProps> = ({
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#F5B942] bg-[#F5B942]/10 px-2 py-0.5 rounded-md border border-[#F5B942]/30">
                 Study Pod Etiquette
               </span>
-              <h3 className="text-lg font-bold text-white mt-1 leading-snug">
+              <h3 id="join-group-title" className="text-lg font-bold text-white mt-1 leading-snug">
                 Join {group.title}
               </h3>
             </div>
             <button
               onClick={onClose}
+              aria-label="Close modal"
               className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, CheckCircle2, Video, FileText, Link2, BookOpen } from 'lucide-react';
 import { StudentProfile, Curriculum } from '@/types';
@@ -86,6 +86,16 @@ const SuggestResourceModalContent: React.FC<SuggestResourceModalProps> = ({
     }, 2200);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const resourceTypes: { id: 'youtube' | 'past_paper' | 'guide_link' | 'notes'; label: string; icon: React.ElementType }[] = [
     { id: 'youtube', label: 'YouTube Video', icon: Video },
     { id: 'past_paper', label: 'Past Paper / Question', icon: FileText },
@@ -106,6 +116,9 @@ const SuggestResourceModalContent: React.FC<SuggestResourceModalProps> = ({
 
       {/* Modal Card */}
       <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="suggest-resource-title"
         initial={{ scale: 0.95, opacity: 0, y: 15 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.95, opacity: 0, y: 15 }}
@@ -114,6 +127,7 @@ const SuggestResourceModalContent: React.FC<SuggestResourceModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
+          aria-label="Close modal"
           className="absolute right-5 top-5 p-1.5 rounded-full text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-all cursor-pointer"
         >
           <X className="w-4 h-4" />
@@ -141,7 +155,7 @@ const SuggestResourceModalContent: React.FC<SuggestResourceModalProps> = ({
                 <Sparkles className="w-4 h-4" />
                 <span className="text-xs font-semibold uppercase tracking-wider">Community Contribution</span>
               </div>
-              <h2 className="text-xl font-bold text-white">Suggest a Study Resource</h2>
+              <h2 id="suggest-resource-title" className="text-xl font-bold text-white">Suggest a Study Resource</h2>
               <p className="text-xs text-[#A8A39D] mt-1 mb-5">
                 Know a great YouTube breakdown, past paper link, or question bank trick? Share it with peers across Tokyo.
               </p>

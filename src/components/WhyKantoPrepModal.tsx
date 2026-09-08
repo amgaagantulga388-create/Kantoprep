@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
@@ -27,6 +27,17 @@ export const WhyKantoPrepModal: React.FC<WhyKantoPrepModalProps> = ({
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
@@ -45,6 +56,9 @@ export const WhyKantoPrepModal: React.FC<WhyKantoPrepModalProps> = ({
 
         {/* Modal Window */}
         <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="why-kantoprep-title"
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -77,6 +91,7 @@ export const WhyKantoPrepModal: React.FC<WhyKantoPrepModalProps> = ({
                 <span>Our Purpose &amp; The Science</span>
               </div>
               <h2
+                id="why-kantoprep-title"
                 className={`text-xl sm:text-2xl font-black tracking-tight ${
                   isDark ? 'text-white' : 'text-zinc-900'
                 }`}

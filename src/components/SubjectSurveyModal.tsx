@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
@@ -100,6 +100,17 @@ export const SubjectSurveyModal: React.FC<SubjectSurveyModalProps> = ({
     return SUBJECTS_BY_CURRICULUM[selectedCurriculum] || [];
   }, [selectedCurriculum]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const toggleSubject = (subj: string) => {
@@ -168,6 +179,9 @@ export const SubjectSurveyModal: React.FC<SubjectSurveyModalProps> = ({
 
         {/* Modal Window */}
         <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="subject-survey-title"
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -181,7 +195,7 @@ export const SubjectSurveyModal: React.FC<SubjectSurveyModalProps> = ({
                 <Target className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base sm:text-lg font-extrabold text-white flex items-center gap-1.5">
+                <h3 id="subject-survey-title" className="text-base sm:text-lg font-extrabold text-white flex items-center gap-1.5">
                   <span>What are you studying?</span>
                   <span className="px-2 py-0.5 rounded-full bg-[#F5B942]/15 border border-[#F5B942]/30 text-[10px] font-bold text-[#F5B942] uppercase tracking-wider">
                     Personalize
@@ -194,6 +208,7 @@ export const SubjectSurveyModal: React.FC<SubjectSurveyModalProps> = ({
             </div>
             <button
               onClick={onClose}
+              aria-label="Close modal"
               className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />

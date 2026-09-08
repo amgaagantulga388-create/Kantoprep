@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { X, Check, ShieldCheck, Mail, AlertCircle } from 'lucide-react';
@@ -27,6 +27,17 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
     valid: boolean;
     message: string;
   } | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -70,6 +81,9 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
       />
 
       <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="school-switch-title"
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
@@ -81,10 +95,11 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
             <span className="text-[10px] font-bold uppercase tracking-wider text-[#F5B942]">
               Pilot Testing Hub
             </span>
-            <h2 className="text-base font-bold text-white">Switch School / Test Gate</h2>
+            <h2 id="school-switch-title" className="text-base font-bold text-white">Switch School / Test Gate</h2>
           </div>
           <button
             onClick={onClose}
+            aria-label="Close modal"
             className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
