@@ -9,7 +9,6 @@ import {
   Zap,
   BookOpen,
   Plus,
-  Filter,
   CheckCircle2,
   ChevronDown,
   ChevronUp,
@@ -17,18 +16,14 @@ import {
   Layers,
   ArrowRight,
   RotateCcw,
-  Clock,
-  Target,
   ExternalLink,
   ShieldCheck,
-  AlertCircle,
 } from 'lucide-react';
 import { Curriculum, StudyGroup } from '@/types';
 import { useTheme } from '@/context/ThemeProvider';
 import {
   OFFICIAL_EXAM_SCHEDULES,
   getNextOfficialSession,
-  ExamSessionSchedule,
 } from '@/lib/examSchedule';
 
 interface ExamMilestone {
@@ -124,7 +119,14 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
   const [now, setNow] = useState<Date>(new Date());
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
-  const [selectedSatSessionId, setSelectedSatSessionId] = useState<string>('');
+  const [selectedSatSessionId, setSelectedSatSessionId] = useState<string>(() => {
+    if (typeof window === 'undefined') return '';
+    try {
+      return localStorage.getItem('kantoprep_target_sat_session') || '';
+    } catch {
+      return '';
+    }
+  });
 
   // Update tick every 60 seconds
   useEffect(() => {
@@ -132,16 +134,6 @@ export const ExamRadar: React.FC<ExamRadarProps> = ({
       setNow(new Date());
     }, 60000);
     return () => clearInterval(timer);
-  }, []);
-
-  // Restore preferred SAT session if user chose a specific target sitting
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('kantoprep_target_sat_session');
-      if (saved) setSelectedSatSessionId(saved);
-    } catch {
-      // Ignore
-    }
   }, []);
 
   const handleSelectSatSession = (sessionId: string) => {

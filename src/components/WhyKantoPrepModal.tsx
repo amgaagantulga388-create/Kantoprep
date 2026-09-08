@@ -10,7 +10,6 @@ import {
   ShieldCheck,
   Headphones,
   BookOpen,
-  MapPin,
   Smile,
 } from 'lucide-react';
 import { useTheme } from '@/context/ThemeProvider';

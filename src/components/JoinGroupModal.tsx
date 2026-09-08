@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MapPin, Clock, Users, ShieldAlert, ArrowRight, ExternalLink } from 'lucide-react';
+import { X, MapPin, Clock, Users, ArrowRight, ExternalLink } from 'lucide-react';
 import { StudyGroup, StudentProfile } from '@/types';
 import { getGoogleMapsUrl, VENUE_CONFIG } from '@/lib/constants';
 
@@ -17,7 +17,6 @@ interface JoinGroupModalProps {
 export const JoinGroupModal: React.FC<JoinGroupModalProps> = ({
   isOpen,
   group,
-  currentUser,
   onConfirmJoin,
   onClose,
 }) => {

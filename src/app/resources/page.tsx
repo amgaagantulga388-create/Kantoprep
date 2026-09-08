@@ -17,7 +17,7 @@ import { SuggestResourceModal } from '@/components/resources/SuggestResourceModa
 import { SYLLABUS_DATA } from '@/lib/resourceData';
 import { Curriculum } from '@/types';
 import { getBookmarkedSubjects, toggleSubjectBookmark } from '@/lib/bookmarks';
-import { BookOpen, Search, Sparkles, GraduationCap, Plus, Star, Share2, MessageSquarePlus, Target } from 'lucide-react';
+import { BookOpen, Search, GraduationCap, Plus, Star, Share2, MessageSquarePlus, Target } from 'lucide-react';
 
 type FilterType = Curriculum | 'ALL' | 'MY_SUBJECTS';
 
@@ -26,10 +26,9 @@ export default function ResourcesPage() {
   const router = useRouter();
 
   // Bookmarks
-  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>([]);
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => getBookmarkedSubjects());
 
   useEffect(() => {
-    setBookmarkedIds(getBookmarkedSubjects());
     const handleSync = (e: Event) => {
       const custom = e as CustomEvent<string[]>;
       if (custom.detail) {

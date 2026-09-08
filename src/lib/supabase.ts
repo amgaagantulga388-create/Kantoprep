@@ -100,8 +100,12 @@ export async function sendSchoolOtp(email: string): Promise<{
         message: `6-digit security code sent to ${email}. Please check your inbox.`,
         isPilotMode: false,
       };
-    } catch (err: any) {
-      return { success: false, message: err?.message || 'Failed to send code.', isPilotMode: false };
+    } catch (err: unknown) {
+      return {
+        success: false,
+        message: err instanceof Error ? err.message : 'Failed to send code.',
+        isPilotMode: false,
+      };
     }
   }
 
@@ -137,8 +141,8 @@ export async function verifySchoolOtp(
       }
 
       return { success: true, message: 'Verified successfully!' };
-    } catch (err: any) {
-      return { success: false, message: err?.message || 'Verification failed.' };
+    } catch (err: unknown) {
+      return { success: false, message: err instanceof Error ? err.message : 'Verification failed.' };
     }
   }
 

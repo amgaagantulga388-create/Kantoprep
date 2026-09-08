@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   X,
   Mail,
@@ -10,9 +10,6 @@ import {
   Sparkles,
   CheckCircle2,
   AlertCircle,
-  School,
-  Lock,
-  UserCheck,
 } from 'lucide-react';
 import { StudentProfile, Curriculum } from '@/types';
 import { ALLOWED_SCHOOLS, CURRICULUM_OPTIONS, SUBJECTS_BY_CURRICULUM } from '@/lib/constants';
@@ -72,7 +69,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const handleQuickPilotLogin = (schoolDomain: string) => {
     const school = ALLOWED_SCHOOLS.find((s) => s.domain === schoolDomain) || ALLOWED_SCHOOLS[0];
     const demoUser: StudentProfile = {
-      id: `usr_${Date.now()}`,
+      id: `usr_demo_${school.domain.replace(/[^a-zA-Z0-9]/g, '_')}`,
       fullName: 'Maya Tanaka',
       email: `maya.tanaka@${school.domain}`,
       schoolDomain: school.domain,

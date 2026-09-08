@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { StudentProfile } from '@/types';
 import { SchoolGateScreen } from '@/components/SchoolGateScreen';
 import { FeedbackModal } from '@/components/FeedbackModal';
@@ -26,30 +26,22 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [currentUser, setCurrentUser] = useState<StudentProfile | null>(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<StudentProfile | null>(() => {
+    if (typeof window === 'undefined') return null;
+    try {
+      const saved = localStorage.getItem('kantoprep_user');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.id) return parsed;
+      }
+    } catch {}
+    return null;
+  });
 
   // Gate-screen modal state
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
   const [isWhyOpen, setIsWhyOpen] = useState(false);
   const [isInviteOpen, setIsInviteOpen] = useState(false);
-
-  // Restore session from localStorage
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('kantoprep_user');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed && parsed.id) {
-          setCurrentUser(parsed);
-        }
-      }
-    } catch {
-      // Ignore
-    } finally {
-      setIsAuthLoading(false);
-    }
-  }, []);
 
   const login = (user: StudentProfile) => {
     setCurrentUser(user);
@@ -77,18 +69,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       // Ignore
     }
   };
-
-  // Loading state
-  if (isAuthLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0E0D0B] text-[#F5B942]">
-        <div className="flex items-center space-x-2 text-sm font-semibold animate-pulse">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#F5B942]" />
-          <span>Entering KantoPrep...</span>
-        </div>
-      </div>
-    );
-  }
 
   // Gate screen — unauthenticated
   if (!currentUser) {

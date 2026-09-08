@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Plus, ShieldCheck, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles, Share2, BookOpen, Users, Target } from 'lucide-react';
+import { Plus, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles, Share2, BookOpen, Users, Target } from 'lucide-react';
 import { StudentProfile } from '@/types';
 import { ALLOWED_SCHOOLS } from '@/lib/constants';
 import { ThemeToggle } from './ThemeToggle';

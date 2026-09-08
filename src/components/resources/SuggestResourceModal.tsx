@@ -28,8 +28,7 @@ export interface SuggestedResource {
   createdAt: string;
 }
 
-export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
-  isOpen,
+const SuggestResourceModalContent: React.FC<SuggestResourceModalProps> = ({
   onClose,
   currentUser,
   defaultCurriculum = 'IB',
@@ -45,15 +44,6 @@ export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
   const [url, setUrl] = useState('');
   const [note, setNote] = useState('');
   const [submitted, setSubmitted] = useState(false);
-
-  React.useEffect(() => {
-    if (isOpen) {
-      if (defaultCurriculum) setCurriculum(defaultCurriculum);
-      if (defaultSubject) setSubject(defaultSubject);
-    }
-  }, [isOpen, defaultCurriculum, defaultSubject]);
-
-  if (!isOpen) return null;
 
   const handleCurriculumChange = (c: Curriculum) => {
     setCurriculum(c);
@@ -292,5 +282,15 @@ export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = ({
         </AnimatePresence>
       </motion.div>
     </div>
+  );
+};
+
+export const SuggestResourceModal: React.FC<SuggestResourceModalProps> = (props) => {
+  if (!props.isOpen) return null;
+  return (
+    <SuggestResourceModalContent
+      key={`${props.defaultCurriculum}-${props.defaultSubject}`}
+      {...props}
+    />
   );
 };

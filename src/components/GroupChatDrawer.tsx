@@ -20,8 +20,6 @@ import {
   Download,
   ExternalLink,
   FileText,
-  Bookmark,
-  CheckCircle2,
   Share2,
   Check,
   LogOut,
@@ -130,9 +128,14 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
   useEffect(() => {
     if (!isOpen) {
       ambientAudio.stop();
-      setAmbientSound('off');
     }
   }, [isOpen]);
+
+  const handleClose = () => {
+    ambientAudio.stop();
+    setAmbientSound('off');
+    onClose();
+  };
 
   // Resource attachment popover state
   const [isAttachOpen, setIsAttachOpen] = useState(false);
@@ -159,16 +162,20 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
 
   // Pomodoro countdown timer tick
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isTimerRunning && timerSeconds > 0) {
-      interval = setInterval(() => {
-        setTimerSeconds((prev) => prev - 1);
-      }, 1000);
-    } else if (timerSeconds === 0 && isTimerRunning) {
-      setIsTimerRunning(false);
-    }
+    if (!isTimerRunning) return;
+
+    const interval = setInterval(() => {
+      setTimerSeconds((prev) => {
+        if (prev <= 1) {
+          setIsTimerRunning(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
     return () => clearInterval(interval);
-  }, [isTimerRunning, timerSeconds]);
+  }, [isTimerRunning]);
 
   if (!group) return null;
 
@@ -276,7 +283,7 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            onClick={onClose}
+            onClick={handleClose}
             className="absolute inset-0 bg-black/40 backdrop-blur-md"
           />
 
@@ -326,7 +333,7 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
 
                     {/* Close Button */}
                     <button
-                      onClick={onClose}
+                      onClick={handleClose}
                       className="p-1.5 rounded-xl text-[#A8A39D] hover:text-white hover:bg-[#1C1A17] transition-colors cursor-pointer"
                     >
                       <X className="w-5 h-5" />
@@ -824,7 +831,7 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                         <span>Leave Study Pod?</span>
                       </div>
                       <p className="text-xs text-[#A8A39D] leading-relaxed">
-                        Your seat will open for another student. To be respectful, a brief notice will be posted in the chat so your study partners aren't left waiting.
+                        Your seat will open for another student. To be respectful, a brief notice will be posted in the chat so your study partners aren&apos;t left waiting.
                       </p>
                       <div className="flex items-center justify-end space-x-2 pt-1">
                         <button

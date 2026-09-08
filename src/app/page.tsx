@@ -40,9 +40,37 @@ export default function Home() {
   const { currentUser, updateUser: authUpdateUser, logout } = useAuth();
 
   // App Data State
-  const [groups, setGroups] = useState<StudyGroup[]>(INITIAL_GROUPS);
-  const [chatMessages, setChatMessages] = useState<Record<string, ChatMessage[]>>(INITIAL_CHAT_MESSAGES);
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [groups, setGroups] = useState<StudyGroup[]>(() => {
+    if (typeof window === 'undefined') return INITIAL_GROUPS;
+    try {
+      const savedGroups = localStorage.getItem('kantoprep_groups');
+      if (savedGroups) {
+        const parsedGroups = JSON.parse(savedGroups);
+        if (Array.isArray(parsedGroups) && parsedGroups.length > 0) {
+          return parsedGroups;
+        }
+      }
+    } catch {
+      // Ignore
+    }
+    return INITIAL_GROUPS;
+  });
+
+  const [chatMessages, setChatMessages] = useState<Record<string, ChatMessage[]>>(() => {
+    if (typeof window === 'undefined') return INITIAL_CHAT_MESSAGES;
+    try {
+      const savedChats = localStorage.getItem('kantoprep_chats');
+      if (savedChats) {
+        const parsedChats = JSON.parse(savedChats);
+        if (parsedChats && typeof parsedChats === 'object') {
+          return { ...INITIAL_CHAT_MESSAGES, ...parsedChats };
+        }
+      }
+    } catch {
+      // Ignore
+    }
+    return INITIAL_CHAT_MESSAGES;
+  });
 
   // Filter States
   const [selectedCurriculum, setSelectedCurriculum] = useState<Curriculum | 'ALL'>('ALL');
@@ -51,7 +79,16 @@ export default function Home() {
   const [isMyPodsOnly, setIsMyPodsOnly] = useState(false);
 
   // Active Modals & Drawers
-  const [activeChatGroup, setActiveChatGroup] = useState<StudyGroup | null>(null);
+  const [activeChatGroupId, setActiveChatGroupId] = useState<string | null>(null);
+  const activeChatGroup = useMemo(() => {
+    if (!activeChatGroupId) return null;
+    return groups.find((g) => g.id === activeChatGroupId) || null;
+  }, [groups, activeChatGroupId]);
+
+  const setActiveChatGroup = (group: StudyGroup | null) => {
+    setActiveChatGroupId(group ? group.id : null);
+  };
+
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isSchoolSwitchOpen, setIsSchoolSwitchOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
@@ -69,52 +106,23 @@ export default function Home() {
     tags?: string;
   }>({});
 
-  // Restore groups and chat history from localStorage on initial load
-  useEffect(() => {
-    try {
-      const savedGroups = localStorage.getItem('kantoprep_groups');
-      if (savedGroups) {
-        const parsedGroups = JSON.parse(savedGroups);
-        if (Array.isArray(parsedGroups) && parsedGroups.length > 0) {
-          setGroups(parsedGroups);
-        }
-      }
-
-      const savedChats = localStorage.getItem('kantoprep_chats');
-      if (savedChats) {
-        const parsedChats = JSON.parse(savedChats);
-        if (parsedChats && typeof parsedChats === 'object') {
-          setChatMessages((prev) => ({ ...prev, ...parsedChats }));
-        }
-      }
-    } catch {
-      // Ignore
-    } finally {
-      setIsDataLoaded(true);
-    }
-  }, []);
-
   // Persist study groups across reloads
   useEffect(() => {
-    if (isDataLoaded) {
-      try {
-        localStorage.setItem('kantoprep_groups', JSON.stringify(groups));
-      } catch {
-        // Ignore
-      }
+    try {
+      localStorage.setItem('kantoprep_groups', JSON.stringify(groups));
+    } catch {
+      // Ignore
     }
-  }, [groups, isDataLoaded]);
+  }, [groups]);
 
   // Persist chat messages across reloads
   useEffect(() => {
-    if (isDataLoaded) {
-      try {
-        localStorage.setItem('kantoprep_chats', JSON.stringify(chatMessages));
-      } catch {
-        // Ignore
-      }
+    try {
+      localStorage.setItem('kantoprep_chats', JSON.stringify(chatMessages));
+    } catch {
+      // Ignore
     }
-  }, [chatMessages, isDataLoaded]);
+  }, [chatMessages]);
 
   const deepLinkProcessedRef = useRef(false);
 
@@ -130,11 +138,13 @@ export default function Home() {
     if (matched) {
       deepLinkProcessedRef.current = true;
       const isMember = matched.members.some((m) => m.id === currentUser.id);
-      if (isMember) {
-        setActiveChatGroup(matched);
-      } else {
-        setPendingJoinGroup(matched);
-      }
+      setTimeout(() => {
+        if (isMember) {
+          setActiveChatGroupId(matched.id);
+        } else {
+          setPendingJoinGroup(matched);
+        }
+      }, 0);
       return;
     }
 
@@ -146,28 +156,20 @@ export default function Home() {
 
     if (create === 'true') {
       deepLinkProcessedRef.current = true;
-      if (curriculumParam) setSelectedCurriculum(curriculumParam);
-      if (subjectParam) setSearchQuery(subjectParam);
-      setPrefillData({
-        curriculum: curriculumParam || undefined,
-        subject: subjectParam || undefined,
-        title: topicParam ? `${topicParam} Sprint` : (subjectParam ? `${subjectParam} Exam Prep` : ''),
-        tags: topicParam ? `${topicParam}, Past Papers` : 'Past Papers, Exam Prep',
-      });
-      setIsCreateModalOpen(true);
+      setTimeout(() => {
+        if (curriculumParam) setSelectedCurriculum(curriculumParam);
+        if (subjectParam) setSearchQuery(subjectParam);
+        setPrefillData({
+          curriculum: curriculumParam || undefined,
+          subject: subjectParam || undefined,
+          title: topicParam ? `${topicParam} Sprint` : (subjectParam ? `${subjectParam} Exam Prep` : ''),
+          tags: topicParam ? `${topicParam}, Past Papers` : 'Past Papers, Exam Prep',
+        });
+        setIsCreateModalOpen(true);
+      }, 0);
       window.history.replaceState({}, '', '/');
     }
   }, [currentUser, groups]);
-
-  // Keep active chat group in sync with any group updates (leave, join, profile update)
-  useEffect(() => {
-    if (activeChatGroup) {
-      const fresh = groups.find((g) => g.id === activeChatGroup.id);
-      if (fresh && fresh !== activeChatGroup) {
-        setActiveChatGroup(fresh);
-      }
-    }
-  }, [groups, activeChatGroup]);
 
   // Handle Logo Click -> Go Home & Reset Filters
   const handleGoHome = () => {

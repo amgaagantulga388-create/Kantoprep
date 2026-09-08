@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Sparkles, AlertTriangle, ExternalLink, ShieldCheck, Check } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { X, ArrowRight, ArrowLeft, Sparkles, AlertTriangle, ExternalLink, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { Curriculum, SessionFormat, VenueType, StudyGroup, StudentProfile } from '@/types';
 import { CURRICULUM_OPTIONS, SUBJECTS_BY_CURRICULUM, FORMAT_CONFIG, VENUE_CONFIG, getGoogleMapsUrl } from '@/lib/constants';
@@ -19,8 +19,7 @@ interface CreateGroupModalProps {
   initialTags?: string;
 }
 
-export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
-  isOpen,
+const CreateGroupModalContent: React.FC<CreateGroupModalProps> = ({
   onClose,
   currentUser,
   onCreateGroup,
@@ -40,22 +39,11 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
   const [title, setTitle] = useState(initialTitle || '');
   const [description, setDescription] = useState('');
   const [meetingTime, setMeetingTime] = useState('Tomorrow, 4:30 PM');
-  const [durationMinutes, setDurationMinutes] = useState(90);
+  const durationMinutes = 90;
   const [maxMembers, setMaxMembers] = useState(5);
-  const [tagsInput, setTagsInput] = useState(initialTags || 'Paper 1, Exam Prep');
+  const tagsInput = initialTags || 'Paper 1, Exam Prep';
   const [safetyError, setSafetyError] = useState<string | null>(null);
   const [hasAgreedToPledge, setHasAgreedToPledge] = useState(false);
-
-  React.useEffect(() => {
-    if (isOpen) {
-      if (initialCurriculum) setCurriculum(initialCurriculum);
-      if (initialSubject) setSubject(initialSubject);
-      if (initialTitle) setTitle(initialTitle);
-      if (initialTags) setTagsInput(initialTags);
-    }
-  }, [isOpen, initialCurriculum, initialSubject, initialTitle, initialTags]);
-
-  if (!isOpen) return null;
 
   const handleCurriculumChange = (c: Curriculum) => {
     setCurriculum(c);
@@ -495,5 +483,15 @@ export const CreateGroupModal: React.FC<CreateGroupModalProps> = ({
         </form>
       </motion.div>
     </div>
+  );
+};
+
+export const CreateGroupModal: React.FC<CreateGroupModalProps> = (props) => {
+  if (!props.isOpen) return null;
+  return (
+    <CreateGroupModalContent
+      key={`${props.initialCurriculum}-${props.initialSubject}-${props.initialTitle}-${props.initialTags}`}
+      {...props}
+    />
   );
 };

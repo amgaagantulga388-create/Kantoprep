@@ -6,7 +6,9 @@ import { useTheme } from '@/context/ThemeProvider';
 export const InteractiveBackground: React.FC = () => {
   const { theme } = useTheme();
   const themeRef = useRef(theme);
-  themeRef.current = theme;
+  useEffect(() => {
+    themeRef.current = theme;
+  }, [theme]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });

@@ -12,40 +12,46 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+const applyTheme = (t: Theme) => {
+  if (typeof document === 'undefined') return;
+  const root = document.documentElement;
+  if (t === 'light') {
+    root.classList.remove('dark');
+    root.classList.add('light');
+  } else {
+    root.classList.remove('light');
+    root.classList.add('dark');
+  }
+
+  // Update browser status bar / theme color
+  const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+  if (metaThemeColor) {
+    metaThemeColor.setAttribute('content', t === 'light' ? '#f7faf8' : '#0E0D0B');
+  }
+};
+
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>('dark');
-  const [mounted, setMounted] = useState(false);
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (typeof window === 'undefined') return 'dark';
+    try {
+      const saved = localStorage.getItem('kantoprep_theme');
+      return saved === 'light' || saved === 'dark' ? saved : 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
 
   useEffect(() => {
-    // Read saved theme or fallback to dark
-    const saved = localStorage.getItem('kantoprep_theme') as Theme | null;
-    const initialTheme: Theme = saved === 'light' || saved === 'dark' ? saved : 'dark';
-    
-    setThemeState(initialTheme);
-    applyTheme(initialTheme);
-    setMounted(true);
-  }, []);
-
-  const applyTheme = (t: Theme) => {
-    const root = document.documentElement;
-    if (t === 'light') {
-      root.classList.remove('dark');
-      root.classList.add('light');
-    } else {
-      root.classList.remove('light');
-      root.classList.add('dark');
-    }
-
-    // Update browser status bar / theme color
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-    if (metaThemeColor) {
-      metaThemeColor.setAttribute('content', t === 'light' ? '#f7faf8' : '#0E0D0B');
-    }
-  };
+    applyTheme(theme);
+  }, [theme]);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
-    localStorage.setItem('kantoprep_theme', newTheme);
+    try {
+      localStorage.setItem('kantoprep_theme', newTheme);
+    } catch {
+      // Ignore storage write errors
+    }
     applyTheme(newTheme);
   };
 

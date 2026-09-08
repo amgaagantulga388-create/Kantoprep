@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Check, ShieldCheck, Mail, AlertCircle } from 'lucide-react';
 import { StudentProfile } from '@/types';
-import { ALLOWED_SCHOOLS } from '@/lib/constants';
 import { INITIAL_STUDENTS, CURRENT_USER } from '@/lib/mockData';
 import { validateSchoolEmail } from '@/lib/supabase';
 

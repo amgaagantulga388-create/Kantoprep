@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { X, MessageSquarePlus, CheckCircle2, Sparkles, MapPin, Bug, Lightbulb, MessageCircle } from 'lucide-react';
 import { StudentProfile, FeedbackReport } from '@/types';
 

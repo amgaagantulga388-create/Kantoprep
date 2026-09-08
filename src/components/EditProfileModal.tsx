@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Check, Sparkles, User } from 'lucide-react';
+import { X, Check, Sparkles } from 'lucide-react';
 import { StudentProfile } from '@/types';
 import { PRESET_AVATARS } from '@/lib/constants';
 

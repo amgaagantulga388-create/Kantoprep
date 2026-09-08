@@ -6,11 +6,8 @@ import {
   X,
   Check,
   Sparkles,
-  BookOpen,
-  GraduationCap,
   Target,
   ArrowRight,
-  Plus,
   CheckCircle2,
 } from 'lucide-react';
 import { Curriculum, StudentProfile } from '@/types';

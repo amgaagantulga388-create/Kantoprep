@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, MapPin, Sparkles, Users, Quote, CalendarClock } from 'lucide-react';
 import { Curriculum } from '@/types';
@@ -67,17 +67,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   ];
 
   // Rotate daily based on day of the year
-  const [quoteIndex, setQuoteIndex] = useState(0);
-  const [examCountdown, setExamCountdown] = useState<{ label: string; daysLeft: number } | null>(null);
-
-  useEffect(() => {
+  const [quoteIndex] = useState(() => {
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 0);
     const diff = now.getTime() - start.getTime();
     const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
-    setQuoteIndex(dayOfYear % FAMOUS_QUOTES.length);
-    setExamCountdown(getNextExamCountdown());
-  }, []);
+    return dayOfYear % FAMOUS_QUOTES.length;
+  });
+  const [examCountdown] = useState(() => getNextExamCountdown());
 
   const activeQuote = FAMOUS_QUOTES[quoteIndex];
 

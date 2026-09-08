@@ -13,7 +13,7 @@ const STORAGE_KEY = 'kantoprep_pwa_banner_seen';
 
 export const AddToHomeScreenBanner: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isIos, setIsIos] = useState(false);
+  const [isIos] = useState(() => typeof window !== 'undefined' && /iPhone|iPad|iPod/i.test(window.navigator.userAgent));
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
@@ -32,11 +32,6 @@ export const AddToHomeScreenBanner: React.FC = () => {
       // Already running as an installed PWA, don't prompt
       return;
     }
-
-    // Detect iOS
-    const ua = window.navigator.userAgent;
-    const isIosDevice = /iPhone|iPad|iPod/i.test(ua);
-    setIsIos(isIosDevice);
 
     // Listen for native Android/Chromium install prompt
     const handleBeforeInstallPrompt = (e: Event) => {

@@ -26,14 +26,11 @@ export default function SubjectDetailPage() {
   const subjectId = params.subjectId as string;
 
   // Bookmarks & Academic Tools Modals
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(() => (subjectId ? isSubjectBookmarked(subjectId) : false));
   const [isBookletOpen, setIsBookletOpen] = useState(false);
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
   useEffect(() => {
-    if (subjectId) {
-      setIsBookmarked(isSubjectBookmarked(subjectId));
-    }
     const handleSync = () => {
       if (subjectId) setIsBookmarked(isSubjectBookmarked(subjectId));
     };

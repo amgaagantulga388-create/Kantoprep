@@ -11,7 +11,6 @@ import {
   Sparkles,
   ShieldCheck,
   MapPin,
-  Users,
   GraduationCap,
 } from 'lucide-react';
 import { StudentProfile } from '@/types';

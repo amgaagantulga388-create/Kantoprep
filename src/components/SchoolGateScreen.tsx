@@ -10,7 +10,6 @@ import {
   Lock,
   CheckCircle2,
   AlertCircle,
-  BookOpen,
   MapPin,
   MessageSquarePlus,
   Share2,
