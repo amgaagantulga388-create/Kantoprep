@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
@@ -120,10 +121,13 @@ export const InviteModal: React.FC<InviteModalProps> = ({
               {/* QR Code Container */}
               <div className="mt-5 p-3 rounded-2xl bg-[#0E0D0B] border-2 border-[#F5B942]/30 shadow-md">
                 <div className="bg-white p-2 rounded-xl">
-                  <img
+                  <Image
                     src={qrImageUrl}
                     alt="Scan to join KantoPrep"
+                    width={192}
+                    height={192}
                     className="w-44 h-44 sm:w-48 sm:h-48 rounded-lg object-contain mx-auto"
+                    unoptimized
                   />
                 </div>
                 <p className="mt-2 text-[11px] font-mono font-bold text-[#F5B942] tracking-wider">

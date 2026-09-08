@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { MapPin, ArrowUpRight, MessageCircle, ExternalLink, Share2, Check, Crown } from 'lucide-react';
 import { StudyGroup, StudentProfile } from '@/types';
@@ -146,13 +147,16 @@ export const GroupCard: React.FC<GroupCardProps> = ({
             <div className="flex -space-x-1.5 overflow-hidden">
               {group.members.slice(0, 4).map((member, idx) => (
                 <div key={member.id || idx} className="relative">
-                  <img
+                  <Image
                     src={member.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80'}
                     alt={member.fullName}
                     title={`${member.fullName}${member.id === group.host.id ? ' (Host)' : ''} • ${member.schoolName}`}
+                    width={24}
+                    height={24}
                     className={`inline-block h-6 w-6 rounded-full ring-2 ring-[#161513] object-cover ${
                       member.id === group.host.id ? 'ring-[#F5B942]/50' : ''
                     }`}
+                    unoptimized={member.avatarUrl?.startsWith('data:')}
                   />
                   {member.id === group.host.id && (
                     <Crown className="absolute -top-1.5 -right-0.5 w-3 h-3 text-[#F5B942] drop-shadow-sm" />

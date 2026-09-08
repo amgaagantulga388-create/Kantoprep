@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Plus, LogIn, LogOut, ChevronDown, User, MessageSquarePlus, Sparkles, Share2, BookOpen, Users, Target } from 'lucide-react';
@@ -74,9 +75,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           title="KantoPrep Home"
         >
           <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-md shadow-[#F5B942]/15 border border-[#F5B942]/30 group-hover:scale-105 transition-transform shrink-0 bg-[#161513]">
-            <img
+            <Image
               src="/logo.png"
               alt="KantoPrep Logo"
+              width={40}
+              height={40}
+              priority
               className="w-full h-full object-cover"
             />
           </div>
@@ -171,10 +175,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="flex items-center space-x-1 p-0.5 rounded-full hover:ring-2 hover:ring-[#F5B942]/40 transition-all cursor-pointer"
                 >
-                  <img
+                  <Image
                     src={currentUser.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120'}
                     alt={currentUser.fullName}
+                    width={36}
+                    height={36}
                     className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover ring-2 ring-[#F5B942]/30 shadow-xs"
+                    unoptimized={currentUser.avatarUrl?.startsWith('data:')}
                   />
                   <ChevronDown className="w-3 h-3 text-[#7A756D] hidden sm:block" />
                 </button>

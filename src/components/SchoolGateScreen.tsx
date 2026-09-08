@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
   ShieldCheck,
@@ -163,9 +164,12 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
       <header className="relative z-10 w-full px-4 sm:px-6 py-4 sm:py-5 max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-2.5">
           <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden shadow-md shadow-[#F5B942]/15 border border-[#F5B942]/30 shrink-0 bg-[#161513]">
-            <img
+            <Image
               src="/logo.png"
               alt="KantoPrep Logo"
+              width={40}
+              height={40}
+              priority
               className="w-full h-full object-cover"
             />
           </div>
@@ -221,9 +225,12 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
               transition={{ duration: 0.4 }}
               className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3.5 rounded-full overflow-hidden shadow-lg shadow-[#F5B942]/20 border-2 border-[#F5B942]/30 bg-[#161513] p-0.5"
             >
-              <img
+              <Image
                 src="/logo.png"
                 alt="KantoPrep Emblem"
+                width={80}
+                height={80}
+                priority
                 className="w-full h-full object-cover rounded-full"
               />
             </motion.div>
@@ -465,10 +472,13 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                       Choose Avatar <span className="text-[#7A756D] font-normal">(No real photo needed)</span>
                     </label>
                     <div className="w-6 h-6 rounded-full overflow-hidden ring-2 ring-[#F5B942] shadow-xs">
-                      <img
+                      <Image
                         src={selectedAvatarUrl}
                         alt="Selected Avatar"
+                        width={24}
+                        height={24}
                         className="w-full h-full object-cover"
+                        unoptimized={selectedAvatarUrl.startsWith('data:')}
                       />
                     </div>
                   </div>
@@ -487,7 +497,14 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                               : 'hover:bg-white/5 hover:scale-105'
                           }`}
                         >
-                          <img src={preset.url} alt={preset.name} className="w-7 h-7 rounded-full" />
+                          <Image
+                            src={preset.url}
+                            alt={preset.name}
+                            width={28}
+                            height={28}
+                            className="w-7 h-7 rounded-full"
+                            unoptimized
+                          />
                         </button>
                       );
                     })}

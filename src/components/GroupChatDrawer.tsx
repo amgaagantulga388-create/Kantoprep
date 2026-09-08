@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
@@ -574,10 +575,13 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                           }`}
                         >
                           {!isMe && (
-                            <img
+                            <Image
                               src={msg.sender.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60'}
                               alt={msg.sender.fullName}
+                              width={28}
+                              height={28}
                               className="w-7 h-7 rounded-full object-cover ring-1 ring-[#F5B942]/30"
+                              unoptimized={msg.sender.avatarUrl?.startsWith('data:')}
                             />
                           )}
 
@@ -637,13 +641,16 @@ export const GroupChatDrawer: React.FC<GroupChatDrawerProps> = ({
                         }`}
                       >
                         {!isMe && (
-                          <img
+                          <Image
                             src={
                               msg.sender.avatarUrl ||
                               'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60'
                             }
                             alt={msg.sender.fullName}
+                            width={28}
+                            height={28}
                             className="w-7 h-7 rounded-full object-cover ring-1 ring-[#F5B942]/30"
+                            unoptimized={msg.sender.avatarUrl?.startsWith('data:')}
                           />
                         )}
 

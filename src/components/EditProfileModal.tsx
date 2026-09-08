@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Check, Sparkles } from 'lucide-react';
 import { StudentProfile } from '@/types';
@@ -85,10 +86,13 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
             {/* Current Avatar Preview */}
             <div className="flex flex-col items-center justify-center pt-1 pb-2">
               <div className="w-16 h-16 rounded-full overflow-hidden ring-4 ring-[#F5B942]/30 shadow-md bg-[#1C1A17] p-0.5 mb-2">
-                <img
+                <Image
                   src={selectedAvatarUrl}
                   alt="Selected Avatar"
+                  width={64}
+                  height={64}
                   className="w-full h-full object-cover rounded-full"
+                  unoptimized={selectedAvatarUrl.startsWith('data:')}
                 />
               </div>
               <p className="text-[11px] text-[#A8A39D] font-medium">
@@ -116,10 +120,13 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
                           : 'hover:scale-105 hover:bg-white/5'
                       }`}
                     >
-                      <img
+                      <Image
                         src={preset.url}
                         alt={preset.name}
+                        width={32}
+                        height={32}
                         className="w-8 h-8 rounded-full object-cover"
+                        unoptimized
                       />
                       {isSelected && (
                         <div className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-[#F5B942] text-[#0E0D0B] flex items-center justify-center shadow-xs">

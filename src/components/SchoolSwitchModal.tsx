@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { X, Check, ShieldCheck, Mail, AlertCircle } from 'lucide-react';
 import { StudentProfile } from '@/types';
@@ -164,10 +165,13 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
                   }`}
                 >
                   <div className="flex items-center space-x-3">
-                    <img
+                    <Image
                       src={user.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60'}
                       alt={user.fullName}
+                      width={36}
+                      height={36}
                       className="w-9 h-9 rounded-full object-cover ring-1 ring-[#F5B942]/30"
+                      unoptimized={user.avatarUrl?.startsWith('data:')}
                     />
                     <div>
                       <div className="flex items-center space-x-2">
