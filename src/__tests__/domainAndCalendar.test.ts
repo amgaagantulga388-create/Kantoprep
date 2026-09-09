@@ -2,7 +2,11 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import {
   isSchoolEmailAllowed,
   getSchoolByEmail,
+  isSchoolRecognized,
+  isSchoolDomainActive,
+  ACTIVE_PUBLISH_SCHOOL_DOMAINS,
 } from '@/lib/constants';
+import { validateSchoolEmail } from '@/lib/supabase';
 import {
   generateIcsContent,
   generateGoogleCalendarUrl,
@@ -42,30 +46,47 @@ const createMockGroup = (overrides?: Partial<StudyGroup>): StudyGroup => ({
 
 describe('Task 3: School Domain Gatekeeper & Calendar Integration Engine', () => {
   describe('School Domain Gatekeeper (isSchoolEmailAllowed & getSchoolByEmail)', () => {
-    const pilotSchools = [
-      { domain: 'students.aobajapan.jp', name: 'Aoba-Japan International School', shortName: 'A-JIS' },
-      { domain: 'bst.ac.jp', name: 'The British School in Tokyo', shortName: 'BST' },
-      { domain: 'asij.ac.jp', name: 'American School in Japan', shortName: 'ASIJ' },
-      { domain: 'k-international.ed.jp', name: 'K. International School Tokyo', shortName: 'KIST' },
-      { domain: 'smis.ac.jp', name: "St. Mary's International School", shortName: 'SMIS' },
-      { domain: 'seisen.com', name: 'Seisen International School', shortName: 'Seisen' },
-      { domain: 'issh.ac.jp', name: 'Intl School of the Sacred Heart', shortName: 'ISSH' },
-      { domain: 'yis.ac.jp', name: 'Yokohama International School', shortName: 'YIS' },
-      { domain: 'saintmaur.ac.jp', name: 'Saint Maur International School', shortName: 'Saint Maur' },
-      { domain: 'caj.ac.jp', name: 'Christian Academy in Japan', shortName: 'CAJ' },
+    const partnerSchools = [
+      { domain: 'students.aobajapan.jp', name: 'Aoba-Japan International School', shortName: 'A-JIS', active: true },
+      { domain: 'aobajapan.jp', name: 'Aoba-Japan International School', shortName: 'A-JIS', active: true },
+      { domain: 'bst.ac.jp', name: 'The British School in Tokyo', shortName: 'BST', active: false },
+      { domain: 'asij.ac.jp', name: 'American School in Japan', shortName: 'ASIJ', active: false },
+      { domain: 'k-international.ed.jp', name: 'K. International School Tokyo', shortName: 'KIST', active: false },
+      { domain: 'smis.ac.jp', name: "St. Mary's International School", shortName: 'SMIS', active: false },
+      { domain: 'seisen.com', name: 'Seisen International School', shortName: 'Seisen', active: false },
+      { domain: 'issh.ac.jp', name: 'Intl School of the Sacred Heart', shortName: 'ISSH', active: false },
+      { domain: 'yis.ac.jp', name: 'Yokohama International School', shortName: 'YIS', active: false },
+      { domain: 'saintmaur.ac.jp', name: 'Saint Maur International School', shortName: 'Saint Maur', active: false },
+      { domain: 'caj.ac.jp', name: 'Christian Academy in Japan', shortName: 'CAJ', active: false },
     ];
 
-    describe('Pilot School Verification (All 10 schools)', () => {
-      pilotSchools.forEach(({ domain, name, shortName }) => {
-        it(`authorizes pilot school domain @${domain} (${shortName})`, () => {
-          const testEmail = `student.pilot@${domain}`;
-          expect(isSchoolEmailAllowed(testEmail)).toBe(true);
-
+    describe('School Recognition & Experimental Publish Gating', () => {
+      partnerSchools.forEach(({ domain, name, shortName, active }) => {
+        it(`recognizes school domain @${domain} (${shortName}) and gates access appropriately`, () => {
+          const testEmail = `student@${domain}`;
           const school = getSchoolByEmail(testEmail);
           expect(school).toBeDefined();
           expect(school?.domain).toBe(domain);
           expect(school?.shortName).toBe(shortName);
           expect(school?.name).toBe(name);
+          expect(isSchoolRecognized(testEmail)).toBe(true);
+
+          if (active) {
+            expect(isSchoolEmailAllowed(testEmail)).toBe(true);
+            expect(isSchoolDomainActive(domain)).toBe(true);
+            expect(ACTIVE_PUBLISH_SCHOOL_DOMAINS).toContain(domain);
+            const val = validateSchoolEmail(testEmail);
+            expect(val.isValid).toBe(true);
+            expect(val.schoolName).toBe(name);
+          } else {
+            expect(isSchoolEmailAllowed(testEmail)).toBe(false);
+            expect(isSchoolDomainActive(domain)).toBe(false);
+            const val = validateSchoolEmail(testEmail);
+            expect(val.isValid).toBe(false);
+            expect(val.isPendingSchool).toBe(true);
+            expect(val.error).toContain('Access is currently limited to Aoba-Japan International School');
+            expect(val.error).toContain(name);
+          }
         });
       });
     });
@@ -149,28 +170,33 @@ describe('Task 3: School Domain Gatekeeper & Calendar Integration Engine', () =>
       it('handles case insensitivity seamlessly', () => {
         const upperEmails = [
           'STUDENT@STUDENTS.AOBAJAPAN.JP',
-          'User.Name@BST.AC.JP',
-          'Alex@AsIj.Ac.Jp',
-          'KENJI@K-INTERNATIONAL.ED.JP',
+          'ADMIN@AOBAJAPAN.JP',
         ];
 
         upperEmails.forEach((email) => {
           expect(isSchoolEmailAllowed(email)).toBe(true);
           expect(getSchoolByEmail(email)).toBeDefined();
         });
+
+        // Partner schools recognition is also case-insensitive
+        expect(getSchoolByEmail('USER@BST.AC.JP')).toBeDefined();
+        expect(getSchoolByEmail('ALEX@ASIJ.AC.JP')).toBeDefined();
       });
 
       it('trims leading and trailing whitespace', () => {
         const whitespaceEmails = [
-          '  student@bst.ac.jp  ',
-          '\tuser@asij.ac.jp\n',
-          '   kenji@yis.ac.jp ',
+          '  student@students.aobajapan.jp  ',
+          '\tstudent@aobajapan.jp\n',
         ];
 
         whitespaceEmails.forEach((email) => {
           expect(isSchoolEmailAllowed(email)).toBe(true);
           expect(getSchoolByEmail(email)).toBeDefined();
         });
+
+        // Partner schools recognition trims whitespace
+        expect(getSchoolByEmail('  student@bst.ac.jp  ')).toBeDefined();
+        expect(getSchoolByEmail('   kenji@yis.ac.jp ')).toBeDefined();
       });
     });
   });

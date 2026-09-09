@@ -2,7 +2,7 @@ import { StudentProfile, StudyGroup, ChatMessage } from '@/types';
 import { PRESET_AVATARS } from '@/lib/constants';
 
 export const CURRENT_USER: StudentProfile = {
-  id: 'usr_me_pilot',
+  id: 'usr_me_aoba',
   fullName: 'Aoba Student',
   email: 'student@students.aobajapan.jp',
   schoolDomain: 'students.aobajapan.jp',

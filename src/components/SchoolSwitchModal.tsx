@@ -93,7 +93,7 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
         <div className="flex items-center justify-between pb-4 border-b border-[#F5B942]/15">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-[#F5B942]">
-              Pilot Testing Hub
+              School & Account Hub
             </span>
             <h2 id="school-switch-title" className="text-base font-bold text-white">Switch School / Test Gate</h2>
           </div>
@@ -113,7 +113,7 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
             <span>Test Email Domain Gate</span>
           </div>
           <p className="text-[11px] text-[#A8A39D] mb-3">
-            Try a personal email (e.g. <code>student@gmail.com</code>) vs a verified school domain (e.g. <code>alex@bst.ac.jp</code> or <code>sato@asij.ac.jp</code>):
+            Try an Aoba email (e.g. <code>student@students.aobajapan.jp</code>), a personal email (e.g. <code>student@gmail.com</code>), or another school domain (e.g. <code>alex@bst.ac.jp</code>):
           </p>
 
           <form onSubmit={handleTestEmailSubmit} className="flex gap-2">
@@ -160,7 +160,7 @@ export const SchoolSwitchModal: React.FC<SchoolSwitchModalProps> = ({
         {/* Switch Demo Student Profile */}
         <div className="mt-5">
           <h3 className="text-xs font-semibold text-[#EDEDEB] mb-2">
-            Select Active Pilot Student Profile
+            Select Active Student Profile
           </h3>
           <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
             {demoAccounts.map((user) => {

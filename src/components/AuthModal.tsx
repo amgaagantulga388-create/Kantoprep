@@ -10,6 +10,7 @@ import {
   Sparkles,
   CheckCircle2,
   AlertCircle,
+  Clock,
 } from 'lucide-react';
 import { StudentProfile, Curriculum } from '@/types';
 import { ALLOWED_SCHOOLS, CURRICULUM_OPTIONS, SUBJECTS_BY_CURRICULUM } from '@/lib/constants';
@@ -76,30 +77,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     setStep('code');
   };
 
-  // Quick Pilot Bypass (1-click testing for school pilot)
-  const handleQuickPilotLogin = (schoolDomain: string) => {
-    const school = ALLOWED_SCHOOLS.find((s) => s.domain === schoolDomain) || ALLOWED_SCHOOLS[0];
-    const demoUser: StudentProfile = {
-      id: `usr_demo_${school.domain.replace(/[^a-zA-Z0-9]/g, '_')}`,
-      fullName: 'Maya Tanaka',
-      email: `maya.tanaka@${school.domain}`,
-      schoolDomain: school.domain,
-      schoolName: school.name,
-      gradeLevel: 11,
-      curriculum: 'IB',
-      subjects: ['Math Analysis & Approaches HL', 'Physics HL', 'Economics HL'],
-      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120',
-      role: 'student',
-    };
-
-    onAuthenticated(demoUser);
-    onClose();
-  };
-
   // Handle OTP verification
   const handleVerifyCode = (e: React.FormEvent) => {
     e.preventDefault();
-    // In pilot mode, any 6-digit code or default enters onboarding / login
+    // Complete profile setup or login
     if (!fullName) {
       // Prompt quick profile setup if name is not set
       const derivedName = email.split('@')[0].replace(/[._]/g, ' ');
@@ -230,7 +211,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <motion.div
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-3 rounded-2xl bg-[#1C1A17] border border-[#F5B942]/30 flex items-center justify-between"
+                  className={`p-3 rounded-2xl border flex items-center justify-between ${
+                    detectedSchool.domain === 'students.aobajapan.jp' || detectedSchool.domain === 'aobajapan.jp'
+                      ? 'bg-[#1C1A17] border-[#F5B942]/30'
+                      : 'bg-amber-950/40 border-amber-500/30'
+                  }`}
                 >
                   <div className="flex items-center space-x-2.5">
                     <div
@@ -238,20 +223,32 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     />
                     <div>
                       <p className="text-xs font-bold text-white">
-                        {detectedSchool.name}
+                        {detectedSchool.name} {!(detectedSchool.domain === 'students.aobajapan.jp' || detectedSchool.domain === 'aobajapan.jp') && '(Opening Soon)'}
                       </p>
-                      <p className="text-[10px] text-[#F5B942]">
-                        Authorized Campus: {detectedSchool.campus}
+                      <p
+                        className={`text-[10px] ${
+                          detectedSchool.domain === 'students.aobajapan.jp' || detectedSchool.domain === 'aobajapan.jp'
+                            ? 'text-[#F5B942]'
+                            : 'text-[#A8A39D]'
+                        }`}
+                      >
+                        {detectedSchool.domain === 'students.aobajapan.jp' || detectedSchool.domain === 'aobajapan.jp'
+                          ? `Authorized Campus: ${detectedSchool.campus}`
+                          : `Experimental publish is live for Aoba. ${detectedSchool.shortName} access will open soon!`}
                       </p>
                     </div>
                   </div>
-                  <ShieldCheck className="w-5 h-5 text-[#F5B942] shrink-0" />
+                  {detectedSchool.domain === 'students.aobajapan.jp' || detectedSchool.domain === 'aobajapan.jp' ? (
+                    <ShieldCheck className="w-5 h-5 text-[#F5B942] shrink-0" />
+                  ) : (
+                    <Clock className="w-5 h-5 text-amber-400 shrink-0" />
+                  )}
                 </motion.div>
               ) : email.includes('@') && email.split('@')[1].length > 3 ? (
                 <div className="p-3 rounded-2xl bg-amber-950/40 border border-[#F5B942]/30 text-xs text-amber-200 flex items-start space-x-2">
                   <AlertCircle className="w-4 h-4 text-[#F5B942] shrink-0 mt-0.5" />
                   <p className="text-[11px] leading-tight text-[#EDEDEB]">
-                    Domain not recognized yet. KantoPrep currently whitelists A-JIS (@students.aobajapan.jp), BST, ASIJ, KIST, St. Mary&apos;s, Seisen, ISSH, YIS, CAJ, and Saint Maur.
+                    Please use your official Aoba school email address (<code>@students.aobajapan.jp</code>). Other Tokyo international schools will open soon!
                   </p>
                 </div>
               ) : null}
@@ -264,28 +261,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
-
-            {/* Quick Pilot Testing Bypass */}
-            <div className="pt-3 border-t border-[#F5B942]/10 text-center">
-              <span className="text-[11px] text-[#A8A39D] font-medium">
-                — OR INSTANT DEMO LOGIN FOR TESTING —
-              </span>
-              <div className="mt-2.5 flex flex-wrap gap-1.5 justify-center">
-                {['students.aobajapan.jp', 'bst.ac.jp', 'asij.ac.jp'].map((dom) => {
-                  const s = ALLOWED_SCHOOLS.find((sch) => sch.domain === dom);
-                  return (
-                    <button
-                      key={dom}
-                      type="button"
-                      onClick={() => handleQuickPilotLogin(dom)}
-                      className="px-2.5 py-1 rounded-lg bg-[#1C1A17] hover:bg-[#F5B942]/15 hover:text-[#F5B942] hover:border-[#F5B942]/40 border border-[#F5B942]/15 text-[11px] text-[#A8A39D] font-medium transition-colors cursor-pointer"
-                    >
-                      Login as {s?.shortName}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
           </motion.div>
         )}
 
@@ -301,7 +276,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <div>
                 <p className="font-bold text-white">Security Code Sent</p>
                 <p className="text-[11px] text-[#A8A39D] mt-0.5">
-                  We sent a 6-digit access code to <strong className="font-bold text-[#F5B942]">{email}</strong>. (In pilot mode, you can enter any 6 digits).
+                  We sent a 6-digit access code to <strong className="font-bold text-[#F5B942]">{email}</strong>. Please enter the code sent to your inbox.
                 </p>
               </div>
             </div>

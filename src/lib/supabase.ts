@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { ALLOWED_SCHOOLS } from './constants';
+import { ALLOWED_SCHOOLS, isSchoolDomainActive } from './constants';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -17,12 +17,15 @@ export const supabase = isSupabaseConfigured()
  * Hardened validator for school email domains
  * Protects against subdomain spoofing (e.g. bst.ac.jp.attacker.org)
  * and ensures standard RFC format.
+ * In this publish phase, access is live for Aoba-Japan International School first;
+ * other partner schools will be added soon.
  */
 export function validateSchoolEmail(email: string): {
   isValid: boolean;
   schoolName?: string;
   domain?: string;
   error?: string;
+  isPendingSchool?: boolean;
 } {
   if (!email || typeof email !== 'string') {
     return { isValid: false, error: 'Email address is required.' };
@@ -56,7 +59,18 @@ export function validateSchoolEmail(email: string): {
   if (!matchedSchool) {
     return {
       isValid: false,
-      error: `Access Denied: @${domainPart} is not currently an authorized school domain. Please use your official school email (@students.aobajapan.jp, @bst.ac.jp, etc.).`,
+      error: `Access Denied: @${domainPart} is not currently an authorized school domain. Please use your official school email (@students.aobajapan.jp).`,
+    };
+  }
+
+  // Check if school is active for this experimental publish phase
+  if (!isSchoolDomainActive(matchedSchool.domain)) {
+    return {
+      isValid: false,
+      schoolName: matchedSchool.name,
+      domain: matchedSchool.domain,
+      isPendingSchool: true,
+      error: `Access is currently limited to Aoba-Japan International School (@students.aobajapan.jp) for this initial experimental publish. Support for ${matchedSchool.name} (@${matchedSchool.domain}) will be enabled soon!`,
     };
   }
 
@@ -68,8 +82,7 @@ export function validateSchoolEmail(email: string): {
 }
 
 /**
- * Send 6-digit OTP verification code via Supabase Free Tier
- * Gracefully falls back to pilot mode if Supabase env vars are not yet configured.
+ * Send 6-digit OTP verification code via Supabase Auth.
  */
 export async function sendSchoolOtp(email: string): Promise<{
   success: boolean;
@@ -81,7 +94,7 @@ export async function sendSchoolOtp(email: string): Promise<{
     return { success: false, message: check.error || 'Invalid school email', isPilotMode: false };
   }
 
-  // If Supabase credentials are configured in .env, send real free email code
+  // If Supabase credentials are configured in .env.local, send real email code
   if (supabase && isSupabaseConfigured()) {
     try {
       const { error } = await supabase.auth.signInWithOtp({
@@ -109,11 +122,11 @@ export async function sendSchoolOtp(email: string): Promise<{
     }
   }
 
-  // Otherwise, pilot mode: simulate instant delivery for testing
+  // If credentials are not yet configured in .env.local
   return {
-    success: true,
-    message: `Pilot Mode: 6-digit security code generated for ${email}. Enter any 6 digits to verify.`,
-    isPilotMode: true,
+    success: false,
+    message: 'Email verification service is being connected. Please ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set in .env.local.',
+    isPilotMode: false,
   };
 }
 
@@ -146,6 +159,9 @@ export async function verifySchoolOtp(
     }
   }
 
-  // Pilot mode verification
-  return { success: true, message: 'Pilot verified!' };
+  return {
+    success: false,
+    message: 'Email verification service is not active. Please configure Supabase credentials.',
+  };
 }
+

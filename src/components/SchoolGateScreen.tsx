@@ -14,6 +14,7 @@ import {
   MapPin,
   MessageSquarePlus,
   Share2,
+  Clock,
 } from 'lucide-react';
 import { StudentProfile, Curriculum } from '@/types';
 import { ALLOWED_SCHOOLS, CURRICULUM_OPTIONS, SUBJECTS_BY_CURRICULUM, PRESET_AVATARS } from '@/lib/constants';
@@ -130,25 +131,6 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
     onAuthenticated(newUser);
   };
 
-  // Quick 1-click test bypass
-  const handleQuickPilotLogin = (domain: string) => {
-    const school = ALLOWED_SCHOOLS.find((s) => s.domain === domain) || ALLOWED_SCHOOLS[0];
-    const pilotUser: StudentProfile = {
-      id: `usr_${Date.now()}`,
-      fullName: 'Aoba Pilot Student',
-      email: `student@${school.domain}`,
-      schoolDomain: school.domain,
-      schoolName: school.name,
-      gradeLevel: 11,
-      curriculum: 'IB',
-      subjects: ['Math Analysis & Approaches HL', 'Physics HL', 'Economics HL'],
-      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120',
-      role: 'student',
-    };
-
-    onAuthenticated(pilotUser);
-  };
-
   const toggleSubject = (sub: string) => {
     setSelectedSubjects((prev) =>
       prev.includes(sub) ? prev.filter((s) => s !== sub) : [...prev, sub]
@@ -176,7 +158,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
           <div>
             <span className="text-base sm:text-lg font-bold tracking-tight text-white">KantoPrep</span>
             <span className="ml-1.5 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-semibold uppercase tracking-wide bg-[#F5B942]/10 text-[#F5B942] border border-[#F5B942]/30 rounded-full">
-              Pilot
+              Experimental
             </span>
           </div>
         </div>
@@ -321,28 +303,44 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                   <motion.div
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-3 rounded-2xl bg-[#F5B942]/10 border border-[#F5B942]/30 flex items-center justify-between"
+                    className={`p-3 rounded-2xl border flex items-center justify-between ${
+                      detectedSchool.domain === 'students.aobajapan.jp' || detectedSchool.domain === 'aobajapan.jp'
+                        ? 'bg-[#F5B942]/10 border-[#F5B942]/30'
+                        : 'bg-amber-500/10 border-amber-500/30'
+                    }`}
                   >
                     <div className="flex items-center space-x-2.5">
                       <div
                         className={`w-3 h-3 rounded-full bg-gradient-to-r ${detectedSchool.badgeColor}`}
                       />
                       <div>
-                        <p className="text-xs font-bold text-[#F5B942]">
-                          {detectedSchool.name}
+                        <p
+                          className={`text-xs font-bold ${
+                            detectedSchool.domain === 'students.aobajapan.jp' || detectedSchool.domain === 'aobajapan.jp'
+                              ? 'text-[#F5B942]'
+                              : 'text-amber-300'
+                          }`}
+                        >
+                          {detectedSchool.name} {!(detectedSchool.domain === 'students.aobajapan.jp' || detectedSchool.domain === 'aobajapan.jp') && '(Opening Soon)'}
                         </p>
                         <p className="text-[10px] text-[#D1CEC7]">
-                          Campus: {detectedSchool.campus}
+                          {detectedSchool.domain === 'students.aobajapan.jp' || detectedSchool.domain === 'aobajapan.jp'
+                            ? `Campus: ${detectedSchool.campus} • Live for Aoba Students`
+                            : `Experimental release is live for Aoba first. ${detectedSchool.shortName} access will open soon!`}
                         </p>
                       </div>
                     </div>
-                    <ShieldCheck className="w-5 h-5 text-[#F5B942] shrink-0" />
+                    {detectedSchool.domain === 'students.aobajapan.jp' || detectedSchool.domain === 'aobajapan.jp' ? (
+                      <ShieldCheck className="w-5 h-5 text-[#F5B942] shrink-0" />
+                    ) : (
+                      <Clock className="w-5 h-5 text-amber-400 shrink-0" />
+                    )}
                   </motion.div>
                 ) : email.includes('@') && email.split('@')[1].length > 3 ? (
                   <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 flex items-start space-x-2">
                     <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                     <p className="text-[11px] leading-tight">
-                      Domain not recognized. Whitelisted: A-JIS (@students.aobajapan.jp), BST, ASIJ, KIST, St. Mary&apos;s, Seisen, ISSH, YIS, CAJ, and Saint Maur.
+                      Please use your official Aoba school email address (<code>@students.aobajapan.jp</code>). Other Tokyo international schools will open soon!
                     </p>
                   </div>
                 ) : null}
@@ -361,36 +359,6 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                     </>
                   )}
                 </button>
-
-                {/* Instant Pilot Testing Section */}
-                <div className="pt-2.5 border-t border-[#F5B942]/15 text-center">
-                  <span className="text-[10px] text-[#7A756D] font-semibold tracking-wider uppercase">
-                    — Or 1-Click Pilot Testing Login —
-                  </span>
-                  <div className="mt-2 flex flex-wrap gap-1.5 justify-center">
-                    <button
-                      type="button"
-                      onClick={() => handleQuickPilotLogin('students.aobajapan.jp')}
-                      className="px-3 py-1.5 rounded-xl bg-[#F5B942]/15 hover:bg-[#F5B942]/25 border border-[#F5B942]/35 text-xs text-[#F5B942] font-bold transition-all cursor-pointer shadow-2xs"
-                    >
-                      Login as A-JIS Student
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleQuickPilotLogin('bst.ac.jp')}
-                      className="px-2.5 py-1.5 rounded-xl bg-[#1C1A17] hover:bg-[#24211D] border border-[#F5B942]/20 text-xs text-[#D1CEC7] font-medium transition-all cursor-pointer"
-                    >
-                      BST
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleQuickPilotLogin('asij.ac.jp')}
-                      className="px-2.5 py-1.5 rounded-xl bg-[#1C1A17] hover:bg-[#24211D] border border-[#F5B942]/20 text-xs text-[#D1CEC7] font-medium transition-all cursor-pointer"
-                    >
-                      ASIJ
-                    </button>
-                  </div>
-                </div>
               </form>
             )}
 
@@ -402,7 +370,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                   <div>
                     <p className="font-bold text-white">6-Digit Code Sent</p>
                     <p className="text-[11px] text-[#D1CEC7] mt-0.5">
-                      Sent to <strong className="font-semibold text-[#F5B942]">{email}</strong>. (In pilot mode, type any 6 digits to verify).
+                      Sent to <strong className="font-semibold text-[#F5B942]">{email}</strong>. Please enter the 6-digit code sent to your inbox.
                     </p>
                   </div>
                 </div>

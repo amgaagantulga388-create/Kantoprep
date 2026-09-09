@@ -78,13 +78,6 @@ export const ALLOWED_SCHOOLS: SchoolInfo[] = [
     campus: 'Higashikurume',
     badgeColor: 'from-lime-500 to-emerald-600',
   },
-  {
-    domain: 'demo.school.ac.jp',
-    name: 'KantoPrep Pilot Campus',
-    shortName: 'KantoPrep',
-    campus: 'Tokyo Central',
-    badgeColor: 'from-amber-400 to-amber-600',
-  },
 ];
 
 export const CURRICULUM_OPTIONS: { id: Curriculum; label: string; description: string }[] = [
@@ -287,10 +280,33 @@ export function getSchoolByEmail(email: string): SchoolInfo | undefined {
 }
 
 /**
- * Checks whether an email belongs to an authorized school domain in ALLOWED_SCHOOLS.
+ * Currently active school domains permitted for registration/login during this experimental publish.
+ * Aoba-Japan International School is active first; other school domains will be enabled soon.
+ */
+export const ACTIVE_PUBLISH_SCHOOL_DOMAINS: string[] = [
+  'students.aobajapan.jp',
+  'aobajapan.jp',
+];
+
+export function isSchoolDomainActive(domain: string): boolean {
+  if (!domain) return false;
+  return ACTIVE_PUBLISH_SCHOOL_DOMAINS.includes(domain.toLowerCase().trim());
+}
+
+/**
+ * Checks whether an email belongs to a recognized Tokyo international school.
+ */
+export function isSchoolRecognized(email: string): boolean {
+  return getSchoolByEmail(email) !== undefined;
+}
+
+/**
+ * Checks whether an email belongs to an active school domain authorized for login/registration
+ * during this experimental publish phase (Aoba-first).
  */
 export function isSchoolEmailAllowed(email: string): boolean {
-  return getSchoolByEmail(email) !== undefined;
+  const school = getSchoolByEmail(email);
+  return school !== undefined && isSchoolDomainActive(school.domain);
 }
 
 

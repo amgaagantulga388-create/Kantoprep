@@ -657,7 +657,7 @@ export default function Home() {
             <div className="flex items-center space-x-2">
               <span className="text-sm font-bold text-white">KantoPrep</span>
               <span className="px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide bg-[#F5B942]/10 text-[#F5B942] border border-[#F5B942]/30 rounded-full">
-                Pilot
+                Experimental
               </span>
             </div>
             <div className="flex items-center space-x-3 text-[11px] text-[#7A756D]">

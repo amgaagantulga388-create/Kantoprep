@@ -90,7 +90,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 KantoPrep
               </span>
               <span className="px-1.5 py-0.5 text-[9px] sm:text-[10px] font-semibold uppercase tracking-wide bg-[#F5B942]/10 text-[#F5B942] border border-[#F5B942]/30 rounded-full">
-                Pilot
+                Experimental
               </span>
             </div>
             <p className="text-[10px] sm:text-[11px] text-[#9E988F] font-normal hidden md:block">
