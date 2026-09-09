@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { StudentProfile, Curriculum } from '@/types';
 import { ALLOWED_SCHOOLS, CURRICULUM_OPTIONS, SUBJECTS_BY_CURRICULUM } from '@/lib/constants';
-import { validateSchoolEmail } from '@/lib/supabase';
+import { validateSchoolEmail, sendSchoolOtp, verifySchoolOtp } from '@/lib/supabase';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -60,10 +60,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  const [loading, setLoading] = useState(false);
+
   if (!isOpen) return null;
 
   // Handle email submit
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
@@ -73,25 +75,41 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       return;
     }
 
-    // Move to verification code or quick confirm
-    setStep('code');
+    setLoading(true);
+    const res = await sendSchoolOtp(email);
+    setLoading(false);
+
+    if (res.success) {
+      setStep('code');
+    } else {
+      setErrorMessage(res.message);
+    }
   };
 
   // Handle OTP verification
-  const handleVerifyCode = (e: React.FormEvent) => {
+  const handleVerifyCode = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Complete profile setup or login
-    if (!fullName) {
-      // Prompt quick profile setup if name is not set
-      const derivedName = email.split('@')[0].replace(/[._]/g, ' ');
-      const formattedName = derivedName
-        .split(' ')
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' ');
-      setFullName(formattedName || 'Tokyo Student');
-      setStep('profile');
+    if (!verificationCode.trim()) return;
+
+    setLoading(true);
+    const res = await verifySchoolOtp(email, verificationCode);
+    setLoading(false);
+
+    if (res.success) {
+      if (!fullName) {
+        // Prompt quick profile setup if name is not set
+        const derivedName = email.split('@')[0].replace(/[._]/g, ' ');
+        const formattedName = derivedName
+          .split(' ')
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(' ');
+        setFullName(formattedName || 'Tokyo Student');
+        setStep('profile');
+      } else {
+        completeLogin();
+      }
     } else {
-      completeLogin();
+      setErrorMessage(res.message);
     }
   };
 
@@ -255,10 +273,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-2.5 bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
+                disabled={loading}
+                className="w-full py-2.5 bg-[#F5B942] hover:bg-[#E5A832] disabled:opacity-50 text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
               >
-                <span>Continue with School Email</span>
-                <ArrowRight className="w-4 h-4" />
+                {loading ? (
+                  <span>Sending Code...</span>
+                ) : (
+                  <>
+                    <span>Continue with School Email</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </form>
           </motion.div>
@@ -281,6 +306,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </div>
             </div>
 
+            {errorMessage && (
+              <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300 flex items-start space-x-2">
+                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                <span className="text-[11px] leading-tight">{errorMessage}</span>
+              </div>
+            )}
+
             <form onSubmit={handleVerifyCode} className="space-y-3.5">
               <div>
                 <label className="block text-xs font-semibold text-[#EDEDEB] mb-1.5">
@@ -290,7 +322,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   type="text"
                   maxLength={6}
                   value={verificationCode}
-                  onChange={(e) => setVerificationCode(e.target.value)}
+                  onChange={(e) => {
+                    setVerificationCode(e.target.value);
+                    if (errorMessage) setErrorMessage(null);
+                  }}
                   placeholder="e.g. 123456"
                   autoFocus
                   className="w-full text-center tracking-[0.4em] font-mono text-base py-2.5 bg-[#1C1A17] border border-[#F5B942]/20 rounded-xl text-white placeholder-[#7A756D] focus:outline-none focus:border-[#F5B942] focus:ring-1 focus:ring-[#F5B942]"
@@ -307,10 +342,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="w-2/3 py-2.5 bg-[#F5B942] hover:bg-[#E5A832] text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
+                  disabled={loading}
+                  className="w-2/3 py-2.5 bg-[#F5B942] hover:bg-[#E5A832] disabled:opacity-50 text-[#0E0D0B] text-xs font-bold rounded-xl transition-all shadow-md shadow-[#F5B942]/20 active:scale-[0.98] cursor-pointer flex items-center justify-center space-x-1.5"
                 >
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Verify & Enter</span>
+                  {loading ? (
+                    <span>Verifying...</span>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>Verify & Enter</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>
