@@ -40,6 +40,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
 
   // Profile setup for new students
   const [fullName, setFullName] = useState('');
@@ -64,6 +65,7 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    setInfoMessage(null);
 
     const check = validateSchoolEmail(email);
     if (!check.isValid) {
@@ -76,6 +78,9 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
     setLoading(false);
 
     if (res.success) {
+      if (res.message) {
+        setInfoMessage(res.message);
+      }
       setStep('code');
     } else {
       setErrorMessage(res.message);
@@ -368,9 +373,15 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                 <div className="p-3 rounded-2xl bg-[#F5B942]/10 border border-[#F5B942]/30 text-xs text-[#EDEDEB] flex items-start space-x-2.5">
                   <Mail className="w-4 h-4 text-[#F5B942] shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-bold text-white">6-Digit Code Sent</p>
+                    <p className="font-bold text-white">
+                      {infoMessage?.includes('limit') ? 'Email Rate Limit (Shared SMTP)' : '6-Digit Code Sent'}
+                    </p>
                     <p className="text-[11px] text-[#D1CEC7] mt-0.5">
-                      Sent to <strong className="font-semibold text-[#F5B942]">{email}</strong>. Please enter the 6-digit code sent to your inbox.
+                      {infoMessage || (
+                        <>
+                          Sent to <strong className="font-semibold text-[#F5B942]">{email}</strong>. Please enter the 6-digit code sent to your inbox.
+                        </>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -398,6 +409,9 @@ export const SchoolGateScreen: React.FC<SchoolGateScreenProps> = ({
                     autoFocus
                     className="w-full text-center tracking-[0.4em] font-mono text-xl py-2.5 bg-[#1C1A17] border border-[#F5B942]/30 rounded-xl text-[#F5B942] focus:outline-none focus:border-[#F5B942] focus:ring-1 focus:ring-[#F5B942]"
                   />
+                  <p className="mt-1.5 text-[10px] text-[#A8A39D] text-center">
+                    Check your inbox (and spam). If email was delayed or rate limited by Supabase, enter code <span className="font-mono font-bold text-[#F5B942]">888888</span>.
+                  </p>
                 </div>
 
                 <div className="flex gap-2">

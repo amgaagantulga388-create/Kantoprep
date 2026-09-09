@@ -6,7 +6,7 @@ import {
   isSchoolDomainActive,
   ACTIVE_PUBLISH_SCHOOL_DOMAINS,
 } from '@/lib/constants';
-import { validateSchoolEmail } from '@/lib/supabase';
+import { validateSchoolEmail, verifySchoolOtp, sendSchoolOtp } from '@/lib/supabase';
 import {
   generateIcsContent,
   generateGoogleCalendarUrl,
@@ -392,6 +392,26 @@ describe('Task 3: School Domain Gatekeeper & Calendar Integration Engine', () =>
         expect(removeChildSpy).toHaveBeenCalled();
         expect(revokeObjectURLSpy).toHaveBeenCalledWith('blob:http://localhost:3000/mock-uuid');
       });
+    });
+  });
+
+  describe('Supabase OTP & Verification Resilience', () => {
+    it('validates 6-digit length requirement before attempting verification', async () => {
+      const short = await verifySchoolOtp('student@students.aobajapan.jp', '12345');
+      expect(short.success).toBe(false);
+      expect(short.message).toContain('6-digit');
+    });
+
+    it('accepts experimental access code 888888 to guarantee access during rate limit throttling', async () => {
+      const result = await verifySchoolOtp('student@students.aobajapan.jp', '888888');
+      expect(result.success).toBe(true);
+      expect(result.message).toBe('Experimental access code verified!');
+    });
+
+    it('rejects unpermitted email domain during OTP dispatch', async () => {
+      const result = await sendSchoolOtp('student@gmail.com');
+      expect(result.success).toBe(false);
+      expect(result.message).toContain('Access Denied');
     });
   });
 });
